@@ -1,0 +1,8 @@
+.idea/
+*.iml
+/target/
+classes/
+# Eclipse Project Files #
+.classpath
+.project
+.settings
