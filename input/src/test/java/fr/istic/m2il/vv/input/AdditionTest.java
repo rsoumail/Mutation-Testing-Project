@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
 public class AdditionTest {
 
 
-    @Test
-    public void simple() throws Exception {
-       Operation addition = new Addition();
-
-    }
+//    @Test
+//    public void simple() throws Exception {
+//       Operation addition = new Addition();
+//
+//    }
 
 }

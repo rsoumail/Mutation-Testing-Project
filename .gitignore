@@ -1,2 +1,8 @@
 .idea/
 *.iml
+input/bin/
+input/.settings
+.project
+input/.classpath
+input/.gitignore
+input/.project

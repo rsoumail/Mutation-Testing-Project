@@ -4,7 +4,15 @@ public class Addition implements Operation {
     private Double firstMember;
     private Double secondMember;
 
-    public Double getFisrtMember() {
+    
+    
+    public Addition(Double firstMember, Double secondMember) {
+		this.firstMember = firstMember;
+		this.secondMember = secondMember;
+	}
+
+
+	public Double getFisrtMember() {
         return null;
     }
 

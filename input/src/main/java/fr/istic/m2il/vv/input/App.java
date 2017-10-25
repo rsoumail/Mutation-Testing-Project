@@ -4,8 +4,11 @@ public class App {
 
     public static void main(String[] args) {
 
-        Operation addition = new Addition();
-        addition.setFirstMember(10.0);
-        addition.setSecondMember(5.0);
+        Addition addition = new Addition(10.0,5.0);
+        Divison division = new Divison(10.0, 5.0);
+        Substraction substration = new Substraction(10.0, 5.0);
+        addition.operate();      
+        division.operate();
+        substration.operate();
     }
 }
