@@ -6,7 +6,11 @@
 
     <groupId>fr.istic.m2il.VV</groupId>
     <artifactId>MutationTesting</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>input</module>
+    </modules>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
