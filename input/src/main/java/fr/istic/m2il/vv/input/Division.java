@@ -1,10 +1,11 @@
 package fr.istic.m2il.vv.input;
 
-public class Addition implements Operation {
+public class Division implements Operation {
+
 	private double firstMember;
 	private double secondMember;
 
-	public Addition(double firstMember, double secondMember) {
+	public Division(double firstMember, double secondMember) {
 		this.firstMember = firstMember;
 		this.secondMember = secondMember;
 	}
@@ -31,6 +32,6 @@ public class Addition implements Operation {
 
 	@Override
 	public double operate() {
-		return (getFirstMember() + getSecondMember());
+		return (getFirstMember() / getSecondMember());
 	}
 }

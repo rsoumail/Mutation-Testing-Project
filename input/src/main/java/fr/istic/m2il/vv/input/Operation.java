@@ -1,5 +1,13 @@
 package fr.istic.m2il.vv.input;
 
 public interface Operation {
-    Double operate();
+	void setFirstMember(double firstMember);
+
+	void setSecondMember(double secondMember);
+
+	double getFirstMember();
+
+	double getSecondMember();
+
+	double operate();
 }

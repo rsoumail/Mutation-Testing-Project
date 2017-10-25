@@ -1,31 +1,37 @@
 package fr.istic.m2il.vv.input;
 
-public class Multiplication {
-	private Double firstMember;
-	private Double secondMember;
+public class Multiplication implements Operation {
 
-	public Multiplication(Double firstMember, Double secondMember) {
+	private double firstMember;
+	private double secondMember;
+
+	public Multiplication(double firstMember, double secondMember) {
 		this.firstMember = firstMember;
 		this.secondMember = secondMember;
 	}
 
-	public Double getFisrtMember() {
-		return null;
-	}
-
-	public void setFirstMember(Double firstMember) {
+	@Override
+	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;
 	}
 
-	public Double getSecondMember() {
+	@Override
+	public void setSecondMember(double secondMember) {
+		this.secondMember = secondMember;
+	}
+
+	@Override
+	public double getFirstMember() {
+		return this.firstMember;
+	}
+
+	@Override
+	public double getSecondMember() {
 		return this.secondMember;
 	}
 
-	public void setSecondMember(Double secondMember) {
-		this.secondMember = secondMember;
-	}
-
-	public Double operate() {
-		return (getFisrtMember() * getSecondMember());
+	@Override
+	public double operate() {
+		return (getFirstMember() * getSecondMember());
 	}
 }
