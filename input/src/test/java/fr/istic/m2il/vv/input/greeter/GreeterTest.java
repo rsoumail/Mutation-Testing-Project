@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.greeter;
+package fr.istic.m2il.vv.input.greeter;
 
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.Fake;
