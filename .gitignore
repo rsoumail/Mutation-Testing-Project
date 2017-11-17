@@ -6,8 +6,12 @@ input/.settings
 input/.classpath
 input/.gitignore
 input/.project
+
 /.metadata/
 .settings/
 mutation/.classpath
 mutation/.gitignore
 mutation/.settings/
+
+target/
+

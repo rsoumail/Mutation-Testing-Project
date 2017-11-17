@@ -14,7 +14,7 @@ public class BCArithmeticEditor implements AbstractEditor{
     public void replace(CtMethod ctMethod) throws CannotCompileException {
         try {
             ctMethod.instrument(new ExprEditor(){
-                
+
             });
         } catch (CannotCompileException e) {
             e.printStackTrace();
