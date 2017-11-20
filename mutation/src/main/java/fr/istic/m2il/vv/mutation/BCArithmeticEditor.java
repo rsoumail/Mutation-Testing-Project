@@ -4,11 +4,11 @@ import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.expr.ExprEditor;
 
-public class BCArithmeticEditor implements AbstractEditor{
-    private ExprEditor exprEditor;
+public class BCArithmeticEditor extends AbstractEditor{
 
-    public BCArithmeticEditor(ExprEditor exprEditor) {
-        this.exprEditor = exprEditor;
+
+    public BCArithmeticEditor() {
+
     }
 
     public void replace(CtMethod ctMethod) throws CannotCompileException {
