@@ -5,7 +5,7 @@
 Lancement du projet :
 
   > Compilation des programmes (cible et mutateur)
-  Se placer à la racine du projet
+  Se placer à la racine du projet :
   Lancer la commande : mvn package (Cette commande compile les projets et les unitaires du programme cible)
   
   > Exécution du programme mutateur (module mutation)
@@ -29,15 +29,18 @@ Lancement du projet :
   
     > Dans le package ../vv/mutation les mutants implémentées sont:
       
-     Opération + remplacé par -
-     Opération - remplacé par +
-     Opération * remplacé par /
-     Opération / remplacé par *
+     Opération + est remplacé par -
+     Opération - est remplacé par +
+     Opération * est remplacé par /
+     Opération / est remplacé par *
      
      Suppression des méthodes de type void
      
      
 ## Couverture du code avec PIT
 
+  Se placer à la racine du projet:
+  Lancer la commande : mvn org.pitest:pitest-maven:mutationCoverage
 
+  
      
