@@ -19,7 +19,9 @@ public class AdditionTest {
 	public void AdditionByZero() throws Exception {
 
 		Addition add = new Addition(5000, 0);
-		assert (add.operate() == 5000);
+		System.out.println(add.operate());
+		//assert (add.operate() == 5000.0);
+		assertEquals(5000.0, add.operate(), 2);
 	}
 
 	@Test
