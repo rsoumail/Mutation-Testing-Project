@@ -32,15 +32,15 @@ public class App {
             inputTestPath = args[0] + "/target/test-classes/";
             mutate(inputPath, args);
             try {
-                runTest(inputPath,
-                        inputTestPath);
+                runTest(inputPath, inputTestPath);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            }/*
-            deleteTarget(new File(inputPath));
-            rebuildTarget("javac input/*.java");*/
+            }
+            deleteTarget(new File(  args[0] +"/target"));
+            rebuildTarget("javac  -d input/target -cp input/src/main/java/fr/istic/m2il/vv/input/*.java");
+
         }
 
     }
@@ -89,9 +89,10 @@ public class App {
         File[] allContents = inputPath.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
-                deleteTarget(new File(file.getName()));
+                deleteTarget(new File(inputPath.toPath()+ "/"+ file.getName()));
             }
         }
+        inputPath.delete();
     }
 
     public static void buildTarget(){
@@ -128,6 +129,8 @@ public class App {
 
             mutateArithmeticOperation(pool, classes, inputPath);
             mutateComparisonOperation(pool, classes, inputPath);
+
+            pool.appendClassPath(inputPath);
 
         }
         catch(Throwable exc) {
