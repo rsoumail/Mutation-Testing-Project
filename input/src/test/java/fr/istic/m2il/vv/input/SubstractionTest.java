@@ -18,7 +18,7 @@ public class SubstractionTest {
 		double a = 10;
 		double b = 0;
 		Substraction substraction = new Substraction(a, b);
-		assert(substraction.operate() == a);
+		Assert.assertEquals(substraction.operate(), a, 1);
 	}
 	
 	@Test 
@@ -27,10 +27,10 @@ public class SubstractionTest {
 		double b = 80;
 		Substraction substraction = new Substraction(a, b);
 		if(a < b) {
-			assert(substraction.operate() < 0);
+			Assert.assertTrue(substraction.operate() < 0);
 		}
 		else {
-			assert(substraction.operate() >= 0);
+			Assert.assertTrue(substraction.operate() >= 0);
 		}
 	}
 

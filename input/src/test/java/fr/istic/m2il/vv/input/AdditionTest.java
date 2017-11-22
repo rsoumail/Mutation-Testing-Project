@@ -10,18 +10,13 @@ public class AdditionTest {
 	@Test
 	public void simple() throws Exception {
 		Addition addition = new Addition(10.0, 5.0);
-		// Assert.assertEquals(addition.operate(), (addition.getFirstMember() +
-		// addition.getSecondMember()), 0);
-		assert (addition.operate() == addition.getFirstMember() + addition.getSecondMember());
+		Assert.assertEquals(15.0, addition.operate(), 1);
 	}
 
 	@Test
 	public void AdditionByZero() throws Exception {
-
-		Addition add = new Addition(5000, 0);
-		System.out.println(add.operate());
-		//assert (add.operate() == 5000.0);
-		assertEquals(5000.0, add.operate(), 2);
+		Addition addition = new Addition(5000.0, 0.0);
+		Assert.assertEquals(5000.0, addition.operate(), 1);
 	}
 
 	@Test
@@ -29,7 +24,7 @@ public class AdditionTest {
 		double a = 0;
 		double b = 1;
 		Addition addition = new Addition(a, b);
-		assert (addition.getFirstMember() == a);
+		Assert.assertEquals(a, addition.getFirstMember(), 1);
 	}
 	
 	@Test
@@ -37,11 +32,13 @@ public class AdditionTest {
 		double a = 0;
 		double b = 1;
 		Addition addition = new Addition(a, b);
-		assert (addition.getSecondMember() == b);
+		Assert.assertEquals(b, addition.getSecondMember(), 1);
 	}
 
 	@Test
-	public void Test() {
-		assert (true);
+	public void SetFirstMember() throws Exception {
+		Addition addition = new Addition();
+		addition.setFirstMember(20.0);
+		Assert.assertEquals(20.0, addition.getFirstMember(), 1);
 	}
 }

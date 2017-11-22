@@ -7,6 +7,6 @@ import javassist.expr.ExprEditor;
 
 import java.io.IOException;
 
-public interface AbstractEditor {
+public interface Mutator {
     void replace(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException;
 }

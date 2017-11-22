@@ -10,7 +10,7 @@ public class DivisionTest {
 	@Test
 	public void simple() throws Exception {
 		Division division = new Division(10.0, 5.0);
-		Assert.assertEquals(division.operate(), (division.getFirstMember() / division.getSecondMember()), 0);
+		Assert.assertEquals(division.operate(), (division.getFirstMember() / division.getSecondMember()), 1);
 	}
 	
 	@Test
@@ -18,7 +18,7 @@ public class DivisionTest {
 		double a = 1000;
 		double b = 1;
 		Division division = new Division(a, b);
-		assert(division.operate() == a);
+		Assert.assertEquals(division.operate(), a, 1);
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class DivisionTest {
 		double a = 1;
 		double b = 10;
 		Division division = new Division(a, b);
-		assert(division.operate() < 1);
+		Assert.assertTrue(division.operate() < 1);
 	}
 	
 	@Test
@@ -34,6 +34,6 @@ public class DivisionTest {
 		double a = 50;
 		double b = 10;
 		Division division = new Division(a, b);
-		assert(division.operate() == 5);
+		Assert.assertEquals(5, division.operate(), 1);
 	}
 }
