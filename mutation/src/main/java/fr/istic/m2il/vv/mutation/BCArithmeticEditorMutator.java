@@ -7,12 +7,12 @@ import javassist.bytecode.*;
 
 import java.io.IOException;
 
-public class BCArithmeticEditor implements Mutator {
+public class BCArithmeticEditorMutator implements Mutator {
 
     private String inputPath;
     private int oldOpcode, newOpcode;
 
-    public BCArithmeticEditor(String inputPath, int oldOpcode, int newOpcode) {
+    public BCArithmeticEditorMutator(String inputPath, int oldOpcode, int newOpcode) {
         this.inputPath = inputPath;
         this.oldOpcode = oldOpcode;
         this.newOpcode = newOpcode;
@@ -29,16 +29,12 @@ public class BCArithmeticEditor implements Mutator {
             int pos = iterator.next();
             if(iterator.byteAt(pos) == this.oldOpcode){
                 iterator.writeByte(this.newOpcode, pos);
-                System.out.println("try");
                 write(ctMethod.getDeclaringClass());
-                System.out.println("written ");
             }
         }
     }
 
     public void write(CtClass ctClass) throws CannotCompileException, IOException {
-        System.out.println("Try write file");
         ctClass.writeFile(inputPath);
-        System.out.println("Finish written");
     }
 }

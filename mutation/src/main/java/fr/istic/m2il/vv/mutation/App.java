@@ -9,8 +9,6 @@ import org.junit.runner.notification.Failure;
 
 import javassist.*;
 
-import org.junit.runner.notification.Failure;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,12 +16,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import static java.lang.System.exit;
-import static java.lang.System.in;
 
 public class App {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         String inputPath, inputTestPath;
         if(args.length < 1){
             System.err.println(args[0]);
@@ -33,7 +30,7 @@ public class App {
         else {
             inputPath = args[0] + "/target/classes/";
             inputTestPath = args[0] + "/target/test-classes/";
-            mutate(inputPath);
+            mutate(inputPath, args);
             try {
                 runTest(inputPath,
                         inputTestPath);
@@ -41,8 +38,9 @@ public class App {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            }
-            deleteTarget(inputPath);
+            }/*
+            deleteTarget(new File(inputPath));
+            rebuildTarget("javac input/*.java");*/
         }
 
     }
@@ -87,11 +85,12 @@ public class App {
 
     }
 
-    public static void deleteTarget(String inputPath){
-        File target = new File(inputPath);
-        for(String file : target.list()){
-            File currentFile = new File(target.getPath(),file);
-            currentFile.delete();
+    public static void deleteTarget(File inputPath){
+        File[] allContents = inputPath.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteTarget(new File(file.getName()));
+            }
         }
     }
 
@@ -99,7 +98,7 @@ public class App {
 
     }
 
-    public static void mutate(String inputPath){
+    public static void mutate(String inputPath, String[] args){
         try{
             ClassPool pool = ClassPool.getDefault();
             Loader loader = new Loader(pool);
@@ -125,6 +124,7 @@ public class App {
                     "fr.istic.m2il.vv.input.Multiplication",
                     "fr.istic.m2il.vv.input.Substraction"
             };
+
 
             mutateArithmeticOperation(pool, classes, inputPath);
             mutateComparisonOperation(pool, classes, inputPath);
@@ -170,7 +170,7 @@ public class App {
                         break;
 
                 }
-                BCArithmeticEditor bcArithmeticEditor = new BCArithmeticEditor(inputPath, oldopcode, newOpcode);
+                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Substraction")){
@@ -201,7 +201,7 @@ public class App {
 
                 }
 
-                BCArithmeticEditor bcArithmeticEditor = new BCArithmeticEditor(inputPath, oldopcode, newOpcode);
+                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Multiplication")){
@@ -232,7 +232,7 @@ public class App {
 
                 }
 
-                BCArithmeticEditor bcArithmeticEditor = new BCArithmeticEditor(inputPath, oldopcode, newOpcode);
+                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Division")){
@@ -263,7 +263,7 @@ public class App {
 
                 }
 
-                BCArithmeticEditor bcArithmeticEditor = new BCArithmeticEditor(inputPath, oldopcode, newOpcode);
+                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
         }
@@ -275,7 +275,7 @@ public class App {
         for(CtClass ctClass: pool.get(classes)){
             for (CtMethod method : ctClass.getDeclaredMethods()) {
                 if (method.getReturnType().equals(CtClass.voidType)) {
-                    VoidMethodEditor voidMethodEditor = new VoidMethodEditor(inputPath);
+                    VoidMethodMutator voidMethodEditor = new VoidMethodMutator(inputPath);
                     try {
                         voidMethodEditor.replace(method);
                     } catch (CannotCompileException e) {
@@ -289,5 +289,11 @@ public class App {
             }
         }
 
+    }
+
+    private static void rebuildTarget(String command) throws Exception {
+        Process pro = Runtime.getRuntime().exec(command);
+        pro.waitFor();
+        System.out.println(command + " exitValue() " + pro.exitValue());
     }
 }

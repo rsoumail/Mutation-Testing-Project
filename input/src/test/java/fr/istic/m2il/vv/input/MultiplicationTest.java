@@ -16,7 +16,7 @@ public class MultiplicationTest {
 	@Test
 	public void MultiplicationByZero() throws Exception {
 		double a = 10;
-		double b = 20;
+		double b = 0;
 		Multiplication multiplication = new Multiplication(a, b);
 		Assert.assertEquals(0.0, multiplication.operate(), 1);
 	}

@@ -7,11 +7,11 @@ import javassist.bytecode.BadBytecode;
 
 import java.io.IOException;
 
-public class VoidMethodEditor implements Mutator {
+public class VoidMethodMutator implements Mutator {
 
     private String inputPath;
 
-    public VoidMethodEditor(String inputPath) {
+    public VoidMethodMutator(String inputPath) {
         this.inputPath = inputPath;
     }
 
@@ -19,14 +19,10 @@ public class VoidMethodEditor implements Mutator {
     public void replace(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException {
         ctMethod.getDeclaringClass().defrost();
         ctMethod.setBody("{}");
-        System.out.println("try");
         write(ctMethod.getDeclaringClass());
-        System.out.println("written ");
     }
 
     public void write(CtClass ctClass) throws CannotCompileException, IOException {
-        System.out.println("Try write file");
         ctClass.writeFile(inputPath);
-        System.out.println("Finish written");
     }
 }
