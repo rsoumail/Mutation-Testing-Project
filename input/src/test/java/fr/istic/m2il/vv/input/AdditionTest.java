@@ -19,7 +19,6 @@ public class AdditionTest {
 	public void AdditionByZero() throws Exception {
 
 		Addition add = new Addition(5000, 0);
-		System.out.println(add.operate());
 		//assert (add.operate() == 5000.0);
 		assertEquals(5000.0, add.operate(), 2);
 	}
@@ -31,6 +30,15 @@ public class AdditionTest {
 		Addition addition = new Addition(a, b);
 		assert (addition.getFirstMember() == a);
 	}
+	
+	@Test
+	public void FirstMemberSet() throws Exception {
+		Addition addition = new Addition(5.0,30.0);
+		addition.setFirstMember(10.0);
+		System.out.println(addition.getFirstMember());
+		Assert.assertEquals(10.0, addition.getFirstMember(), 1);
+	}
+	
 	
 	@Test
 	public void SecondMember() throws Exception {

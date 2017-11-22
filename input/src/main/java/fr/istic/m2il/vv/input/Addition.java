@@ -8,6 +8,9 @@ public class Addition implements Operation {
 		this.firstMember = firstMember;
 		this.secondMember = secondMember;
 	}
+	
+	public Addition() {
+	}
 
 	@Override
 	public void setFirstMember(double firstMember) {
