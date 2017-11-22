@@ -40,6 +40,7 @@ Lancement du projet :
 ## Couverture du code avec PIT
 
   Se placer à la racine du projet:
+ 
   Lancer la commande : mvn fr.istic.m2il.vv:pitest-maven:mutationCoverage
   
   
