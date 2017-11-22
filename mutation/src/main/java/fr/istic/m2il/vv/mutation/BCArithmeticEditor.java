@@ -4,14 +4,10 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.bytecode.*;
-import javassist.expr.ExprEditor;
-import javassist.expr.MethodCall;
-import javassist.expr.NewExpr;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 
 import java.io.IOException;
 
-public class BCArithmeticEditor implements AbstractEditor{
+public class BCArithmeticEditor implements Mutator {
 
     private String inputPath;
     private int oldOpcode, newOpcode;

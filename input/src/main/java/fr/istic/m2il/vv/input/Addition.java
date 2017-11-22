@@ -12,6 +12,7 @@ public class Addition implements Operation {
 	public Addition() {
 	}
 
+
 	@Override
 	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;

@@ -18,7 +18,7 @@ public class MultiplicationTest {
 		double a = 10;
 		double b = 20;
 		Multiplication multiplication = new Multiplication(a, b);
-		assert(multiplication.operate() == 0);
+		Assert.assertEquals(0.0, multiplication.operate(), 1);
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class MultiplicationTest {
 		double a = 10;
 		double b = 20;
 		Multiplication multiplication = new Multiplication(a, b);
-		assert(multiplication.operate() > 0);
+		Assert.assertTrue(multiplication.operate() > 0);
 	}
 
 }
