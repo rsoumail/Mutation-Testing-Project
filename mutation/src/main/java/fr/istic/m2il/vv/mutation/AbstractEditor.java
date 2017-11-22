@@ -2,10 +2,11 @@ package fr.istic.m2il.vv.mutation;
 
 import javassist.CannotCompileException;
 import javassist.CtMethod;
+import javassist.bytecode.BadBytecode;
 import javassist.expr.ExprEditor;
 
-public abstract class AbstractEditor extends ExprEditor {
-    void replace(CtMethod ctMethod) throws CannotCompileException{
+import java.io.IOException;
 
-    }
+public interface AbstractEditor {
+    void replace(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException;
 }
