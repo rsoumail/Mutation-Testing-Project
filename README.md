@@ -50,7 +50,7 @@ Lancement du projet :
 
   Se placer à la racine du projet:
  
-  > Lancer la commande : mvn fr.istic.m2il.vv:pitest-maven:mutationCoverage
+  > Lancer la commande : mvn org.pitest:pitest-maven:mutationCoverage
   le rapport au format HTML se trouve dans le dossier MutationTesting/mutation/target
   
   
