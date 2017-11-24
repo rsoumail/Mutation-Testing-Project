@@ -51,4 +51,34 @@ public class AdditionTest {
 		addition.setFirstMember(20.0);
 		Assert.assertEquals(20.0, addition.getFirstMember(), 1);
 	}
+	
+	@Test
+	public void firstGreatherThanSecond() throws Exception{
+		Addition addition = new Addition(30.0, 7.0);
+		Assert.assertTrue(addition.firstGreatherThanSecond());
+	}
+	
+	@Test
+	public void secondGreatherThanFirst() throws Exception{
+		Addition addition = new Addition(5.0,30.0);
+		Assert.assertTrue(addition.secondGreatherThanFirst());
+	}
+	
+	@Test
+	public void firstLessThanSecond() throws Exception{
+		Addition addition = new Addition(5.0,30.0);
+		Assert.assertTrue(addition.firstLessThanSecond());
+	}
+	
+	@Test
+	public void secondLessThanFirst() throws Exception{
+        Addition addition = new Addition(30.0, 5.0);
+        Assert.assertTrue(addition.secondLessThanFirst());
+	}
+	
+	@Test
+	public void firstGratherEqualSecond() throws Exception{
+		Addition addition = new Addition(30.0,30.0);
+		Assert.assertTrue(addition.firstGratherEqualSecond());
+	}
 }
