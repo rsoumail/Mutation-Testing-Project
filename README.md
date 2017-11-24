@@ -36,7 +36,7 @@ Lancement du projet :
  
   Dans le projet /VV_MutationTesting/mutation
   
-    > Dans le package ../vv/mutation les mutants implémentées sont:
+    > Dans le package ../vv/mutation/mutator les mutants implémentées sont:
       
      Opération + est remplacé par -
      Opération - est remplacé par +
@@ -45,12 +45,14 @@ Lancement du projet :
      
      Suppression des méthodes de type void
      
+     Modification aléatoire de la valeur de retour des méthodes de types void
+     
      
 ## Couverture du code avec PIT
 
   Se placer à la racine du projet:
  
-  > Lancer la commande : mvn org.pitest:pitest-maven:mutationCoverage
+  > Lancer la commande : mvn clean install org.pitest:pitest-maven:mutationCoverage
   le rapport au format HTML se trouve dans le dossier VV_MutationTesting/mutation/
   
   
