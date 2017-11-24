@@ -17,7 +17,7 @@ Lancement du projet :
   
   Lancer la commande : 
   > 
-  java -cp ./mutation-with-dependecies-1.0-SNAPSHOT.jar:.chemin_absolue_projet_cible/target/fr.istic.m2il.vv.input-1.0-SNAPSHOT.jar fr.istic.m2il.vv.mutation.App chemin_absolue_projet_cible/input
+  java -cp ./mutation-with-dependecies-mutation-1.0-SNAPSHOT.jar:.chemin_absolue_projet_cible/target/fr.istic.m2il.vv.input-1.0-SNAPSHOT.jar fr.istic.m2il.vv.mutation.App chemin_absolue_projet_cible/input
   
   > Où chemin_absolue_projet_cible represente le chemin absolue du programme cible à muter.
   
