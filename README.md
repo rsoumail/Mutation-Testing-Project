@@ -17,7 +17,7 @@ Lancement du projet :
   
   Lancer la commande : 
   > 
-  java -cp ./mutation-with-dependecies-mutation-1.0-SNAPSHOT.jar:.chemin_absolue_projet_cible/target/fr.istic.m2il.vv.input-1.0-SNAPSHOT.jar fr.istic.m2il.vv.mutation.App chemin_absolue_projet_cible/input
+  java -cp ./mutation-with-dependencies-1.0-SNAPSHOT.jar:.chemin_absolue_projet_cible/target/input-1.0-SNAPSHOT.jar fr.istic.m2il.vv.mutation.MutatorApp chemin_absolue_projet_cible/input
   
   > Où chemin_absolue_projet_cible represente le chemin absolue du programme cible à muter.
   
@@ -45,7 +45,7 @@ Lancement du projet :
      
      Suppression des méthodes de type void
      
-     Modification aléatoire de la valeur de retour des méthodes de types void
+     Renvoyer true pour les méthodes de types boolean
      
      
 ## Couverture du code avec PIT
@@ -53,7 +53,7 @@ Lancement du projet :
   Se placer à la racine du projet:
  
   > Lancer la commande : mvn clean install org.pitest:pitest-maven:mutationCoverage
-  le rapport au format HTML se trouve dans le dossier VV_MutationTesting/mutation/
+  le rapport au format HTML se trouve dans le dossier VV_MutationTesting/mutation/target/pit-reports
   
   
 
