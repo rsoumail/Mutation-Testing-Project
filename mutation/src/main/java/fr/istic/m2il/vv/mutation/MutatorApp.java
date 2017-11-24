@@ -13,6 +13,7 @@ import org.junit.runner.notification.Failure;
 
 import javassist.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,11 +32,15 @@ public class MutatorApp {
          exit(0);
         }
         else {
-            inputPath = args[0] + "/target/classes/";
-            inputTestPath = args[0] + "/target/test-classes/";
-            mutate(inputPath, args);
+
+            File inputDir = new File(args[0] + "/target/classes");
+            File testInputDir = new File(args[0]  + "/target/test-classes");
+
+            /*inputPath = args[0] + "/target/classes/";
+            inputTestPath = args[0] + "/target/test-classes/";*/
+            mutate(inputDir, args);
             try {
-                runTest(inputPath, inputTestPath);
+                runTest(inputDir, testInputDir);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
@@ -48,14 +53,14 @@ public class MutatorApp {
 
     }
 
-    public static void runTest(String targetClasses, String targetTestClasses ) throws ClassNotFoundException, MalformedURLException{
+    public static void runTest(File inputDir, File testInputDir ) throws ClassNotFoundException, MalformedURLException{
 
 
 
 
         URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{
-                new URL("file://" + targetClasses),
-                new URL("file://" + targetTestClasses),
+                new URL("file://" + inputDir.getAbsoluteFile() + "/"),
+                new URL("file://" + testInputDir.getAbsolutePath() + "/"),
         });
 
         JUnitCore core = new JUnitCore();
@@ -91,7 +96,7 @@ public class MutatorApp {
 
     }
 
-    public static void mutate(String inputPath, String[] args){
+    public static void mutate(File inputDir, String[] args){
         try{
             ClassPool pool = ClassPool.getDefault();
             Loader loader = new Loader(pool);
@@ -107,7 +112,7 @@ public class MutatorApp {
             };
 
             loader.addTranslator(pool, logger);
-            pool.appendClassPath(inputPath);
+            pool.appendClassPath(inputDir.getAbsolutePath());
 
             /*LoadClasses To mutate*/
             String classes[] = {
@@ -119,9 +124,9 @@ public class MutatorApp {
             };
 
 
-            mutateArithmeticOperation(pool, classes, inputPath);
-            mutateVoidReturnType(pool, classes, inputPath);
-            mutateBooleanReturnType(pool, classes, inputPath);
+            mutateArithmeticOperation(pool, classes, inputDir.getAbsolutePath());
+            mutateVoidReturnType(pool, classes, inputDir.getAbsolutePath());
+            mutateBooleanReturnType(pool, classes, inputDir.getAbsolutePath());
 
         }
         catch(Throwable exc) {
