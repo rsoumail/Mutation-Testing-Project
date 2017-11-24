@@ -37,4 +37,24 @@ public class Addition implements Operation {
 	public double operate() {
 		return (getFirstMember() + getSecondMember());
 	}
+
+	@Override
+	public boolean firstGreatherThanSecond() {
+		return this.firstMember > this.secondMember;
+	}
+
+	@Override
+	public boolean secondGreatherThanFirst() {
+		return this.secondMember > this.firstMember;
+	}
+
+	@Override
+	public boolean firstLessThanSecond() {
+		return  this.firstMember < this.secondMember;
+	}
+
+	@Override
+	public boolean secondLessThanFirst() {
+		return this.secondMember < this.firstMember;
+	}
 }

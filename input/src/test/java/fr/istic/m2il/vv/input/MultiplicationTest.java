@@ -29,4 +29,29 @@ public class MultiplicationTest {
 		Assert.assertTrue(multiplication.operate() > 0);
 	}
 
+	@Test
+	public void firstGreatherThanSecond() throws Exception{
+		Multiplication multiplication = new Multiplication(30.0, 7.0);
+		Assert.assertTrue(multiplication.firstGreatherThanSecond());
+
+	}
+
+	@Test
+	public void secondGreatherThanFirst() throws Exception{
+		Multiplication multiplication = new Multiplication(5.0,30.0);
+		Assert.assertTrue(multiplication.secondGreatherThanFirst() );
+	}
+
+	@Test
+	public void firstLessThanSecond() throws Exception{
+		Multiplication multiplication = new Multiplication(5.0,30.0);
+		Assert.assertTrue(multiplication.firstLessThanSecond());
+	}
+
+	@Test
+	public void secondLessThanFirst() throws Exception{
+		Multiplication multiplication = new Multiplication(30.0, 5.0);
+		Assert.assertTrue(multiplication.secondLessThanFirst());
+	}
+
 }

@@ -34,4 +34,24 @@ public class Substraction implements Operation {
 		return (getFirstMember() - getSecondMember());
 	}
 
+	@Override
+	public boolean firstGreatherThanSecond() {
+		return this.firstMember > this.secondMember;
+	}
+
+	@Override
+	public boolean secondGreatherThanFirst() {
+		return this.secondMember > this.firstMember;
+	}
+
+	@Override
+	public boolean firstLessThanSecond() {
+		return  this.firstMember < this.secondMember;
+	}
+
+	@Override
+	public boolean secondLessThanFirst() {
+		return this.secondMember < this.firstMember;
+	}
+
 }
