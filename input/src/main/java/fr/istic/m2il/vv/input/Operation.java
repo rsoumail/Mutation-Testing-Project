@@ -10,6 +10,8 @@ public interface Operation {
 
 	double getSecondMember();
 	
+	double operate();
+
 	boolean firstGreatherThanSecond();
 
 	boolean secondGreatherThanFirst();
@@ -17,10 +19,4 @@ public interface Operation {
 	boolean firstLessThanSecond();
 
 	boolean secondLessThanFirst();
-	
-	boolean firstGratherEqualSecond();
-	
-	boolean secondLessEqualSecond();
-	
-	double operate();
 }

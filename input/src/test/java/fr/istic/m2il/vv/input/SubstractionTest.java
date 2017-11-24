@@ -10,7 +10,7 @@ public class SubstractionTest {
 	@Test
 	public void simple() throws Exception {
 		Substraction substraction = new Substraction(10.0, 5.0);
-		Assert.assertEquals(substraction.operate(), (substraction.getFirstMember() - substraction.getSecondMember()), 0);
+		Assert.assertEquals(5.0,substraction.operate(), 1);
 	}
 	
 	@Test
@@ -18,7 +18,7 @@ public class SubstractionTest {
 		double a = 10;
 		double b = 0;
 		Substraction substraction = new Substraction(a, b);
-		Assert.assertEquals(substraction.operate(), a, 1);
+		Assert.assertEquals(a, substraction.operate(),  1);
 	}
 	
 	@Test 
@@ -32,6 +32,31 @@ public class SubstractionTest {
 		else {
 			Assert.assertTrue(substraction.operate() >= 0);
 		}
+	}
+
+	@Test
+	public void firstGreatherThanSecond() throws Exception{
+		Substraction substraction = new Substraction(30.0, 7.0);
+		Assert.assertTrue(substraction.firstGreatherThanSecond());
+
+	}
+
+	@Test
+	public void secondGreatherThanFirst() throws Exception{
+		Substraction substraction = new Substraction(5.0,30.0);
+		Assert.assertTrue(substraction.secondGreatherThanFirst() );
+	}
+
+	@Test
+	public void firstLessThanSecond() throws Exception{
+		Substraction substraction = new Substraction(5.0,30.0);
+		Assert.assertTrue(substraction.firstLessThanSecond());
+	}
+
+	@Test
+	public void secondLessThanFirst() throws Exception{
+		Substraction substraction = new Substraction(30.0, 5.0);
+		Assert.assertTrue(substraction.secondLessThanFirst());
 	}
 
 }

@@ -1,5 +1,9 @@
 package fr.istic.m2il.vv.mutation;
 
+import fr.istic.m2il.vv.mutation.mutator.BCArithmeticMutator;
+import fr.istic.m2il.vv.mutation.mutator.BooleanMethodMutator;
+import fr.istic.m2il.vv.mutation.mutator.Mutator;
+import fr.istic.m2il.vv.mutation.mutator.VoidMethodMutator;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.Opcode;
 import org.junit.runner.JUnitCore;
@@ -17,7 +21,7 @@ import java.net.URLClassLoader;
 
 import static java.lang.System.exit;
 
-public class App {
+public class MutatorApp {
 
 
     public static void main(String[] args) throws Exception {
@@ -28,31 +32,35 @@ public class App {
          exit(0);
         }
         else {
-            inputPath = args[0] + "/target/classes/";
-            inputTestPath = args[0] + "/target/test-classes/";
-            mutate(inputPath, args);
+
+            File inputDir = new File(args[0] + "/target/classes");
+            File testInputDir = new File(args[0]  + "/target/test-classes");
+
+            /*inputPath = args[0] + "/target/classes/";
+            inputTestPath = args[0] + "/target/test-classes/";*/
+            mutate(inputDir, args);
             try {
-                runTest(inputPath, inputTestPath);
+                runTest(inputDir, testInputDir);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-            deleteTarget(new File(  args[0] +"/target"));
-            rebuildTarget("javac  -d input/target -cp input/src/main/java/fr/istic/m2il/vv/input/*.java");
+            /*deleteTarget(new File(  args[0] +"/target"));
+            rebuildTarget("javac  -d input/target -cp input/src/main/java/fr/istic/m2il/vv/input/*.java");*/
 
         }
 
     }
 
-    public static void runTest(String targetClasses, String targetTestClasses ) throws ClassNotFoundException, MalformedURLException{
+    public static void runTest(File inputDir, File testInputDir ) throws ClassNotFoundException, MalformedURLException{
 
 
 
 
         URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{
-                new URL("file://" + targetClasses),
-                new URL("file://" + targetTestClasses),
+                new URL("file://" + inputDir.getAbsoluteFile() + "/"),
+                new URL("file://" + testInputDir.getAbsolutePath() + "/"),
         });
 
         JUnitCore core = new JUnitCore();
@@ -68,10 +76,13 @@ public class App {
             	Result r = core.run(request);
 
                 System.out.println("For " +  clazz.getName() + String.format("| RUN: %d", r.getRunCount()));
+                System.out.println();
                 if(r.wasSuccessful())
                     System.out.println( "For " +  clazz.getName() + "| ALL SUCCEEDED !");
                 else
-                    System.out.println( "For " +  clazz.getName() + "| FAILURE ! ");
+                    System.out.println( "For " +  clazz.getName() +  String.format("| FAILURE! : %d", r.getFailureCount()));
+                System.out.println();
+
                 for (Failure failure : r.getFailures()){
                     System.out.println(failure.toString());
                     System.out.println(failure.getTrace());
@@ -85,21 +96,7 @@ public class App {
 
     }
 
-    public static void deleteTarget(File inputPath){
-        File[] allContents = inputPath.listFiles();
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteTarget(new File(inputPath.toPath()+ "/"+ file.getName()));
-            }
-        }
-        inputPath.delete();
-    }
-
-    public static void buildTarget(){
-
-    }
-
-    public static void mutate(String inputPath, String[] args){
+    public static void mutate(File inputDir, String[] args){
         try{
             ClassPool pool = ClassPool.getDefault();
             Loader loader = new Loader(pool);
@@ -115,7 +112,7 @@ public class App {
             };
 
             loader.addTranslator(pool, logger);
-            pool.appendClassPath(inputPath);
+            pool.appendClassPath(inputDir.getAbsolutePath());
 
             /*LoadClasses To mutate*/
             String classes[] = {
@@ -127,10 +124,9 @@ public class App {
             };
 
 
-            mutateArithmeticOperation(pool, classes, inputPath);
-            mutateComparisonOperation(pool, classes, inputPath);
-
-            pool.appendClassPath(inputPath);
+            mutateArithmeticOperation(pool, classes, inputDir.getAbsolutePath());
+            mutateVoidReturnType(pool, classes, inputDir.getAbsolutePath());
+            mutateBooleanReturnType(pool, classes, inputDir.getAbsolutePath());
 
         }
         catch(Throwable exc) {
@@ -173,7 +169,7 @@ public class App {
                         break;
 
                 }
-                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
+                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Substraction")){
@@ -204,7 +200,7 @@ public class App {
 
                 }
 
-                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
+                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Multiplication")){
@@ -235,7 +231,7 @@ public class App {
 
                 }
 
-                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
+                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
                 bcArithmeticEditor.replace(methode);
             }
             if(ctClass.getName().contains("Division")){
@@ -266,21 +262,21 @@ public class App {
 
                 }
 
-                BCArithmeticEditorMutator bcArithmeticEditor = new BCArithmeticEditorMutator(inputPath, oldopcode, newOpcode);
-                bcArithmeticEditor.replace(methode);
+                Mutator mutator = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
+                mutator.replace(methode);
             }
         }
 
     }
 
-    public static void mutateComparisonOperation(ClassPool pool, String[] classes, String inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
+    public static void mutateVoidReturnType(ClassPool pool, String[] classes, String inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
         for(CtClass ctClass: pool.get(classes)){
             for (CtMethod method : ctClass.getDeclaredMethods()) {
                 if (method.getReturnType().equals(CtClass.voidType)) {
-                    VoidMethodMutator voidMethodEditor = new VoidMethodMutator(inputPath);
+                    Mutator mutator = new VoidMethodMutator(inputPath);
                     try {
-                        voidMethodEditor.replace(method);
+                        mutator.replace(method);
                     } catch (CannotCompileException e) {
                         e.printStackTrace();
                     } catch (BadBytecode badBytecode) {
@@ -294,9 +290,29 @@ public class App {
 
     }
 
-    private static void rebuildTarget(String command) throws Exception {
-        Process pro = Runtime.getRuntime().exec(command);
-        pro.waitFor();
-        System.out.println(command + " exitValue() " + pro.exitValue());
+    public static void mutateBooleanReturnType(ClassPool pool, String[] classes, String inputPath) throws NotFoundException {
+
+        try {
+            for(CtClass ctClass: pool.get(classes)){
+                for (CtMethod method : ctClass.getDeclaredMethods()) {
+                    if (method.getReturnType().equals(CtClass.booleanType)) {
+                        Mutator mutator = new BooleanMethodMutator(inputPath);
+                        try {
+                            mutator.replace(method);
+                        } catch (CannotCompileException e) {
+                            e.printStackTrace();
+                        } catch (BadBytecode badBytecode) {
+                            badBytecode.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

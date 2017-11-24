@@ -26,7 +26,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>fr.istic.m2il.vv.input</artifactId>
+    <artifactId>input</artifactId>
     <packaging>jar</packaging>
 
     <properties>

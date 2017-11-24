@@ -36,4 +36,29 @@ public class DivisionTest {
 		Division division = new Division(a, b);
 		Assert.assertEquals(5, division.operate(), 1);
 	}
+
+	@Test
+	public void firstGreatherThanSecond() throws Exception{
+		Division division = new Division(30.0, 7.0);
+		Assert.assertTrue(division.firstGreatherThanSecond());
+
+	}
+
+	@Test
+	public void secondGreatherThanFirst() throws Exception{
+		Division division = new Division(5.0,30.0);
+		Assert.assertTrue(division.secondGreatherThanFirst() );
+	}
+
+	@Test
+	public void firstLessThanSecond() throws Exception{
+		Division division = new Division(5.0,30.0);
+		Assert.assertTrue(division.firstLessThanSecond());
+	}
+
+	@Test
+	public void secondLessThanFirst() throws Exception{
+		Division division = new Division(30.0, 5.0);
+		Assert.assertTrue(division.secondLessThanFirst());
+	}
 }

@@ -2,6 +2,7 @@ package fr.istic.m2il.vv.mutation;
 
 import java.io.IOException;
 
+import fr.istic.m2il.vv.mutation.mutator.Mutator;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;

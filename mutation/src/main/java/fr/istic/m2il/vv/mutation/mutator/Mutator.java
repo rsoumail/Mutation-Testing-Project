@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutation;
+package fr.istic.m2il.vv.mutation.mutator;
 
 import javassist.CannotCompileException;
 import javassist.CtMethod;
