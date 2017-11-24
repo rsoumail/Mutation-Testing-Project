@@ -12,6 +12,5 @@ public class App {
 		System.out.println("Sustraction : " + substraction.operate());
 		System.out.println("Multiplication : " + multiplication.operate());
 		System.out.println("Division : " + division.operate());
-
 	}
 }
