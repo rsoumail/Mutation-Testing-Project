@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Utils {
 
-    private static void rebuildTarget(String command) throws Exception {
+    public static void rebuildTarget(String command) throws Exception {
         Process pro = Runtime.getRuntime().exec(command);
         pro.waitFor();
         System.out.println(command + " exitValue() " + pro.exitValue());
@@ -24,7 +24,7 @@ public class Utils {
         inputPath.delete();
     }
 
-    public static void write(CtClass ctClass, String inputPath) throws CannotCompileException, IOException {
-        ctClass.writeFile(inputPath);
+    public static void write(CtClass ctClass, File inputPath) throws CannotCompileException, IOException {
+        ctClass.writeFile(inputPath.getAbsolutePath());
     }
 }

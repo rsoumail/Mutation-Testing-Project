@@ -1,51 +1,51 @@
 package fr.istic.m2il.vv.mutation;
 
-import fr.istic.m2il.vv.mutation.mutator.BCArithmeticMutator;
+import fr.istic.m2il.vv.mutation.mutator.ArithmeticOperatorMutator;
 import fr.istic.m2il.vv.mutation.mutator.BooleanMethodMutator;
 import fr.istic.m2il.vv.mutation.mutator.Mutator;
 import fr.istic.m2il.vv.mutation.mutator.VoidMethodMutator;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.Opcode;
 import org.junit.runner.JUnitCore;
+
+import javassist.*;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-
-import javassist.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.exit;
 
 public class MutatorApp {
 
+    static ClassPool pool;
+    static Loader loader;
+    static CustomTranslator translator;
+    static File inputDir ;
+    static  File testInputDir ;
+
 
     public static void main(String[] args) throws Exception {
-        String inputPath, inputTestPath;
+
         if(args.length < 1){
-            System.err.println(args[0]);
             System.err.println("Veuillez indiquer le chemin du projet source");
          exit(0);
         }
         else {
 
-            File inputDir = new File(args[0] + "/target/classes");
-            File testInputDir = new File(args[0]  + "/target/test-classes");
+            /*File inputDir = new File(args[0] + "/target/classes");
+            File testInputDir = new File(args[0]  + "/target/test-classes");*/
 
-            /*inputPath = args[0] + "/target/classes/";
-            inputTestPath = args[0] + "/target/test-classes/";*/
-            mutate(inputDir, args);
-            try {
-                runTest(inputDir, testInputDir);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            loadSources(args[0]);
+            mutate(new File("mutation/target/classes/"));
+
             /*deleteTarget(new File(  args[0] +"/target"));
             rebuildTarget("javac  -d input/target -cp input/src/main/java/fr/istic/m2il/vv/input/*.java");*/
 
@@ -53,23 +53,42 @@ public class MutatorApp {
 
     }
 
-    public static void runTest(File inputDir, File testInputDir ) throws ClassNotFoundException, MalformedURLException{
+    public static void runTest() throws ClassNotFoundException, IOException, NotFoundException, CannotCompileException {
 
-
-
-
+        File f = new File("target/classes/");
         URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{
-                new URL("file://" + inputDir.getAbsoluteFile() + "/"),
+                //new URL("file://" + inputDir.getAbsoluteFile() + "/"),
+                new URL("file://" + f.getAbsoluteFile() + "/"),
                 new URL("file://" + testInputDir.getAbsolutePath() + "/"),
         });
 
+
         JUnitCore core = new JUnitCore();
+        //Class<?>[] _testClasses = new Class<?>[testInputDir.listFiles().length];
+        //loadTestClass(_testClasses, urlClassLoader, testInputDir);
+
+        //String[] _testClasses = new String[];
+
+        /*for(CtClass ctClass : pool.get(_testClasses)){
+            //testClasses.add(ctClass.toClass());
+        }*/
+
+       // URL[] urls = new URL[translator.getCtClasses().size()];
+      /*  int i = 0;
+        for(CtClass classToReload : translator.getCtClasses()){
+            System.out.println("URL" + classToReload.getURL());
+            urls[i++] = classToReload.getURL();
+        }
+*/
         Class<?>[] classes = {
                 urlClassLoader.loadClass("fr.istic.m2il.vv.input.AdditionTest"),
                 urlClassLoader.loadClass("fr.istic.m2il.vv.input.SubstractionTest"),
                 urlClassLoader.loadClass("fr.istic.m2il.vv.input.MultiplicationTest"),
                 urlClassLoader.loadClass("fr.istic.m2il.vv.input.DivisionTest")
                 };
+
+        //loadTestClass(classes, testInputDir);
+
         for(Class<?> clazz : classes) {
             	System.out.println("Test: " + clazz.getName());
             	Request request = Request.aClass(clazz);
@@ -96,10 +115,10 @@ public class MutatorApp {
 
     }
 
-    public static void mutate(File inputDir, String[] args){
+    public static void mutate(File inputDir){
         try{
-            ClassPool pool = ClassPool.getDefault();
-            Loader loader = new Loader(pool);
+             /*pool = ClassPool.getDefault();
+             loader = new Loader(pool);
 
             Translator logger = new Translator() {
                 public void start(ClassPool classPool) throws NotFoundException, CannotCompileException {
@@ -113,7 +132,7 @@ public class MutatorApp {
 
             loader.addTranslator(pool, logger);
             pool.appendClassPath(inputDir.getAbsolutePath());
-
+*/
             /*LoadClasses To mutate*/
             String classes[] = {
                     "fr.istic.m2il.vv.input.Operation",
@@ -123,10 +142,33 @@ public class MutatorApp {
                     "fr.istic.m2il.vv.input.Substraction"
             };
 
+            mutateArithmeticOperation(classes, inputDir);
+            /*try {
+                runTest();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }*/
+            //Utils.deleteTarget(new File("mutation/target"));
+           // File mutation = new File("mutation");
 
-            mutateArithmeticOperation(pool, classes, inputDir.getAbsolutePath());
-            mutateVoidReturnType(pool, classes, inputDir.getAbsolutePath());
-            mutateBooleanReturnType(pool, classes, inputDir.getAbsolutePath());
+            //System.out.println("New File " + mutation.getAbsolutePath());
+           // Utils.rebuildTarget("javac -d ../mutation/" + " -cp " + mutation.getAbsolutePath()+"/src/main/java/fr/istic/m2il/vv/mutation/*.java");
+
+            //mutateVoidReturnType(classes, inputDir);
+
+
+            //Utils.deleteTarget(new File("mutation/target"));
+            //Utils.rebuildTarget("javac -cp mutation/src/fr/istic/m2il/vv/mutation/*.java");
+            /*mutateBooleanReturnType(classes, inputDir);
+            try {
+                runTest();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }*/
 
         }
         catch(Throwable exc) {
@@ -136,181 +178,102 @@ public class MutatorApp {
         }
     }
 
-    public static void mutateArithmeticOperation(ClassPool pool, String[] classes, String inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
+    public static void mutateArithmeticOperation(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
+        List<ArithmeticOperatorMutator> mutators = new ArrayList<>();
         for(CtClass ctClass: pool.get(classes)){
             ctClass.defrost();
-            CtMethod methode = ctClass.getDeclaredMethod("operate");
+            CtMethod[] methods = ctClass.getDeclaredMethods();
 
-            if(ctClass.getName().contains("Addition")){
-
-                int oldopcode = 0;
-                int newOpcode = 0;
-
-                switch (methode.getReturnType().getName().toString()){
-                    case "double":
-                        oldopcode = Opcode.DADD;
-                        newOpcode = Opcode.DSUB;
-                        break;
-
-                    case "int":
-                        oldopcode = Opcode.IADD;
-                        newOpcode = Opcode.ISUB;
-                        break;
-
-                    case "float":
-                        oldopcode = Opcode.FADD;
-                        newOpcode = Opcode.FSUB;
-                        break;
-
-                    case "long":
-                        oldopcode = Opcode.LADD;
-                        newOpcode = Opcode.LSUB;
-                        break;
-
-                }
-                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
-                bcArithmeticEditor.replace(methode);
+            for(CtMethod method: methods){
+                ArithmeticOperatorMutator bcArithmeticEditor = new ArithmeticOperatorMutator(inputPath);
+                bcArithmeticEditor.mutate(method);
+                mutators.add(bcArithmeticEditor);
             }
-            if(ctClass.getName().contains("Substraction")){
 
-                int oldopcode = 0;
-                int newOpcode = 0;
+        }
 
-                switch (methode.getReturnType().getName().toString()){
-                    case "double":
-                        oldopcode = Opcode.DSUB;
-                        newOpcode = Opcode.DADD;
-                        break;
-
-                    case "int":
-                        oldopcode = Opcode.ISUB;
-                        newOpcode = Opcode.IADD;
-                        break;
-
-                    case "float":
-                        oldopcode = Opcode.FSUB;
-                        newOpcode = Opcode.FADD;
-                        break;
-
-                    case "long":
-                        oldopcode = Opcode.LSUB;
-                        newOpcode = Opcode.LADD;
-                        break;
-
-                }
-
-                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
-                bcArithmeticEditor.replace(methode);
+        try {
+            runTest();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            for(Mutator mutator:mutators){
+                mutator.revert();
             }
-            if(ctClass.getName().contains("Multiplication")){
 
-                int oldopcode = 0;
-                int newOpcode = 0;
-
-                switch (methode.getReturnType().getName().toString()){
-                    case "double":
-                        oldopcode = Opcode.DMUL;
-                        newOpcode = Opcode.DDIV;
-                        break;
-
-                    case "int":
-                        oldopcode = Opcode.IMUL;
-                        newOpcode = Opcode.IDIV;
-                        break;
-
-                    case "float":
-                        oldopcode = Opcode.FMUL;
-                        newOpcode = Opcode.FDIV;
-                        break;
-
-                    case "long":
-                        oldopcode = Opcode.LMUL;
-                        newOpcode = Opcode.LDIV;
-                        break;
-
-                }
-
-                BCArithmeticMutator bcArithmeticEditor = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
-                bcArithmeticEditor.replace(methode);
-            }
-            if(ctClass.getName().contains("Division")){
-
-                int oldopcode = 0;
-                int newOpcode = 0;
-
-                switch (methode.getReturnType().getName().toString()){
-                    case "double":
-                        oldopcode = Opcode.DDIV;
-                        newOpcode = Opcode.DMUL;
-                        break;
-
-                    case "int":
-                        oldopcode = Opcode.IDIV;
-                        newOpcode = Opcode.IMUL;
-                        break;
-
-                    case "float":
-                        oldopcode = Opcode.FDIV;
-                        newOpcode = Opcode.FMUL;
-                        break;
-
-                    case "long":
-                        oldopcode = Opcode.LDIV;
-                        newOpcode = Opcode.LMUL;
-                        break;
-
-                }
-
-                Mutator mutator = new BCArithmeticMutator(inputPath, oldopcode, newOpcode);
-                mutator.replace(methode);
-            }
         }
 
     }
 
-    public static void mutateVoidReturnType(ClassPool pool, String[] classes, String inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
+    public static void mutateVoidReturnType(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
         for(CtClass ctClass: pool.get(classes)){
             for (CtMethod method : ctClass.getDeclaredMethods()) {
-                if (method.getReturnType().equals(CtClass.voidType)) {
-                    Mutator mutator = new VoidMethodMutator(inputPath);
-                    try {
-                        mutator.replace(method);
-                    } catch (CannotCompileException e) {
-                        e.printStackTrace();
-                    } catch (BadBytecode badBytecode) {
-                        badBytecode.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                Mutator mutator = new VoidMethodMutator(inputPath);
+                mutator.mutate(method);
             }
         }
 
     }
 
-    public static void mutateBooleanReturnType(ClassPool pool, String[] classes, String inputPath) throws NotFoundException {
+    public static void mutateBooleanReturnType(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
         try {
             for(CtClass ctClass: pool.get(classes)){
                 for (CtMethod method : ctClass.getDeclaredMethods()) {
-                    if (method.getReturnType().equals(CtClass.booleanType)) {
-                        Mutator mutator = new BooleanMethodMutator(inputPath);
-                        try {
-                            mutator.replace(method);
-                        } catch (CannotCompileException e) {
-                            e.printStackTrace();
-                        } catch (BadBytecode badBytecode) {
-                            badBytecode.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    Mutator mutator = new BooleanMethodMutator(inputPath);
+                    mutator.mutate(method);
                 }
             }
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void loadTestClass(Class<?>[] classes,URLClassLoader urlClassLoader, File dir) throws IOException, NotFoundException, CannotCompileException {
+
+        /*for(CtClass c: translator.getCtClasses()){
+            System.out.println("classe :" + c.toClass().getCanonicalName());
+        }*/
+
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                loadTestClass(classes, urlClassLoader, file);
+            } else {
+                String name = file.getPath();
+                if(file.getPath().contains("test-classes"))
+                    System.out.println(file.getPath());
+               //String className =  name.replaceAll("\\.class","");
+              // className = className.replaceAll("/", "\\.");
+
+                //String className = file.getAbsolutePath()
+
+                /*if(name.contains(".class")){
+                    String[] array = name.split("\\.");
+
+                    //Class<?> clazz = file.
+                }*/
+            }
+        }
+
+    }
+
+    public static void loadSources(String input) throws NotFoundException, CannotCompileException {
+        pool = ClassPool.getDefault();
+        loader = new Loader(pool);
+
+        translator = new CustomTranslator();
+
+        inputDir = new File(input + "/target/classes");
+        testInputDir = new File(input  + "/target/test-classes");
+
+        loader.addTranslator(pool, translator);
+        pool.appendClassPath(inputDir.getPath());
+        pool.appendClassPath(testInputDir.getPath());
+
     }
 }

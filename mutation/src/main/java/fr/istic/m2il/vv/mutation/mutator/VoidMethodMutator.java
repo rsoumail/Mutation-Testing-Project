@@ -4,23 +4,34 @@ import fr.istic.m2il.vv.mutation.Utils;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 
+import java.io.File;
 import java.io.IOException;
 
 public class VoidMethodMutator implements Mutator {
 
-    private String inputPath;
+    private File inputPath;
+    private CtMethod original;
 
-    public VoidMethodMutator(String inputPath) {
+    public VoidMethodMutator(File inputPath) {
         this.inputPath = inputPath;
     }
 
     @Override
-    public void replace(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException {
-        ctMethod.getDeclaringClass().defrost();
-        ctMethod.setBody("{}");
-        Utils.write(ctMethod.getDeclaringClass(), this.inputPath);
+    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException {
+        if(ctMethod.getReturnType().equals(CtClass.voidType)){
+            original = ctMethod;
+            ctMethod.getDeclaringClass().defrost();
+            ctMethod.setBody("{}");
+            Utils.write(ctMethod.getDeclaringClass(), this.inputPath);
+        }
+    }
+
+    @Override
+    public void revert() throws CannotCompileException, IOException {
+        Utils.write(original.getDeclaringClass(), this.inputPath);
     }
 
 }
