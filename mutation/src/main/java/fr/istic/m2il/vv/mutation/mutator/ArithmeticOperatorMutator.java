@@ -2,17 +2,14 @@ package fr.istic.m2il.vv.mutation.mutator;
 
 import fr.istic.m2il.vv.mutation.Utils;
 import javassist.CannotCompileException;
-import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.bytecode.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class ArithmeticOperatorMutator implements Mutator {
+public class ArithmeticOperatorMutator implements Mutator{
 
     private File inputPath;
     private CtMethod original;
@@ -151,6 +148,7 @@ public class ArithmeticOperatorMutator implements Mutator {
 
         Utils.write(original.getDeclaringClass(), this.inputPath);
     }
+
 
 
 }

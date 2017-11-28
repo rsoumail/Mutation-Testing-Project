@@ -1,5 +1,6 @@
 package fr.istic.m2il.vv.mutation;
 
+//import fr.istic.m2il.vv.mutation.mutator.ArithmeticOperatorMutator;
 import fr.istic.m2il.vv.mutation.mutator.ArithmeticOperatorMutator;
 import fr.istic.m2il.vv.mutation.mutator.BooleanMethodMutator;
 import fr.istic.m2il.vv.mutation.mutator.Mutator;
@@ -88,7 +89,7 @@ public class MutatorApp {
 
     public static void mutateArithmeticOperation(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
-        List<ArithmeticOperatorMutator> mutators = new ArrayList<>();
+        List<Mutator> mutators = new ArrayList<>();
         for(CtClass ctClass: pool.get(classes)){
             ctClass.defrost();
             CtMethod[] methods = ctClass.getDeclaredMethods();
