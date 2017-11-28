@@ -32,7 +32,6 @@ public class AdditionTest {
 	public void FirstMemberSet() throws Exception {
 		Addition addition = new Addition(5.0, 30.0);
 		addition.setFirstMember(10.0);
-		System.out.println(addition.getFirstMember());
 		Assert.assertEquals(10.0, addition.getFirstMember(), 1);
 	}
 

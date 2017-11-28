@@ -19,7 +19,7 @@ public class MutatorExecutor {
             CtMethod[] methods = ctClass.getDeclaredMethods();
 
             for(CtMethod method: methods){
-                //ArithmeticOperatorMutator bcArithmeticEditor = new ArithmeticOperatorMutator(inputPath);
+
                 mutator.mutate(method);
                 //mutators.add(bcArithmeticEditor);
             }

@@ -29,7 +29,12 @@ public class MutatorApp {
     static Loader loader;
     static CustomTranslator translator;
     static File inputDir ;
-    static  File testInputDir ;
+    static File testInputDir ;
+    static File saveSourcesDir;
+    static String[] _sourcesClasses;
+    static List<Class<?>> _testClasses = new ArrayList<>();
+    static JUnitCore core = new JUnitCore();
+    static URLClassLoader urlClassLoader;
 
 
     public static void main(String[] args) throws Exception {
@@ -39,57 +44,17 @@ public class MutatorApp {
          exit(0);
         }
         else {
-
-            /*File inputDir = new File(args[0] + "/target/classes");
-            File testInputDir = new File(args[0]  + "/target/test-classes");*/
-
             loadSources(args[0]);
             mutate(new File("mutation/target/classes/"));
-
-            /*deleteTarget(new File(  args[0] +"/target"));
-            rebuildTarget("javac  -d input/target -cp input/src/main/java/fr/istic/m2il/vv/input/*.java");*/
-
         }
 
     }
 
     public static void runTest() throws ClassNotFoundException, IOException, NotFoundException, CannotCompileException {
 
-        File f = new File("target/classes/");
-        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{
-                //new URL("file://" + inputDir.getAbsoluteFile() + "/"),
-                new URL("file://" + f.getAbsoluteFile() + "/"),
-                new URL("file://" + testInputDir.getAbsolutePath() + "/"),
-        });
 
 
-        JUnitCore core = new JUnitCore();
-        //Class<?>[] _testClasses = new Class<?>[testInputDir.listFiles().length];
-        //loadTestClass(_testClasses, urlClassLoader, testInputDir);
-
-        //String[] _testClasses = new String[];
-
-        /*for(CtClass ctClass : pool.get(_testClasses)){
-            //testClasses.add(ctClass.toClass());
-        }*/
-
-       // URL[] urls = new URL[translator.getCtClasses().size()];
-      /*  int i = 0;
-        for(CtClass classToReload : translator.getCtClasses()){
-            System.out.println("URL" + classToReload.getURL());
-            urls[i++] = classToReload.getURL();
-        }
-*/
-        Class<?>[] classes = {
-                urlClassLoader.loadClass("fr.istic.m2il.vv.input.AdditionTest"),
-                urlClassLoader.loadClass("fr.istic.m2il.vv.input.SubstractionTest"),
-                urlClassLoader.loadClass("fr.istic.m2il.vv.input.MultiplicationTest"),
-                urlClassLoader.loadClass("fr.istic.m2il.vv.input.DivisionTest")
-                };
-
-        //loadTestClass(classes, testInputDir);
-
-        for(Class<?> clazz : classes) {
+        for(Class<?> clazz : _testClasses) {
             	System.out.println("Test: " + clazz.getName());
             	Request request = Request.aClass(clazz);
             	Result r = core.run(request);
@@ -115,67 +80,10 @@ public class MutatorApp {
 
     }
 
-    public static void mutate(File inputDir){
-        try{
-             /*pool = ClassPool.getDefault();
-             loader = new Loader(pool);
+    public static void mutate(File inputDir) throws CannotCompileException, BadBytecode, NotFoundException, IOException {
 
-            Translator logger = new Translator() {
-                public void start(ClassPool classPool) throws NotFoundException, CannotCompileException {
-                    System.out.println("Starting...");
-                }
+        mutateArithmeticOperation(_sourcesClasses, inputDir);
 
-                public void onLoad(ClassPool classPool, String classname) throws NotFoundException, CannotCompileException {
-                    System.out.println("Loading...: " + classname);
-                }
-            };
-
-            loader.addTranslator(pool, logger);
-            pool.appendClassPath(inputDir.getAbsolutePath());
-*/
-            /*LoadClasses To mutate*/
-            String classes[] = {
-                    "fr.istic.m2il.vv.input.Operation",
-                    "fr.istic.m2il.vv.input.Addition",
-                    "fr.istic.m2il.vv.input.Division",
-                    "fr.istic.m2il.vv.input.Multiplication",
-                    "fr.istic.m2il.vv.input.Substraction"
-            };
-
-            mutateArithmeticOperation(classes, inputDir);
-            /*try {
-                runTest();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }*/
-            //Utils.deleteTarget(new File("mutation/target"));
-           // File mutation = new File("mutation");
-
-            //System.out.println("New File " + mutation.getAbsolutePath());
-           // Utils.rebuildTarget("javac -d ../mutation/" + " -cp " + mutation.getAbsolutePath()+"/src/main/java/fr/istic/m2il/vv/mutation/*.java");
-
-            //mutateVoidReturnType(classes, inputDir);
-
-
-            //Utils.deleteTarget(new File("mutation/target"));
-            //Utils.rebuildTarget("javac -cp mutation/src/fr/istic/m2il/vv/mutation/*.java");
-            /*mutateBooleanReturnType(classes, inputDir);
-            try {
-                runTest();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }*/
-
-        }
-        catch(Throwable exc) {
-            System.out.println("Impossible de charger les sources de l'input.");
-            System.out.println(exc.getMessage());
-            exc.printStackTrace();
-        }
     }
 
     public static void mutateArithmeticOperation(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
@@ -222,58 +130,84 @@ public class MutatorApp {
 
     public static void mutateBooleanReturnType(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode {
 
-        try {
-            for(CtClass ctClass: pool.get(classes)){
-                for (CtMethod method : ctClass.getDeclaredMethods()) {
-                    Mutator mutator = new BooleanMethodMutator(inputPath);
-                    mutator.mutate(method);
-                }
+        for(CtClass ctClass: pool.get(classes)){
+            for (CtMethod method : ctClass.getDeclaredMethods()) {
+                Mutator mutator = new BooleanMethodMutator(inputPath);
+                mutator.mutate(method);
             }
-        } catch (NotFoundException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void loadTestClass(Class<?>[] classes,URLClassLoader urlClassLoader, File dir) throws IOException, NotFoundException, CannotCompileException {
-
-        /*for(CtClass c: translator.getCtClasses()){
-            System.out.println("classe :" + c.toClass().getCanonicalName());
-        }*/
+    public static void loadTestClass(List<Class<?>> classes,URLClassLoader urlClassLoader, File dir) throws IOException, NotFoundException, CannotCompileException, ClassNotFoundException {
 
         for (File file : dir.listFiles()) {
             if (file.isDirectory()) {
                 loadTestClass(classes, urlClassLoader, file);
             } else {
-                String name = file.getPath();
-                if(file.getPath().contains("test-classes"))
-                    System.out.println(file.getPath());
-               //String className =  name.replaceAll("\\.class","");
-              // className = className.replaceAll("/", "\\.");
-
-                //String className = file.getAbsolutePath()
-
-                /*if(name.contains(".class")){
-                    String[] array = name.split("\\.");
-
-                    //Class<?> clazz = file.
-                }*/
+                String[] pathElements = file.getPath().split("classes/");
+                String classFile = pathElements[1].replace(".class", "");
+                classFile = classFile.replace("/", ".");
+                classes.add(urlClassLoader.loadClass(classFile));
             }
         }
 
     }
 
-    public static void loadSources(String input) throws NotFoundException, CannotCompileException {
-        pool = ClassPool.getDefault();
-        loader = new Loader(pool);
+    public static void loadClass(List<String> classes, File dir) throws IOException, NotFoundException, CannotCompileException, ClassNotFoundException {
 
-        translator = new CustomTranslator();
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                loadClass(classes, file);
+            } else {
+                String[] pathElements = file.getPath().split("classes/");
+                String classFile = pathElements[1].replace(".class", "");
+                classFile = classFile.replace("/", ".");
+                classes.add(classFile);
+            }
+        }
 
-        inputDir = new File(input + "/target/classes");
-        testInputDir = new File(input  + "/target/test-classes");
+    }
 
-        loader.addTranslator(pool, translator);
-        pool.appendClassPath(inputDir.getPath());
-        pool.appendClassPath(testInputDir.getPath());
+
+    public static void loadSources(String input) throws NotFoundException, CannotCompileException, IOException, ClassNotFoundException {
+
+        try{
+            pool = ClassPool.getDefault();
+            loader = new Loader(pool);
+
+            translator = new CustomTranslator();
+
+            inputDir = new File(input + "/target/classes");
+            testInputDir = new File(input  + "/target/test-classes");
+            saveSourcesDir = new File("target/classes");
+
+
+            loader.addTranslator(pool, translator);
+            pool.appendClassPath(inputDir.getPath());
+            pool.appendClassPath(testInputDir.getPath());
+        }
+        catch(Throwable exc) {
+            System.out.println("Impossible de charger les sources de l'input.");
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+
+        List<String> sourcesClassesList = new ArrayList<>();
+        loadClass(sourcesClassesList, inputDir);
+        _sourcesClasses = new String[sourcesClassesList.size()];
+        int i = 0;
+        for(String source: sourcesClassesList){
+            _sourcesClasses[i] = source.toString();
+            i++;
+        }
+
+        urlClassLoader = URLClassLoader.newInstance(new URL[]{
+                //new URL("file://" + inputDir.getAbsoluteFile() + "/"),
+                new URL("file://" + saveSourcesDir.getAbsoluteFile() + "/"),
+                new URL("file://" + testInputDir.getAbsolutePath() + "/"),
+        });
+
+        loadTestClass(_testClasses, urlClassLoader, testInputDir);
 
     }
 }

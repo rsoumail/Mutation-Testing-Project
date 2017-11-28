@@ -72,7 +72,6 @@ public class ArithmeticOperatorMutator implements Mutator {
 
                     case Opcode.DADD:
                         bytes.put(pos, iterator.byteAt(pos));
-                        System.out.println("codes add "+iterator.byteAt(pos));
                         iterator.writeByte(Opcode.DSUB, pos);
                         break;
 
