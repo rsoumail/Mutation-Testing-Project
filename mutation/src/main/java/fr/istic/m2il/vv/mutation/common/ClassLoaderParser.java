@@ -5,11 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Parser {
+public class ClassLoaderParser {
 
     private static Logger logger = LoggerFactory.getLogger(MutatorApp.class);
 
@@ -58,7 +61,7 @@ public class Parser {
     }
 
     private void loadingDirectoryClasses(File directoryClass, List<String> classesName, List<Class<?>> loadedClasses, URL[] urls) throws ClassNotFoundException {
-        logger.trace("Loading folder into classLoader");
+        logger.trace("Loading folders into classLoader");
         try(URLClassLoader classLoader = new URLClassLoader(urls)) {
             logger.trace("Loading classes located in {}", directoryClass.getAbsolutePath());
             for (String className : classesName) {
@@ -73,7 +76,7 @@ public class Parser {
 
     /**
      * Returns classes name located in directory
-     * String format include also package architecture (ex: fr.istic.vv.Operation)
+     * String format include also package architecture (ex: fr.istic.vv.input.Operation)
      * @param directory : root classes directory
      * @return List of classes name, if there is not file in directory returns a empty list
      */

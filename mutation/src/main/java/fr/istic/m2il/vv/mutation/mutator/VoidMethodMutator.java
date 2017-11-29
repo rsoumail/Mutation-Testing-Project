@@ -1,11 +1,10 @@
 package fr.istic.m2il.vv.mutation.mutator;
 
 import fr.istic.m2il.vv.mutation.Utils;
-import javassist.CannotCompileException;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import fr.istic.m2il.vv.mutation.testrunner.runner.MVNRunner;
+import javassist.*;
 import javassist.bytecode.BadBytecode;
+import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,24 +13,36 @@ public class VoidMethodMutator implements Mutator {
 
     private File inputPath;
     private CtMethod original;
+    private CtMethod modified;
+    private File pomFil;
 
-    public VoidMethodMutator(File inputPath) {
+    public VoidMethodMutator(File inputPath, File pomFil) {
         this.inputPath = inputPath;
+        this.pomFil = pomFil;
     }
 
     @Override
-    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException {
-        if(ctMethod.getReturnType().equals(CtClass.voidType)){
-            original = ctMethod;
+    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException, MavenInvocationException {
+
+        modified = ctMethod;
+        original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+
+        if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.voidType)){
             ctMethod.getDeclaringClass().defrost();
+            MVNRunner testRunner = new MVNRunner(this.pomFil.getAbsolutePath() + "/pom.xml", "test");
             ctMethod.setBody("{}");
             Utils.write(ctMethod.getDeclaringClass(), this.inputPath);
+            testRunner.run();
+            this.revert();
         }
+
     }
 
     @Override
     public void revert() throws CannotCompileException, IOException {
-        Utils.write(original.getDeclaringClass(), this.inputPath);
+        modified.getDeclaringClass().defrost();
+        modified.setBody(original, null);
+        Utils.write(modified.getDeclaringClass(), this.inputPath);
     }
 
 }
