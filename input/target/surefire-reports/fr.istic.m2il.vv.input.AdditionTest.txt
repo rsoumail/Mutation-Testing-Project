@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: fr.istic.m2il.vv.input.AdditionTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.005 sec <<< FAILURE! - in fr.istic.m2il.vv.input.AdditionTest
+simple(fr.istic.m2il.vv.input.AdditionTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<15.0> but was:<5.0>
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.failNotEquals(Assert.java:834)
+	at org.junit.Assert.assertEquals(Assert.java:553)
+	at org.junit.Assert.assertEquals(Assert.java:683)
+	at fr.istic.m2il.vv.input.AdditionTest.simple(AdditionTest.java:13)
+
