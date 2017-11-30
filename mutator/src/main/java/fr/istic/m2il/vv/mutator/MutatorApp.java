@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static java.lang.System.exit;
 
@@ -58,10 +59,9 @@ public class MutatorApp {
 
 
             /*PITRunner pitRunner = new PITRunner();
-            pitRunner.run();*/
-
+            pitRunner.run();
+*/
         }
-
     }
 
     public static void mutate(File inputDir) throws CannotCompileException, BadBytecode, NotFoundException, IOException, ClassNotFoundException, InterruptedException, MavenInvocationException {

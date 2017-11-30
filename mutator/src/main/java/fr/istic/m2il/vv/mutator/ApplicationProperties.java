@@ -7,8 +7,11 @@ public class ApplicationProperties {
     private File applicationPropertiesFile;
 
     public ApplicationProperties(){
-        ClassLoader classLoader = MutatorApp.class.getClassLoader();
+        System.out.println("OICI");
+        ClassLoader classLoader = getClass().getClassLoader();
+        System.out.println();
         this.applicationPropertiesFile = new File(classLoader.getResource("application.properties").getFile());
+        System.out.println("File "+this.applicationPropertiesFile.getAbsolutePath());
     }
 
     public File getApplicationPropertiesFile() {
