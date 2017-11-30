@@ -1,7 +1,7 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.common.JavaAssistHelper;
-import fr.istic.m2il.vv.mutator.target.TargetProject;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
 import org.apache.maven.shared.invoker.MavenInvocationException;

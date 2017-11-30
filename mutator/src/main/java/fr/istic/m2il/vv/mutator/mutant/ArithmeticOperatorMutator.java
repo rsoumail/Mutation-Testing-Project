@@ -1,7 +1,7 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.Utils;
-import fr.istic.m2il.vv.mutator.target.TargetProject;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.CannotCompileException;
 import javassist.CtMethod;

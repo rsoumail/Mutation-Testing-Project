@@ -13,7 +13,7 @@ public class PITRunner {
     public PITRunner() {
         ClassLoader classLoader = getClass().getClassLoader();
         File applicationProperties = new File(classLoader.getResource("application.properties").getFile());
-        command = "-Dpit.target.classes="+ Utils.loadPropertiesFile(applicationProperties).getProperty("pit.target.classes") + " -Dpit.target.tests="+Utils.loadPropertiesFile(applicationProperties).getProperty("pit.target.tests") + " org.pitest:pitest-maven:mutationCoverage" ;
+        command = "-Dpit.targetproject.classes="+ Utils.loadPropertiesFile(applicationProperties).getProperty("pit.target.classes") + " -Dpit.targetproject.tests="+Utils.loadPropertiesFile(applicationProperties).getProperty("pit.target.tests") + " org.pitest:pitest-maven:mutationCoverage" ;
     }
 
     public void run() throws MavenInvocationException {

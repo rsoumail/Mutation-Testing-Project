@@ -3,21 +3,14 @@ package fr.istic.m2il.vv.mutator;
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.common.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.mutant.*;
-import fr.istic.m2il.vv.mutator.target.TargetProject;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.bytecode.BadBytecode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.junit.runner.JUnitCore;
 
 import javassist.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 import static java.lang.System.exit;
 
@@ -37,7 +30,7 @@ public class MutatorApp {
         ApplicationProperties applicationProperties = new ApplicationProperties();
 
         if(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project").isEmpty()){
-            System.err.println("Veuillez indiquer la propriété target dans le fichier application properties");
+            System.err.println("Veuillez indiquer la propriété targetproject dans le fichier application properties");
             exit(0);
         }
         else {
@@ -80,7 +73,7 @@ public class MutatorApp {
             CtMethod[] methods = ctClass.getDeclaredMethods();
 
             for(CtMethod method: methods){
-                /*Mutator mutant = new VoidMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("target")));
+                /*Mutator mutant = new VoidMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("targetproject")));
                 mutant.mutate(method);*/
             }
 
@@ -93,7 +86,7 @@ public class MutatorApp {
         File file = new File(classLoader.getResource("application.properties").getFile());
         for(CtClass ctClass: pool.get(classes)){
             for(CtMethod method: ctClass.getDeclaredMethods()){
-//                Mutator mutant = new BooleanMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("target")));
+//                Mutator mutant = new BooleanMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("targetproject")));
 //                mutant.mutate(method);
             }
 
