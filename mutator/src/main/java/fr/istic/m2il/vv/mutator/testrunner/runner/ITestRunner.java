@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutation.testrunner.runner;
+package fr.istic.m2il.vv.mutator.testrunner.runner;
 
 import java.util.List;
 

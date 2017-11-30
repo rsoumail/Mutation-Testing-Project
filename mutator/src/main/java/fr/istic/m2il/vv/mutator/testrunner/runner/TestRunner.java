@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutation.testrunner.runner;
+package fr.istic.m2il.vv.mutator.testrunner.runner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class TestRunner implements ITestRunner{
     /*
 	 * (non-Javadoc)
 	 *
-	 * @see fr.istic.m2il.vv.mutation.testrunner.runner.ITestRunner#setClasses(java.util.List)
+	 * @see fr.istic.m2il.vv.mutant.testrunner.runner.ITestRunner#setClasses(java.util.List)
 	 */
     @Override
     public void setClasses(List<Class<?>> classes) {
@@ -63,7 +63,7 @@ public class TestRunner implements ITestRunner{
     /*
          * (non-Javadoc)
          *
-         * @see fr.istic.m2il.vv.mutation.testrunner.runner.ITestRunner#setTestClasses(java.util.List)
+         * @see fr.istic.m2il.vv.mutant.testrunner.runner.ITestRunner#setTestClasses(java.util.List)
          */
     @Override
     public void setTestClasses(List<Class<?>> testClasses) {

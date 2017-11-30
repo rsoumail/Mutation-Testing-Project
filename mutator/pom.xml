@@ -71,7 +71,7 @@
                 <version>1.6.0</version>
                 <configuration>
                     <workingDirectory>${project.artifactId}</workingDirectory>
-                    <mainClass>fr.istic.m2il.vv.mutation.MutatorApp</mainClass>
+                    <mainClass>fr.istic.m2il.vv.mutator.MutatorApp</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -123,29 +123,6 @@
                 </executions-->
             </plugin>
 
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin-->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -162,7 +139,6 @@
                     <finalName>${project.artifactId}-with-dependencies-${project.version}</finalName>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
@@ -206,6 +182,4 @@
             </plugin-->
         </plugins>
     </reporting>
-
-    
 </project>

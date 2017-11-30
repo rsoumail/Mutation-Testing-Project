@@ -1,7 +1,7 @@
-package fr.istic.m2il.vv.mutation.report;
+package fr.istic.m2il.vv.mutator.report;
 
-import fr.istic.m2il.vv.mutation.Utils;
-import fr.istic.m2il.vv.mutation.testrunner.runner.MVNRunner;
+import fr.istic.m2il.vv.mutator.Utils;
+import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.File;

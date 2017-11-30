@@ -1,6 +1,4 @@
-package fr.istic.m2il.vv.mutation;
-
-import javassist.CtClass;
+package fr.istic.m2il.vv.mutator;
 
 import java.io.File;
 import java.io.IOException;
