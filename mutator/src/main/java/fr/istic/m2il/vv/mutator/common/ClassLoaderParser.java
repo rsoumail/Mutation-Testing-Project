@@ -1,6 +1,6 @@
-package fr.istic.m2il.vv.mutation.common;
+package fr.istic.m2il.vv.mutator.common;
 
-import fr.istic.m2il.vv.mutation.MutatorApp;
+import fr.istic.m2il.vv.mutator.MutatorApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ClassLoaderParser {
 
-    private static Logger logger = LoggerFactory.getLogger(MutatorApp.class);
+    private static Logger logger = LoggerFactory.getLogger(ClassLoaderParser.class);
 
     private static final String PACKAGE_SEPARATOR = ".";
 

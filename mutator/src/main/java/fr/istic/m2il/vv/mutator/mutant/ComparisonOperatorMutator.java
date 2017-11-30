@@ -1,6 +1,6 @@
-package fr.istic.m2il.vv.mutation.mutator;
+package fr.istic.m2il.vv.mutator.mutant;
 
-import fr.istic.m2il.vv.mutation.Utils;
+import fr.istic.m2il.vv.mutator.Utils;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;

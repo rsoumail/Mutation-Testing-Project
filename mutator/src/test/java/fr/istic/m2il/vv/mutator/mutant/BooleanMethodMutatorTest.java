@@ -1,12 +1,10 @@
-package fr.istic.m2il.vv.mutation.mutator;
+package fr.istic.m2il.vv.mutator.mutant;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class VoidMethodMutatorTest {
+public class BooleanMethodMutatorTest {
     @Before
     public void setUp() throws Exception {
     }

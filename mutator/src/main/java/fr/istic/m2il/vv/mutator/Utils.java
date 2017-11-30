@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutation;
+package fr.istic.m2il.vv.mutator;
 
 import javassist.CannotCompileException;
 import javassist.CtClass;
@@ -42,11 +42,6 @@ public class Utils {
 
             // load a properties file
             prop.load(input);
-
-            // get the property value and print it out
-            /*System.out.println(prop.getProperty("database"));
-            System.out.println(prop.getProperty("dbuser"));
-            System.out.println(prop.getProperty("dbpassword"));*/
 
         } catch (IOException ex) {
             ex.printStackTrace();

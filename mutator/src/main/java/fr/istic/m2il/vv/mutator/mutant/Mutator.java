@@ -1,10 +1,9 @@
-package fr.istic.m2il.vv.mutation.mutator;
+package fr.istic.m2il.vv.mutator.mutant;
 
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
-import javassist.expr.ExprEditor;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.IOException;

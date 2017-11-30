@@ -1,6 +1,6 @@
-package fr.istic.m2il.vv.mutation.testrunner.runner;
+package fr.istic.m2il.vv.mutator.testrunner.runner;
 
-import fr.istic.m2il.vv.mutation.Utils;
+import fr.istic.m2il.vv.mutator.Utils;
 import org.apache.maven.shared.invoker.*;
 
 import java.io.File;
