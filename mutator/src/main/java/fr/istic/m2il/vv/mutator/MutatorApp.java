@@ -65,7 +65,7 @@ public class MutatorApp {
     }
 
     public static void mutate(File inputDir) throws CannotCompileException, BadBytecode, NotFoundException, IOException, ClassNotFoundException, InterruptedException, MavenInvocationException {
-        
+
         mutateVoidReturnType(_sourcesClasses, inputDir);
         mutateBooleanReturnType(_sourcesClasses, inputDir);
 
