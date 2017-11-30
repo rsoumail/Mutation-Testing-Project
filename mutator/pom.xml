@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>MutationTesting</artifactId>
-        <groupId>fr.istic.m2il.vv</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
-
-    <artifactId>mutation</artifactId>
+    <artifactId>mutator</artifactId>
+    <groupId>fr.istic.m2il.vv</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <properties>
+        <pit.target.classes></pit.target.classes>
+        <pit.target.tests></pit.target.tests>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -20,12 +20,7 @@
             <artifactId>javassist</artifactId>
             <version>3.21.0-GA</version>
         </dependency>
-        <!--dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -36,9 +31,40 @@
             <artifactId>maven-invoker</artifactId>
             <version>2.0.11</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.2.3</version>
+                <configuration>
+                    <targetClasses>
+                        <param>fr.istic.m2il.vv.input.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>fr.istic.m2il.vv.input*</param>
+                    </targetTests>
+                    <reportsDirectory>target/pit-reports</reportsDirectory>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -178,8 +204,6 @@
                     </formats>
                 </configuration>
             </plugin-->
-
-
         </plugins>
     </reporting>
 

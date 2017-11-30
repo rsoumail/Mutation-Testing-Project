@@ -46,31 +46,19 @@ public class MutatorApp {
     private static String testClassesPath = "";
 
 
-
     public static void main(String[] args) throws Exception {
 
 
-        if(args.length < 1){
-            System.err.println("Veuillez indiquer le chemin du projet source");
-         exit(0);
+        ClassLoader classLoader = MutatorApp.class.getClassLoader();
+        File file = new File(classLoader.getResource("application.properties").getFile());
+
+        if(Utils.loadPropertiesFile(file).getProperty("target").isEmpty()){
+            System.err.println("Veuillez indiquer la propriété target dans le fichier application properties");
+            exit(0);
         }
         else {
 
-            //Properties properties = Utils.loadPropertiesFile("application.properties");
-
-            /*classesPath = args[0] + "/target/classes";
-            testClassesPath = args[0] + "/target/test-classes";
-
-            logger.debug("Mutation testing for project :");
-            logger.debug("Classes root directory : {}", classesPath);
-            logger.debug("Test classes root directory : {}", testClassesPath);
-
-            // Chargement des classes du projet target
-            ClassLoaderParser classLoaderParser = new ClassLoaderParser();
-            List<Class<?>> classList = classLoaderParser.getClassesFromDirectory(classesPath);
-            List<Class<?>> testClassList = classLoaderParser.getClassesFromDirectory(testClassesPath);*/
-
-            loadSources(args[0]);
+            loadSources(new File(Utils.loadPropertiesFile(file).getProperty("target")));
             mutate(inputDir);
             PITRunner pitRunner = new PITRunner();
             pitRunner.run();
@@ -78,47 +66,6 @@ public class MutatorApp {
         }
 
     }
-
-    /*public static void runTest() throws ClassNotFoundException, IOException, NotFoundException, CannotCompileException, InterruptedException {
-
-        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{
-                new URL("file://" + saveSourcesDir.getAbsoluteFile() + "/"),
-                new URL("file://" + testInputDir.getAbsolutePath() + "/"),
-        });
-
-
-
-        List<Class<?>> _testClasses = new ArrayList<>();
-        _testClasses = loadTestClass(_testClasses, urlClassLoader, testInputDir);
-        System.out.println("Size " + _testClasses.size());
-
-        for(Class<?> clazz : _testClasses) {
-            	System.out.println("Test: " + clazz.getName());
-            	Request request = Request.aClass(clazz);
-            	Result r = core.run(request);
-
-                System.out.println("For " +  clazz.getName() + String.format("| RUN: %d", r.getRunCount()));
-                System.out.println("");
-                if(r.wasSuccessful())
-                    System.out.println( "For " +  clazz.getName() + "| ALL SUCCEEDED !");
-                else {
-                    System.out.println("For " + clazz.getName() + String.format("| FAILURE! : %d", r.getFailureCount()));
-                    System.out.println();
-                    for (Failure failure : r.getFailures()){
-                        System.out.println(failure.toString());
-                        System.out.println(failure.getTrace());
-                    }
-
-                }
-
-            System.out.println("For " +  clazz.getName() + String.format("| TIME: %dms", r.getRunTime()));
-            System.out.println("");
-        }
-
-        urlClassLoader.close();
-        System.out.println("ALL TESTS FINISHED");
-
-    }*/
 
     public static void mutate(File inputDir) throws CannotCompileException, BadBytecode, NotFoundException, IOException, ClassNotFoundException, InterruptedException, MavenInvocationException {
 
@@ -130,12 +77,14 @@ public class MutatorApp {
 
     public static void mutateArithmeticOperation(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode, InterruptedException, MavenInvocationException {
 
+        ClassLoader classLoader = MutatorApp.class.getClassLoader();
+        File file = new File(classLoader.getResource("application.properties").getFile());
         for(CtClass ctClass: pool.get(classes)){
             ctClass.defrost();
             CtMethod[] methods = ctClass.getDeclaredMethods();
 
             for(CtMethod method: methods){
-                Mutator mutator = new ArithmeticOperatorMutator(inputPath, new File("input/"));
+                Mutator mutator = new ArithmeticOperatorMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("target")));
                 mutator.mutate(method);
             }
         }
@@ -143,11 +92,14 @@ public class MutatorApp {
 
     public static void mutateVoidReturnType(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode, ClassNotFoundException, InterruptedException, MavenInvocationException {
 
+        ClassLoader classLoader = MutatorApp.class.getClassLoader();
+        File file = new File(classLoader.getResource("application.properties").getFile());
         for(CtClass ctClass: pool.get(classes)){
             CtMethod[] methods = ctClass.getDeclaredMethods();
 
             for(CtMethod method: methods){
-                Mutator mutator = new VoidMethodMutator(inputPath, new File("input/"));
+
+                Mutator mutator = new VoidMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("target")));
                 mutator.mutate(method);
             }
 
@@ -158,9 +110,11 @@ public class MutatorApp {
 
     public static void mutateBooleanReturnType(String[] classes, File inputPath) throws NotFoundException, CannotCompileException, IOException, BadBytecode, InterruptedException, MavenInvocationException {
 
+        ClassLoader classLoader = MutatorApp.class.getClassLoader();
+        File file = new File(classLoader.getResource("application.properties").getFile());
         for(CtClass ctClass: pool.get(classes)){
             for(CtMethod method: ctClass.getDeclaredMethods()){
-                Mutator mutator = new BooleanMethodMutator(inputPath, new File("input/"));
+                Mutator mutator = new BooleanMethodMutator(inputPath, new File(Utils.loadPropertiesFile(file).getProperty("target")));
                 mutator.mutate(method);
             }
 
@@ -200,7 +154,7 @@ public class MutatorApp {
     }
 
 
-    public static void loadSources(String input) throws NotFoundException, CannotCompileException, IOException, ClassNotFoundException {
+    public static void loadSources(File input) throws NotFoundException, CannotCompileException, IOException, ClassNotFoundException {
 
         try{
             pool = ClassPool.getDefault();
@@ -208,14 +162,14 @@ public class MutatorApp {
 
             translator = new CustomTranslator();
 
-            inputDir = new File(input + "/target/classes");
-            testInputDir = new File(input  + "/target/test-classes");
+            inputDir = new File(input.getAbsolutePath() + "/target/classes");
+
+            testInputDir = new File(input.getAbsolutePath()  + "/target/test-classes");
             saveSourcesDir = new File("target/classes");
 
-
             loader.addTranslator(pool, translator);
-            pool.appendClassPath(inputDir.getPath());
-            pool.appendClassPath(testInputDir.getPath());
+            pool.appendClassPath(inputDir.getAbsolutePath());
+            pool.appendClassPath(testInputDir.getAbsolutePath());
 
 
         }

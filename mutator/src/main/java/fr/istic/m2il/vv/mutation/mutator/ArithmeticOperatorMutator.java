@@ -35,7 +35,7 @@ public class ArithmeticOperatorMutator implements Mutator{
             CodeAttribute code = methodInfo.getCodeAttribute();
             CodeIterator iterator = code.iterator();
             MVNRunner testRunner = new MVNRunner(this.pomFil.getAbsolutePath() + "/pom.xml", "test");
-            PITRunner pitRunner = new PITRunner();
+//            PITRunner pitRunner = new PITRunner();
             while (iterator.hasNext()) {
                 int pos = iterator.next();
                 switch (iterator.byteAt(pos)) {
