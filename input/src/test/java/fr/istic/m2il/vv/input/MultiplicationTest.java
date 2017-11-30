@@ -53,5 +53,29 @@ public class MultiplicationTest {
 		Multiplication multiplication = new Multiplication(30.0, 5.0);
 		Assert.assertTrue(multiplication.secondLessThanFirst());
 	}
+	
+	@Test
+	public void firstGreatherOrEqualThenSecond() throws Exception{
+		Multiplication multiplication = new Multiplication(60.0, 30.0);
+		Assert.assertTrue(multiplication.firstGreatherOrEqualThenSecond());
+	}
+	
+	@Test 
+	public void secondGreatherOrEqualThenFirst() throws Exception{
+		Multiplication multiplication = new Multiplication(30.0, 60.0);
+		Assert.assertTrue(multiplication.secondGreatherOrEqualThenFirst());
+	}
+	
+	@Test
+	public void firstLessOrEqualThenSecond() throws Exception{
+		Multiplication multiplication = new Multiplication(10.0, 20.0);
+		Assert.assertTrue(multiplication.firstLessOrEqualThenSecond());
+	}
+	
+	@Test
+	public void secondLessOrEqualThenFirst() throws Exception{
+		Multiplication multiplication = new Multiplication(20.0, 10.0);
+		Assert.assertTrue(multiplication.secondLessOrEqualThenFirst());
+	}
 
 }

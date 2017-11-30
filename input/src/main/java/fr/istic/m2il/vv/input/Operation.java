@@ -19,4 +19,12 @@ public interface Operation {
 	boolean firstLessThanSecond();
 
 	boolean secondLessThanFirst();
+	
+	boolean firstGreatherOrEqualThenSecond();
+	
+	boolean secondGreatherOrEqualThenFirst();
+	
+	boolean firstLessOrEqualThenSecond();
+	
+	boolean secondLessOrEqualThenFirst();
 }

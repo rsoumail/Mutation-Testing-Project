@@ -58,5 +58,29 @@ public class SubstractionTest {
 		Substraction substraction = new Substraction(30.0, 5.0);
 		Assert.assertTrue(substraction.secondLessThanFirst());
 	}
+	
+	@Test
+	public void firstGreatherOrEqualThenSecond() throws Exception{
+		Substraction substraction = new Substraction(60.0, 30.0);
+		Assert.assertTrue(substraction.firstGreatherOrEqualThenSecond());
+	}
+	
+	@Test 
+	public void secondGreatherOrEqualThenFirst() throws Exception{
+		Substraction substraction = new Substraction(30.0, 60.0);
+		Assert.assertTrue(substraction.secondGreatherOrEqualThenFirst());
+	}
+	
+	@Test
+	public void firstLessOrEqualThenSecond() throws Exception{
+		Substraction substraction = new Substraction(10.0, 20.0);
+		Assert.assertTrue(substraction.firstLessOrEqualThenSecond());
+	}
+	
+	@Test
+	public void secondLessOrEqualThenFirst() throws Exception{
+		Substraction substraction = new Substraction(20.0, 10.0);
+		Assert.assertTrue(substraction.secondLessOrEqualThenFirst());
+	}
 
 }

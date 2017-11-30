@@ -46,10 +46,10 @@ public class MutatorApp {
             JavaAssistHelper javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
 
             Mutator mutator = new ArithmeticOperatorMutator(targetProject);
-
+            Mutator mutatorComparaison = new ComparisonOperatorMutator(targetProject);
             MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-            mutatorExecutor.execute(mutator, targetProject);
-
+            //mutatorExecutor.execute(mutator, targetProject);
+            mutatorExecutor.execute(mutatorComparaison, targetProject);
 
             /*PITRunner pitRunner = new PITRunner();
             pitRunner.run();

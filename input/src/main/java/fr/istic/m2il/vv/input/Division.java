@@ -54,4 +54,24 @@ public class Division implements Operation {
 	public boolean secondLessThanFirst() {
 		return this.secondMember < this.firstMember;
 	}
+	
+	@Override
+	public boolean firstGreatherOrEqualThenSecond() {
+		return this.firstMember >= this.secondMember;
+	}
+
+	@Override
+	public boolean secondGreatherOrEqualThenFirst() {
+		return this.secondMember >= this.firstMember;
+	}
+
+	@Override
+	public boolean firstLessOrEqualThenSecond() {
+		return this.firstMember <= this.secondMember;
+	}
+
+	@Override
+	public boolean secondLessOrEqualThenFirst() {
+		return this.secondMember <= this.firstMember;
+	}
 }
