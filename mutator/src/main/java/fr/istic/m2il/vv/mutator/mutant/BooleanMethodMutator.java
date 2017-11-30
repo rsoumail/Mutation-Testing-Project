@@ -6,12 +6,14 @@ import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class BooleanMethodMutator implements Mutator{
 
-
+    private static Logger logger = LoggerFactory.getLogger(VoidMethodMutator.class);
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
@@ -29,6 +31,7 @@ public class BooleanMethodMutator implements Mutator{
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
             Boolean returnValue = false;
             ctMethod.setBody("{ return " +  returnValue + ";}");
+            logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
             testRunner.run();
             this.revert();
@@ -38,6 +41,7 @@ public class BooleanMethodMutator implements Mutator{
 
     @Override
     public void revert() throws CannotCompileException, IOException {
+        logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " +targetProject.getLocation());
         modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());

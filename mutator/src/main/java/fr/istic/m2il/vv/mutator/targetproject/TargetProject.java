@@ -64,8 +64,8 @@ public class TargetProject {
 
     public void setLocation(File location) {
         this.location = location;
-        this.setClassesLocation(new File(this.getLocation().getAbsolutePath() + "/targetproject/classes"));
-        this.setTestsLocation(new File(this.getLocation().getAbsolutePath() + "/targetproject/test-classes"));
+        this.setClassesLocation(new File(this.getLocation().getAbsolutePath() + "/target/classes"));
+        this.setTestsLocation(new File(this.getLocation().getAbsolutePath() + "/target/test-classes"));
     }
 
     public String[] getClassesNames() {

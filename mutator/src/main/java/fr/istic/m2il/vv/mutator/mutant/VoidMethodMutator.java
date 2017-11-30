@@ -1,24 +1,26 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.Utils;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class VoidMethodMutator implements Mutator {
 
-    private File inputPath;
+    private static Logger logger = LoggerFactory.getLogger(VoidMethodMutator.class);
     private CtMethod original;
     private CtMethod modified;
-    private File pomFil;
+    private TargetProject targetProject;
 
-    public VoidMethodMutator(File inputPath, File pomFil) {
-        this.inputPath = inputPath;
-        this.pomFil = pomFil;
+    public VoidMethodMutator(TargetProject targetProject) {
+        this.targetProject = targetProject;
     }
 
     @Override
@@ -29,9 +31,10 @@ public class VoidMethodMutator implements Mutator {
 
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.voidType)){
             ctMethod.getDeclaringClass().defrost();
-            MVNRunner testRunner = new MVNRunner(this.pomFil.getAbsolutePath() + "/pom.xml", "test");
+            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
             ctMethod.setBody("{}");
-            Utils.write(ctMethod.getDeclaringClass(), this.inputPath);
+            logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+            Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
             testRunner.run();
             this.revert();
         }
@@ -40,9 +43,10 @@ public class VoidMethodMutator implements Mutator {
 
     @Override
     public void revert() throws CannotCompileException, IOException {
+        logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " +targetProject.getLocation());
         modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
-        Utils.write(modified.getDeclaringClass(), this.inputPath);
+        Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
     }
 
 }

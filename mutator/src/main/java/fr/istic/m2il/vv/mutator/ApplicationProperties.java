@@ -1,17 +1,20 @@
 package fr.istic.m2il.vv.mutator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 public class ApplicationProperties {
 
+    private static Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
     private File applicationPropertiesFile;
 
     public ApplicationProperties(){
-        System.out.println("OICI");
+        logger.info("Loading application.properties");
         ClassLoader classLoader = getClass().getClassLoader();
-        System.out.println();
         this.applicationPropertiesFile = new File(classLoader.getResource("application.properties").getFile());
-        System.out.println("File "+this.applicationPropertiesFile.getAbsolutePath());
+        logger.info("application.properties loaded");
     }
 
     public File getApplicationPropertiesFile() {

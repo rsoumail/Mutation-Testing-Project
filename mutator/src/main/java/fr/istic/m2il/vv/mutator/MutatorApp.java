@@ -45,10 +45,18 @@ public class MutatorApp {
 
             JavaAssistHelper javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
 
-            Mutator mutator = new ArithmeticOperatorMutator(targetProject);
-
+            MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
             MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-            mutatorExecutor.execute(mutator, targetProject);
+            for(MutantType mutant: MutantType.values()){
+                Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
+                mutatorExecutor.execute(mutator, targetProject);
+
+            }
+
+            //Mutator mutator = new ArithmeticOperatorMutator(targetProject);
+
+            //MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
+            //mutatorExecutor.execute(mutator, targetProject);
 
 
             /*PITRunner pitRunner = new PITRunner();
