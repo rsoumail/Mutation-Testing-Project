@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: fr.istic.m2il.vv.mutation.mutator.VoidMethodMutatorTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec - in fr.istic.m2il.vv.mutation.mutator.VoidMethodMutatorTest
