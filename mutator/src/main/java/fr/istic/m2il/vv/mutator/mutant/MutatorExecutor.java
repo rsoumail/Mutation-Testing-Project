@@ -1,6 +1,6 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
-import fr.istic.m2il.vv.mutator.javassistloader.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
