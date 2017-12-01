@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutator;
+package fr.istic.m2il.vv.mutator.javassistloader;
 
 import javassist.*;
 

@@ -1,21 +1,18 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
-import fr.istic.m2il.vv.mutator.Utils;
+import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
-import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.apache.maven.shared.invoker.MavenInvocationException;
 

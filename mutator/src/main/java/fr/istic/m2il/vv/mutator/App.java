@@ -1,18 +1,21 @@
 package fr.istic.m2il.vv.mutator;
 
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
-import fr.istic.m2il.vv.mutator.common.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
+import fr.istic.m2il.vv.mutator.javassistloader.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.javassistloader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.mutant.*;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 
 
+import fr.istic.m2il.vv.mutator.util.Utils;
 import javassist.*;
 
 import java.io.File;
 
 import static java.lang.System.exit;
 
-public class MutatorApp {
+public class App {
 
 
 

@@ -1,6 +1,6 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
-import fr.istic.m2il.vv.mutator.Utils;
+import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
@@ -9,7 +9,6 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 
 public class VoidMethodMutator implements Mutator {

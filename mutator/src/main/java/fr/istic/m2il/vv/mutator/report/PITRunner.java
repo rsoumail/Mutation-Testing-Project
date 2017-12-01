@@ -1,6 +1,6 @@
 package fr.istic.m2il.vv.mutator.report;
 
-import fr.istic.m2il.vv.mutator.Utils;
+import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 

@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutator;
+package fr.istic.m2il.vv.mutator.common;
 
 import java.io.File;
 import java.io.IOException;

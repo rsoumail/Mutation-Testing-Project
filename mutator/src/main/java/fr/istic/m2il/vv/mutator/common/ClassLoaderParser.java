@@ -1,6 +1,5 @@
 package fr.istic.m2il.vv.mutator.common;
 
-import fr.istic.m2il.vv.mutator.MutatorApp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
