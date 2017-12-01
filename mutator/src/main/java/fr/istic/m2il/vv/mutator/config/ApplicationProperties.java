@@ -1,4 +1,4 @@
-package fr.istic.m2il.vv.mutator;
+package fr.istic.m2il.vv.mutator.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ public class ApplicationProperties {
     private File applicationPropertiesFile;
 
     public ApplicationProperties(){
-    	
+
         logger.info("Loading application.properties");
         ClassLoader classLoader = getClass().getClassLoader();
         this.applicationPropertiesFile = new File(classLoader.getResource("application.properties").getFile());

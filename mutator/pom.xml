@@ -71,7 +71,7 @@
                 <version>1.6.0</version>
                 <configuration>
                     <workingDirectory>${project.artifactId}</workingDirectory>
-                    <mainClass>fr.istic.m2il.vv.mutator.MutatorApp</mainClass>
+                    <mainClass>fr.istic.m2il.vv.mutator.App</mainClass>
                 </configuration>
             </plugin>
             <plugin>

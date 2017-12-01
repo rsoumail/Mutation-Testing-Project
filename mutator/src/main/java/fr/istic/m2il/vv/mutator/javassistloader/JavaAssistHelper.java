@@ -1,6 +1,5 @@
-package fr.istic.m2il.vv.mutator.common;
+package fr.istic.m2il.vv.mutator.javassistloader;
 
-import fr.istic.m2il.vv.mutator.CustomTranslator;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.ClassPool;
 import javassist.Loader;
