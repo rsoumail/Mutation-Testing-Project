@@ -7,11 +7,13 @@ import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.bytecode.*;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class ArithmeticOperatorMutator implements Mutator{
 
@@ -19,6 +21,7 @@ public class ArithmeticOperatorMutator implements Mutator{
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
+    private HashMap<Integer, Integer> m = new HashMap<>();
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -35,141 +38,78 @@ public class ArithmeticOperatorMutator implements Mutator{
             CodeAttribute code = methodInfo.getCodeAttribute();
             CodeIterator iterator = code.iterator();
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
-//            PITRunner pitRunner = new PITRunner();
             while (iterator.hasNext()) {
                 int pos = iterator.next();
                 switch (iterator.byteAt(pos)) {
                     case Opcode.IADD:
-                        iterator.writeByte(Opcode.ISUB, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.ISUB);
                         break;
 
                     case Opcode.ISUB:
-                        iterator.writeByte(Opcode.IADD, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.IADD);
                         break;
 
                     case Opcode.FADD:
-                        iterator.writeByte(Opcode.FSUB, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.FSUB);
                         break;
 
                     case Opcode.FSUB:
-                        iterator.writeByte(Opcode.FADD, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.FADD);
                         break;
 
                     case Opcode.LADD:
-                        iterator.writeByte(Opcode.LSUB, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.LSUB);
                         break;
 
                     case Opcode.LSUB:
-                        iterator.writeByte(Opcode.LADD, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.LADD);
                         break;
 
                     case Opcode.DADD:
-                        iterator.writeByte(Opcode.DSUB, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
-                        //pitRunner.run();
+                        m.put(pos, Opcode.DSUB);
                         break;
 
                     case Opcode.DSUB:
-                        iterator.writeByte(Opcode.DADD, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
-                        //pitRunner.run();
+                        m.put(pos, Opcode.DADD);
                         break;
 
                     case Opcode.IMUL:
-                        iterator.writeByte(Opcode.IDIV, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.IDIV);
                         break;
 
                     case Opcode.IDIV:
-                        iterator.writeByte(Opcode.IMUL, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.IMUL);;
                         break;
 
                     case Opcode.FDIV:
-                        iterator.writeByte(Opcode.FMUL, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.FMUL);
                         break;
 
                     case Opcode.FMUL:
-                        iterator.writeByte(Opcode.FDIV, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.FDIV);
                         break;
 
                     case Opcode.LMUL:
-                        iterator.writeByte(Opcode.LDIV, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.LDIV);
                         break;
 
                     case Opcode.LDIV:
-                        iterator.writeByte(Opcode.LMUL, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.LMUL);
                         break;
 
                     case Opcode.DMUL:
-                        iterator.writeByte(Opcode.DDIV, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
+                        m.put(pos, Opcode.DDIV);
                         break;
 
                     case Opcode.DDIV:
-                        iterator.writeByte(Opcode.DMUL, pos);
-                        logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                        Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                        testRunner.run();
-                        this.revert();
-                        //pitRunner.run();
+                        m.put(pos, Opcode.DMUL);
                         break;
                 }
+                iterator.writeByte(m.get(pos), pos);
+                logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+                Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
+                testRunner.run();
+                this.revert();
             }
         }
 
