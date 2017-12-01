@@ -21,7 +21,6 @@ public class ArithmeticOperatorMutator implements Mutator{
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
-    private HashMap<Integer, Integer> m = new HashMap<>();
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -39,6 +38,7 @@ public class ArithmeticOperatorMutator implements Mutator{
             CodeIterator iterator = code.iterator();
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
             while (iterator.hasNext()) {
+                HashMap<Integer, Integer> m = new HashMap<>();
                 int pos = iterator.next();
                 switch (iterator.byteAt(pos)) {
                     case Opcode.IADD:
@@ -105,11 +105,14 @@ public class ArithmeticOperatorMutator implements Mutator{
                         m.put(pos, Opcode.DMUL);
                         break;
                 }
-                iterator.writeByte(m.get(pos), pos);
-                logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-                Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                testRunner.run();
-                this.revert();
+                if(!m.isEmpty()){
+                    System.out.println("size " + m.get(pos));
+                    iterator.writeByte(m.get(pos), pos);
+                    logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+                    Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
+                    testRunner.run();
+                    this.revert();
+                }
             }
         }
 
