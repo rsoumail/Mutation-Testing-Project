@@ -4,24 +4,27 @@
 
 Lancement du projet :
 
-  > Compilation des programmes (cible et mutateur)
-  Se placer à la racine du projet :
-  >
-  Lancer la commande : mvn package 
-  >
-  (Cette commande compile les projets et les unitaires du programme cible)
+  > Compilation des programmes (cible)
   
-  > Exécution du programme mutateur (module mutation)
-  >
-  Se place dans le dossier VV_MutationTesting/mutation/target
+    Dans le dossier input : mvn package    
   
-  Lancer la commande : 
-  > 
-  java -cp ./mutation-with-dependencies-1.0-SNAPSHOT.jar:.chemin_absolue_projet_cible/target/input-1.0-SNAPSHOT.jar fr.istic.m2il.vv.mutation.MutatorApp chemin_absolue_projet_cible/input
+  > Exécution de notre outil mutateur 
+      
+    Compilation des programmes 
   
-  > Où chemin_absolue_projet_cible represente le chemin absolue du programme cible à muter.
-  
+    Dans le dossier mutator : mvn package 
     
+    Configuration : dans le fichier application.propreties se trouvant dans mutator/src/main/resources/
+  
+    Fournir les propriétés suivants: 
+           -  Les mutateurs souhaitée  
+           Exemple:  mutators = ARITHMETIC_MUTATOR, VOID_MUTATOR, COMPARISON_MUTATOR, BOBLEAN_MUTATOR
+             
+           -  Le target du projet cible
+           Exemple: target.project = /home/waberi/Documents/VV/Mutation_Testing/VV_MutationTesting/input
+    
+           -  Le maven home 
+           Exemple: maven.home = /usr/share/maven 
     
     
 
@@ -31,30 +34,36 @@ Lancement du projet :
  
  Dans le projet /VV_MutationTesting/input
  
-    > Création de nos classes arithmétiques (+,-,*,/)
+    > Création de nos classes arithmétiques 
+                   
     > Test unitaire de chaque classe arithmétique
+
  
   Dans le projet /VV_MutationTesting/mutation
   
-    > Dans le package ../vv/mutation/mutator les mutants implémentées sont:
+    > Dans le package mutator les mutants implémentées sont:
       
      Opération + est remplacé par -
      Opération - est remplacé par +
      Opération * est remplacé par /
      Opération / est remplacé par *
      
-     Suppression des méthodes de type void
+     Suppression du corps des méthodes de type void
      
      Renvoyer true pour les méthodes de types boolean
-     
-     
-## Couverture du code avec PIT
-
-  Se placer à la racine du projet:
- 
-  > Lancer la commande : mvn clean install org.pitest:pitest-maven:mutationCoverage
-  le rapport au format HTML se trouve dans le dossier VV_MutationTesting/mutation/target/pit-reports
   
+     Opérateur de comparaison
+      
+      Opération < est remplacé par >=
+      Opération > est remplacé par <=
+      Opération <= est remplacé par >
+      Opération >= est remplacé par <
+   
+     
+     
+## Couverture d'analyse de mutation
+
+ Notre outil génère des informations concernant les opérations des mutations sur le projet spécifié.
   
 
   
