@@ -114,7 +114,7 @@ public class ArithmeticOperatorMutator implements Mutator{
                         }
                         if(!m.isEmpty()){
                             iterator.writeByte(m.get(pos), pos);
-                            logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
+                            //logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
                             ReportService.getInstance().newRanTest();

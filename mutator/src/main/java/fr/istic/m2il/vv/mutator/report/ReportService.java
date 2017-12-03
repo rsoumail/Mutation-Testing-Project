@@ -90,7 +90,7 @@ public class ReportService implements IReportService{
     private void displayStatictics() {
         System.out.println("- Statistics ");
         System.out.println("================================================================================");
-        System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber()) + "%)");
+        System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + String.format("%.2f", this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber())) + "%)");
         System.out.println(">> Ran " + this.getTotalMutationsNumber() + " tests (1 tests per mutation)");
         System.out.println();
     }
@@ -116,7 +116,7 @@ public class ReportService implements IReportService{
         while(iterator.hasNext()){
             Map.Entry reportMutator = (Map.Entry) iterator.next();
             System.out.println("> " + ((Mutator)reportMutator.getKey()).getClass().getName());
-            System.out.println(">> Generated " + ((List<Report>)reportMutator.getValue()).size() + " Killed " +getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()) +" " + this.getRate(getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()), ((List<Report>)reportMutator.getValue()).size()) + "%" );
+            System.out.println(">> Generated " + ((List<Report>)reportMutator.getValue()).size() + " Killed " +getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()) +" " + String.format("%.2f", this.getRate(getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()), ((List<Report>)reportMutator.getValue()).size())) + "%" );
 
             System.out.println("> KILLED " + getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()) + " SURVIVED " + getStateMutantsNumber(MutantState.SURVIVED, (List<Report>)reportMutator.getValue()) +" TIMED_OUT " + getStateMutantsNumber(MutantState.TIMED_OUT, (List<Report>)reportMutator.getValue())  + " NON_VIABLE " + getStateMutantsNumber(MutantState.NON_VIABLE, (List<Report>)reportMutator.getValue()) );
             /*for(Report r:((List<Report>)reportMutator.getValue())){

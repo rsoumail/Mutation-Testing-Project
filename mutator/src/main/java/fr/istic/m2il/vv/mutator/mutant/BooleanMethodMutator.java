@@ -36,7 +36,7 @@ public class BooleanMethodMutator implements Mutator{
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
             Boolean returnValue = false;
             ctMethod.setBody("{ return " +  returnValue + ";}");
-            logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+            //logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
             ReportService.getInstance().newRanTest();

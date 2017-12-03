@@ -96,8 +96,8 @@ public class ComparisonOperatorMutator implements Mutator {
                         if (!m.isEmpty()) {
                             System.out.println("size " + m.get(pos));
                             iterator.writeByte(m.get(pos), pos);
-                            logger.info("Mutating {}", getClass().getName() + "Mutate " + ctMethod.getName() + "" + "on "
-                                    + targetProject.getLocation());
+                            /*logger.info("Mutating {}", getClass().getName() + "Mutate " + ctMethod.getName() + "" + "on "
+                                    + targetProject.getLocation());*/
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
                             ReportService.getInstance().newRanTest();
