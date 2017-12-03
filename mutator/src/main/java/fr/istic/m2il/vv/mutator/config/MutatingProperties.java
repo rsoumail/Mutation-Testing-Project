@@ -22,6 +22,7 @@ public class MutatingProperties {
         else{
             for(String mutator: mutators){
                 for(MutantType mutantType:MutantType.values()){
+                    mutator = mutator.trim();
                     if(mutator.matches(mutantType.name()))
                         mutantTypes.add(MutantType.valueOf(mutator));
                 }
