@@ -11,11 +11,11 @@ import java.util.List;
 public interface IReportService {
 
     /**
-     * Adds a reports list of a mutator  to the report service
+     * Adds a report to reports list of a mutator  in the report service
      *
-     * @param reports
+     * @param report
      */
-    void addReport(Mutator mutator, List<Report> reports);
+    void addReport(Mutator mutator, Report report);
 
     /**
      * Returns all report informations in a markdown format

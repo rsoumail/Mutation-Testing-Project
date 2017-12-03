@@ -45,7 +45,7 @@ public class ArithmeticOperatorMutatorTest {
     	 javaAssistHelperMocked.setTranslator(mock(CustomTranslator.class));
     	 javaAssistHelperMocked.setTargetProject(targetProjectMocked);
     	 mutatorExecutorMocked = mock(MutatorExecutor.class);
-    	 when(mutatorExecutorMocked.getJavaAssistHelper()).thenReturn(javaAssistHelperMocked);
+    	 //when(mutatorExecutorMocked.getJavaAssistHelper()).thenReturn(javaAssistHelperMocked);
 
  
     	 when(targetProjectMocked.getLocation()).thenReturn(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));

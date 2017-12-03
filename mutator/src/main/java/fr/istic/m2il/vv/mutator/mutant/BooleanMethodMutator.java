@@ -1,15 +1,20 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.report.Report;
+import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BooleanMethodMutator implements Mutator{
 
@@ -33,7 +38,16 @@ public class BooleanMethodMutator implements Mutator{
             ctMethod.setBody("{ return " +  returnValue + ";}");
             logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-            testRunner.run();
+            Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+            ReportService.getInstance().newRanTest();
+            InvocationResult testResult = testRunner.run();
+            if(testResult.getExitCode() != 0){
+                report.setMutantState(MutantState.KILLED);
+            }
+            else{
+                report.setMutantState(MutantState.SURVIVED);
+            }
+            ReportService.getInstance().addReport(this, report);
             this.revert();
         }
 
