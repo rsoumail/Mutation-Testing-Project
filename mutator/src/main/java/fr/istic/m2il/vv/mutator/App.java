@@ -4,6 +4,7 @@ import fr.istic.m2il.vv.mutator.common.CheckConfigurtionProperties;
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
+import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.mutant.*;
@@ -60,7 +61,7 @@ public class App {
 
         MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
         MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-        for(MutantType mutant: MutantType.values()){
+        for(MutantType mutant: MutatingProperties.mutantsToAnalysis()){
             Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
             mutatorExecutor.execute(mutator, targetProject);
 
