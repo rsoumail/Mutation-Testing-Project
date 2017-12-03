@@ -7,7 +7,6 @@ import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.bytecode.*;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

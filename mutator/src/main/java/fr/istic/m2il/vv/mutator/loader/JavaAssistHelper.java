@@ -47,7 +47,15 @@ public class JavaAssistHelper {
         this.translator = translator;
     }
 
-    private void initPool(){
+    public TargetProject getTargetProject() {
+		return targetProject;
+	}
+
+	public void setTargetProject(TargetProject targetProject) {
+		this.targetProject = targetProject;
+	}
+
+	private void initPool(){
         try{
             logger.info("Init pool on  {}",this.targetProject.getLocation());
             this.pool = ClassPool.getDefault();
