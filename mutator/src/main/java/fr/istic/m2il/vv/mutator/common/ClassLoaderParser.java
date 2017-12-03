@@ -99,7 +99,9 @@ public class ClassLoaderParser {
                     classesName.addAll(getClassesNameFromDirectory(classFile,packageArchitecture));
                 }
                 else if(classFile.isFile()){
+                    if(getClassName(classFile) != null){
                     classesName.add(parentPackage+PACKAGE_SEPARATOR+getClassName(classFile));
+                    }
                 }
                 else{
                     logger.trace("File {} is not directory and not a file",classFile.getName());
@@ -116,7 +118,11 @@ public class ClassLoaderParser {
      * @return
      */
     private String getClassName(File classFile){
-        return classFile.getName().substring(0, classFile.getName().lastIndexOf('.'));
+
+
+        if(classFile.getName().matches(classFile.getName().substring(0, classFile.getName().lastIndexOf('.')) +".class"))
+            return classFile.getName().substring(0, classFile.getName().lastIndexOf('.'));
+        return null;
     }
 
 }

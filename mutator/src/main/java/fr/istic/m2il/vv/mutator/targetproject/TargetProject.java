@@ -103,12 +103,10 @@ public class TargetProject {
     public String getTestClassNameOfClass(String clazz){
         for(Class<?> klass: tests){
             if(klass.getName().matches(clazz+"Test")){
-            /*if(klass.getName().contains(clazz));*/
-            System.out.println("Test Class Name " + klass.getName() + " for " + clazz);
                 return klass.getName();
             }
         }
-        return "";
+        return null;
     }
 
     private String[] ClassesNamesFromClasses(List<Class<?>> classes){

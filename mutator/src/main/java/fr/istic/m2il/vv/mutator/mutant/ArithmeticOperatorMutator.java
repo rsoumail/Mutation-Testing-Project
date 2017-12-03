@@ -36,104 +36,103 @@ public class ArithmeticOperatorMutator implements Mutator{
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
         if(!ctMethod.getDeclaringClass().isInterface()){
-            ctMethod.getDeclaringClass().defrost();
-            MethodInfo methodInfo = ctMethod.getMethodInfo();
-            CodeAttribute code = methodInfo.getCodeAttribute();
-            CodeIterator iterator = code.iterator();
-            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+            if(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()) != null){
+                ctMethod.getDeclaringClass().defrost();
+                MethodInfo methodInfo = ctMethod.getMethodInfo();
+                if(methodInfo.getCodeAttribute() != null){
+                    CodeAttribute code = methodInfo.getCodeAttribute();
+                    CodeIterator iterator = code.iterator();
+                    MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
-            while (iterator.hasNext()) {
-                HashMap<Integer, Integer> m = new HashMap<>();
-                int pos = iterator.next();
-                switch (iterator.byteAt(pos)) {
-                    case Opcode.IADD:
-                        m.put(pos, Opcode.ISUB);
-                        break;
+                    while (iterator.hasNext()) {
+                        HashMap<Integer, Integer> m = new HashMap<>();
+                        int pos = iterator.next();
+                        switch (iterator.byteAt(pos)) {
+                            case Opcode.IADD:
+                                m.put(pos, Opcode.ISUB);
+                                break;
 
-                    case Opcode.ISUB:
-                        m.put(pos, Opcode.IADD);
-                        break;
+                            case Opcode.ISUB:
+                                m.put(pos, Opcode.IADD);
+                                break;
 
-                    case Opcode.FADD:
-                        m.put(pos, Opcode.FSUB);
-                        break;
+                            case Opcode.FADD:
+                                m.put(pos, Opcode.FSUB);
+                                break;
 
-                    case Opcode.FSUB:
-                        m.put(pos, Opcode.FADD);
-                        break;
+                            case Opcode.FSUB:
+                                m.put(pos, Opcode.FADD);
+                                break;
 
-                    case Opcode.LADD:
-                        m.put(pos, Opcode.LSUB);
-                        break;
+                            case Opcode.LADD:
+                                m.put(pos, Opcode.LSUB);
+                                break;
 
-                    case Opcode.LSUB:
-                        m.put(pos, Opcode.LADD);
-                        break;
+                            case Opcode.LSUB:
+                                m.put(pos, Opcode.LADD);
+                                break;
 
-                    case Opcode.DADD:
-                        m.put(pos, Opcode.DSUB);
-                        break;
+                            case Opcode.DADD:
+                                m.put(pos, Opcode.DSUB);
+                                break;
 
-                    case Opcode.DSUB:
-                        m.put(pos, Opcode.DADD);
-                        break;
+                            case Opcode.DSUB:
+                                m.put(pos, Opcode.DADD);
+                                break;
 
-                    case Opcode.IMUL:
-                        m.put(pos, Opcode.IDIV);
-                        break;
+                            case Opcode.IMUL:
+                                m.put(pos, Opcode.IDIV);
+                                break;
 
-                    case Opcode.IDIV:
-                        m.put(pos, Opcode.IMUL);;
-                        break;
+                            case Opcode.IDIV:
+                                m.put(pos, Opcode.IMUL);;
+                                break;
 
-                    case Opcode.FDIV:
-                        m.put(pos, Opcode.FMUL);
-                        break;
+                            case Opcode.FDIV:
+                                m.put(pos, Opcode.FMUL);
+                                break;
 
-                    case Opcode.FMUL:
-                        m.put(pos, Opcode.FDIV);
-                        break;
+                            case Opcode.FMUL:
+                                m.put(pos, Opcode.FDIV);
+                                break;
 
-                    case Opcode.LMUL:
-                        m.put(pos, Opcode.LDIV);
-                        break;
+                            case Opcode.LMUL:
+                                m.put(pos, Opcode.LDIV);
+                                break;
 
-                    case Opcode.LDIV:
-                        m.put(pos, Opcode.LMUL);
-                        break;
+                            case Opcode.LDIV:
+                                m.put(pos, Opcode.LMUL);
+                                break;
 
-                    case Opcode.DMUL:
-                        m.put(pos, Opcode.DDIV);
-                        break;
+                            case Opcode.DMUL:
+                                m.put(pos, Opcode.DDIV);
+                                break;
 
-                    case Opcode.DDIV:
-                        m.put(pos, Opcode.DMUL);
-                        break;
+                            case Opcode.DDIV:
+                                m.put(pos, Opcode.DMUL);
+                                break;
+                        }
+                        if(!m.isEmpty()){
+                            iterator.writeByte(m.get(pos), pos);
+                            logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
+                            Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
+                            Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+                            ReportService.getInstance().newRanTest();
+                            InvocationResult testResult = testRunner.run();
+                            if(testResult.getExitCode() != 0){
+                                report.setMutantState(MutantState.KILLED);
+                            }
+                            else{
+                                report.setMutantState(MutantState.SURVIVED);
+                            }
+
+                            ReportService.getInstance().addReport(this, report);
+
+                            this.revert();
+                        }
+                    }
                 }
-                if(!m.isEmpty()){
-                    iterator.writeByte(m.get(pos), pos);
-                    logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
-                    Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-                    Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
-                    InvocationResult testResult = testRunner.run();
-                    if(testResult.getExitCode() != 0){
-                        report.setMutantState(MutantState.KILLED);
-                    }
-                    else{
-                        report.setMutantState(MutantState.SURVIVED);
-                    }
 
-                    if(ReportService.getInstance().getReports().get(this) == null){
-                        List<Report> mutantReportList = new ArrayList<>();
-                        mutantReportList.add(report);
-                        ReportService.getInstance().getReports().put(this, mutantReportList);
-                    }
-                    else{
-                        ReportService.getInstance().getReports().get(this).add(report);
-                    }
-
-                    this.revert();
-                }
             }
         }
 

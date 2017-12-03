@@ -1,5 +1,6 @@
 package fr.istic.m2il.vv.mutator;
 
+import fr.istic.m2il.vv.mutator.common.CheckConfigurtionProperties;
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
@@ -26,40 +27,48 @@ public class App {
 
         ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
 
-        if(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project").isEmpty()){
-            System.err.println("Veuillez indiquer la propriété targetproject dans le fichier application properties");
+        if(!applicationProperties.getApplicationPropertiesFile().exists()){
+            System.err.println("Impossible de trouver le fichier application.properties");
             exit(0);
         }
-        else {
+        CheckConfigurtionProperties cheker = new CheckConfigurtionProperties(applicationProperties);
+        cheker.checks();
+        ClassLoaderParser classLoaderParser = new ClassLoaderParser();
 
-            ClassLoaderParser classLoaderParser = new ClassLoaderParser();
+        TargetProject targetProject = new TargetProject();
+        TimeWatch watcher = TimeWatch.start();
 
-            TargetProject targetProject = new TargetProject();
-            TimeWatch watcher = TimeWatch.start();
-            targetProject.setLocation(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
-            targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
-            targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getAbsolutePath()));
-            targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getAbsolutePath()));
+        targetProject.setLocation(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
 
-            JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
+        cheker.checkFileExist(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
+        cheker.checkFileExist(targetProject.getClassesLocation());
+        cheker.checkFileExist(targetProject.getTestsLocation());
+        targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
 
-            ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
+        targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
+        targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
 
-            watcher.reset();
+        cheker.checksClassesAndTestsExist(targetProject);
 
-            MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
-            MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-            for(MutantType mutant: MutantType.values()){
-                Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
-                mutatorExecutor.execute(mutator, targetProject);
+        JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
 
-            }
 
-            ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
 
-            ReportService.getInstance().doReport();
+        ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
+
+        watcher.reset();
+
+        MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
+        MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
+        for(MutantType mutant: MutantType.values()){
+            Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
+            mutatorExecutor.execute(mutator, targetProject);
 
         }
+
+        ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
+
+        ReportService.getInstance().doReport();
     }
 
 }
