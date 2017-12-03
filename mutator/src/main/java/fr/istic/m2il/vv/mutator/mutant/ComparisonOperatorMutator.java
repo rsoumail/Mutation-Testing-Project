@@ -38,7 +38,7 @@ public class ComparisonOperatorMutator implements Mutator {
 			MethodInfo methodInfo = ctMethod.getMethodInfo();
 			CodeAttribute code = methodInfo.getCodeAttribute();
 			CodeIterator iterator = code.iterator();
-			MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath(), "test");
+			MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath(), "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
 			while (iterator.hasNext()) {
 				int pos = iterator.next();

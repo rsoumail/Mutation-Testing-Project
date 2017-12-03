@@ -25,7 +25,8 @@ public class MutatorExecutor {
         logger.info("Execute mutant  {}", mutator.getClass().getName() + " on " +targetProject.getLocation());
         for(CtClass ctClass: this.javaAssistHelper.getPool().get(targetProject.getClassesNames())){
             logger.info("Try to mutate  {}", ctClass.getName()  + " on " +targetProject.getLocation());
-            ctClass.defrost();
+            if(ctClass.isFrozen())
+                ctClass.defrost();
             CtMethod[] methods = ctClass.getDeclaredMethods();
 
             for(CtMethod method: methods){
