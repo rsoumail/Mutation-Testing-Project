@@ -30,7 +30,7 @@ public class VoidMethodMutator implements Mutator {
 
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.voidType)){
             ctMethod.getDeclaringClass().defrost();
-            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
+            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
             ctMethod.setBody("{}");
             logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());

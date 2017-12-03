@@ -17,7 +17,7 @@ public class PITRunner {
     }
 
     public void run() throws MavenInvocationException {
-        MVNRunner runner = new MVNRunner( new File("pom.xml").getAbsolutePath(), this.command);
+        MVNRunner runner = new MVNRunner( new File("pom.xml").getAbsolutePath(), this.command, "");
         runner.run();
     }
 }

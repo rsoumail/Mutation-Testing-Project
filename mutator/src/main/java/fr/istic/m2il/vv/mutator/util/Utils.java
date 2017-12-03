@@ -27,7 +27,8 @@ public class Utils {
         inputPath.delete();
     }
 
-    public static void write(CtClass ctClass, File inputPath) throws CannotCompileException, IOException {
+    public static void write(CtClass ctClass, File inputPath) throws IOException, CannotCompileException {
+
         ctClass.writeFile(inputPath.getAbsolutePath());
     }
 

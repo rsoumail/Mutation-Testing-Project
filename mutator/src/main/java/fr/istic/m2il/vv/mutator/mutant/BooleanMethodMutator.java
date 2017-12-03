@@ -28,7 +28,7 @@ public class BooleanMethodMutator implements Mutator{
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.booleanType)){
             ctMethod.getDeclaringClass().defrost();
-            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "test");
+            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
             Boolean returnValue = false;
             ctMethod.setBody("{ return " +  returnValue + ";}");
             logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
