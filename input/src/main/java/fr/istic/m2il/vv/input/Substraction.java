@@ -5,7 +5,7 @@ public class Substraction implements Operation {
 	private double firstMember;
 	private double secondMember;
 
-	public Substraction(Double firstMember, Double secondMember) {
+	public Substraction(double firstMember, double secondMember) {
 		this.firstMember = firstMember;
 		this.secondMember = secondMember;
 	}

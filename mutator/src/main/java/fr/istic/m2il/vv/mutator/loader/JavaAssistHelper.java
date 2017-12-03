@@ -13,13 +13,21 @@ public class JavaAssistHelper {
     private Loader loader;
     private CustomTranslator translator;
     private TargetProject targetProject;
+    private static JavaAssistHelper instance;
 
-    public JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
+    private JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
         this.pool = pool;
         this.loader = loader;
         this.translator = translator;
         this.targetProject = targetProject;
         this.initPool();
+    }
+
+    public static JavaAssistHelper getInstance(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject){
+        if(instance == null){
+            instance = new JavaAssistHelper(pool, loader, translator, targetProject);
+        }
+        return instance;
     }
 
     public ClassPool getPool() {

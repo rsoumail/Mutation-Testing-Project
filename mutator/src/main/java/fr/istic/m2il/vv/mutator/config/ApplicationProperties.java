@@ -9,13 +9,20 @@ public class ApplicationProperties {
 
     private static Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
     private File applicationPropertiesFile;
+    private static ApplicationProperties instance;
 
-    public ApplicationProperties(){
-
+    private ApplicationProperties(){
         logger.info("Loading application.properties");
         ClassLoader classLoader = getClass().getClassLoader();
         this.applicationPropertiesFile = new File(classLoader.getResource("application.properties").getFile());
         logger.info("application.properties loaded");
+    }
+
+    public static ApplicationProperties getInstance(){
+        if(instance == null){
+            instance = new ApplicationProperties();
+        }
+        return instance;
     }
 
     public File getApplicationPropertiesFile() {

@@ -11,21 +11,24 @@ public class MVNRunner {
     private String pom;
     private String command;
     private InvocationRequest request;
+    private String options;
 
-    public MVNRunner(String pom, String command) {
+    public MVNRunner(String pom, String command, String options) {
         this.pom = pom;
         this.command = command;
+        this.options = options;
         request = new DefaultInvocationRequest();
         request.setPomFile( new File( this.pom ) );
         request.setGoals( Arrays.asList( this.command ) );
+        request.setMavenOpts(options);
     }
 
-    public void run() throws MavenInvocationException {
+    public InvocationResult run() throws MavenInvocationException {
         Invoker invoker = new DefaultInvoker();
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("application.properties").getFile());
         invoker.setMavenHome(new File(Utils.loadPropertiesFile(file).getProperty("maven.home")));
-        invoker.execute( this.request );
+        return invoker.execute( this.request );
     }
 
     public String getPom() {

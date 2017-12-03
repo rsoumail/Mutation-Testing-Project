@@ -100,6 +100,17 @@ public class TargetProject {
         this.classesLocation = classesLocation;
     }
 
+    public String getTestClassNameOfClass(String clazz){
+        for(Class<?> klass: tests){
+            if(klass.getName().matches(clazz+"Test")){
+            /*if(klass.getName().contains(clazz));*/
+            System.out.println("Test Class Name " + klass.getName() + " for " + clazz);
+                return klass.getName();
+            }
+        }
+        return "";
+    }
+
     private String[] ClassesNamesFromClasses(List<Class<?>> classes){
 
         String[] classesNames = new String[classes.size()];

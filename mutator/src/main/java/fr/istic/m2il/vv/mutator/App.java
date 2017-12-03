@@ -1,10 +1,12 @@
 package fr.istic.m2il.vv.mutator;
 
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
+import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.mutant.*;
+import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 
 
@@ -12,6 +14,7 @@ import fr.istic.m2il.vv.mutator.util.Utils;
 import javassist.*;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.exit;
 
@@ -21,7 +24,7 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        ApplicationProperties applicationProperties = new ApplicationProperties();
+        ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
 
         if(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project").isEmpty()){
             System.err.println("Veuillez indiquer la propriété targetproject dans le fichier application properties");
@@ -32,12 +35,17 @@ public class App {
             ClassLoaderParser classLoaderParser = new ClassLoaderParser();
 
             TargetProject targetProject = new TargetProject();
+            TimeWatch watcher = TimeWatch.start();
             targetProject.setLocation(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
             targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
             targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getAbsolutePath()));
             targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getAbsolutePath()));
 
-            JavaAssistHelper javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
+            JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
+
+            ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
+
+            watcher.reset();
 
             MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
             MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
@@ -47,9 +55,10 @@ public class App {
 
             }
 
+            ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
 
-            /*PITRunner pitRunner = new PITRunner();
-            pitRunner.run();*/
+            ReportService.getInstance().doReport();
+
         }
     }
 
