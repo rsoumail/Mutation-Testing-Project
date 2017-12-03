@@ -11,13 +11,17 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 public class ComparisonOperatorMutator implements Mutator {
 
+	private static Logger logger = LoggerFactory.getLogger(ComparisonOperatorMutator.class);
 	private CtMethod original;
 	private CtMethod modified;
 	private TargetProject targetProject;
@@ -41,75 +45,58 @@ public class ComparisonOperatorMutator implements Mutator {
 			MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath(), "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
 			while (iterator.hasNext()) {
+				HashMap<Integer, Integer> m = new HashMap<>();
 				int pos = iterator.next();
 				switch (iterator.byteAt(pos)) {
-				// Replace operator < by <=
+				// Replace operator < by >=
 				case Opcode.IF_ICMPLT:
-					iterator.writeByte(Opcode.IF_ICMPLE, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IF_ICMPGE);
 					break;
-				// Replace operator > by >=
+
+				// Replace operator > by <=
 				case Opcode.IF_ICMPGT:
-					iterator.writeByte(Opcode.IF_ICMPGE, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IF_ICMPLE);
 					break;
-				// Replace operator <= by <
+
+				// Replace operator <= by >
 				case Opcode.IF_ICMPLE:
-					iterator.writeByte(Opcode.IF_ICMPLT, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IF_ICMPGT);
 					break;
-				// Replace operator >= by >
+
+				// Replace operator >= by <
 				case Opcode.IF_ICMPGE:
-					iterator.writeByte(Opcode.IF_ICMPGT, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IF_ICMPLT);
 					break;
-				// > => >=
+
+				// > to <=
 				case Opcode.IFGT:
-					System.out.println("Case 1 : " + Opcode.IFGT + " on method " + ctMethod.getName() + " on class "
-							+ ctMethod.getDeclaringClass().getName());
-					iterator.writeByte(Opcode.IFGE, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IFLE);
 					break;
-				// < => <=
+
+				// < to >=
 				case Opcode.IFLT:
-					System.out.println("Case 2 : " + Opcode.IFLT + " on method " + ctMethod.getName() + " on class "
-							+ ctMethod.getDeclaringClass().getName());
-					iterator.writeByte(Opcode.IFLE, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IFGE);
 					break;
-
+				
+				// >= to <
 				case Opcode.IFGE:
-					System.out.println("Case 3 : " + Opcode.IFGE + " on method " + ctMethod.getName() + " on class "
-							+ ctMethod.getDeclaringClass().getName());
-					iterator.writeByte(Opcode.IFGT, pos);
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					testRunner.run();
-					this.revert();
+					m.put(pos, Opcode.IFLT);
 					break;
 
+				// <= to >
 				case Opcode.IFLE:
-					System.out.println("Case 4 : " + Opcode.IFLE + " on method " + ctMethod.getName() + " on class "
-							+ ctMethod.getDeclaringClass().getName());
-					iterator.writeByte(Opcode.IFLT, pos);
+					m.put(pos, Opcode.IFGT);
+					break;
+				}
+				if (!m.isEmpty()) {
+					System.out.println("size " + m.get(pos));
+					iterator.writeByte(m.get(pos), pos);
+					logger.info("Mutating {}", getClass().getName() + "Mutate " + ctMethod.getName() + "" + "on "
+							+ targetProject.getLocation());
 					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
 					testRunner.run();
 					this.revert();
-					break;
-
 				}
-
 			}
 
 		}
@@ -117,6 +104,9 @@ public class ComparisonOperatorMutator implements Mutator {
 
 	@Override
 	public void revert() throws CannotCompileException, IOException, BadBytecode {
+
+		logger.info("Reverting  {}",
+				getClass().getName() + "Revert " + modified.getName() + " on " + targetProject.getLocation());
 		modified.getDeclaringClass().defrost();
 		modified.setBody(original, null);
 		Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
