@@ -4,9 +4,7 @@ services:
   - docker
 cache:
   directories:
-  - "$HOME/.cache
-install: true
-script: ./mvnw clean install
+    - "$HOME/.cache
 script: 
   - "cd mutator/ && mvn clean test"
   - "mvn cobertura:cobertura"
