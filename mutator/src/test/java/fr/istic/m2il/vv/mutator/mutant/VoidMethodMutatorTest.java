@@ -30,7 +30,7 @@ public class VoidMethodMutatorTest {
     public void setUp() throws Exception {
 
         applicationProperties = mock(ApplicationProperties.class);
-        when(applicationProperties.getApplicationPropertiesFile()).thenReturn((new File("")));
+        //when(applicationProperties.getApplicationPropertiesFile()).thenReturn((new File("")));
 
         classLoaderParser = new ClassLoaderParser();
 
@@ -40,7 +40,7 @@ public class VoidMethodMutatorTest {
         javaAssistHelperMocked.setPool(mock(ClassPool.class));
         javaAssistHelperMocked.setLoader(mock(Loader.class));
         javaAssistHelperMocked.setTranslator(mock(CustomTranslator.class));
-        javaAssistHelperMocked.setTargetProject(targetProjectMocked);
+    /*    javaAssistHelperMocked.setTargetProject(targetProjectMocked);
         mutatorExecutorMocked = mock(MutatorExecutor.class);
         //when(mutatorExecutorMocked.getJavaAssistHelper()).thenReturn(javaAssistHelperMocked);
 
@@ -54,7 +54,7 @@ public class VoidMethodMutatorTest {
 //
 //         javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
 //         mutatorExecutorHelper = new MutatorExecutorHelper();
-//         mutatorExecutor = new MutatorExecutor(javaAssistHelper);
+//         mutatorExecutor = new MutatorExecutor(javaAssistHelper);*/
     }
 
     @After
