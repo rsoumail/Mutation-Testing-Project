@@ -1,5 +1,10 @@
 sudo: false
 language: java
-script: "cd mutator/ && mvn clean test"
+install: true
+script: ./mvnw clean install
+script: 
+  - "cd mutator/ && mvn clean test"
+  - "mvn cobertura:cobertura"
+
 
 
