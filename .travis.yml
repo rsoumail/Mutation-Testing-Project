@@ -1,26 +1,5 @@
 sudo: false
 language: java
-services:
-- docker
-cache:
-  directories:
-  - "$HOME/.cache"
-deploy:
+script: "mvn clean verify cobertura:cobertura"
 
-  provider: script
-  script: "mvn clean verify"
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  on:
-    branch: develop
 
-before_deploy:
-      # Set up git user name and tag this commit
-      - git config --local user.name "ismaelrami"
-      - git config --local user.email "ramadan.soumaila@gmail.com"
-      - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-    deploy:
-      provider: releases
-      api_key: "GITHUB OAUTH TOKEN"
-      file: "FILE TO UPLOAD"
-      skip_cleanup: true
