@@ -1,11 +1,10 @@
 sudo: false
 language: java
 services:
-- docker
+  - docker
 cache:
   directories:
   - "$HOME/.cache
-
 install: true
 script: ./mvnw clean install
 script: 
