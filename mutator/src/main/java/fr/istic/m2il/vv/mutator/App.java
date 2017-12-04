@@ -36,7 +36,7 @@ public class App {
         cheker.checks();
         ClassLoaderParser classLoaderParser = new ClassLoaderParser();
 
-        TargetProject targetProject = new TargetProject();
+        TargetProject targetProject = TargetProject.getInstance();
         TimeWatch watcher = TimeWatch.start();
 
         targetProject.setLocation(new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
@@ -47,11 +47,12 @@ public class App {
         targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
 
         targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
-        targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
+        ClassLoaderParser classLoaderParser1 = new ClassLoaderParser();
+        targetProject.setTests(classLoaderParser1.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
 
         cheker.checksClassesAndTestsExist(targetProject);
 
-        JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
+        JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(targetProject);
 
 
 

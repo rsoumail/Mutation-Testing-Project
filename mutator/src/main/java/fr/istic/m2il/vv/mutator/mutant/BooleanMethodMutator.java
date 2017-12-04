@@ -55,7 +55,7 @@ public class BooleanMethodMutator implements Mutator{
 
     @Override
     public void revert() throws CannotCompileException, IOException {
-        logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " +targetProject.getLocation());
+        logger.info("Reverting  {}", getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
         modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());

@@ -23,9 +23,10 @@ public class JavaAssistHelper {
         this.initPool();
     }
 
-    public static JavaAssistHelper getInstance(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject){
+    public static JavaAssistHelper getInstance(TargetProject targetProject){
         if(instance == null){
-            instance = new JavaAssistHelper(pool, loader, translator, targetProject);
+
+            instance = new JavaAssistHelper(new ClassPool(), new Loader(), new CustomTranslator(), targetProject);
         }
         return instance;
     }
