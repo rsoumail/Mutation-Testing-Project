@@ -64,25 +64,20 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
     </dependencies>
     <build>
+
+
+
         <plugins>
-
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.2.3</version>
-                <configuration>
-                    <targetClasses>
-                        <param>fr.istic.m2il.vv.input.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>fr.istic.m2il.vv.input*</param>
-                    </targetTests>
-                    <reportsDirectory>target/pit-reports</reportsDirectory>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -130,7 +125,7 @@
                             </regex>
                         </regexes>
                     </check>
-                </configuration>
+                </configuration-->
                 <executions>
                     <execution>
                         <goals>
@@ -138,10 +133,60 @@
                             <goal>check</goal>
                         </goals>
                     </execution>
-                </executions-->
+                </executions>
             </plugin>
 
             <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>fr.istic.m2il.vv.mutator.App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+            <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+                <configuration>
+                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                    <includeEmptyDirs>true</includeEmptyDirs>
+                    <resources>
+                        <resource>
+                            <directory>${basedir}/src/main/resources</directory>
+                            <filtering>false</filtering>
+                        </resource>
+                    </resources>
+                </configuration>
+            </execution>
+            </executions>
+            </plugin-->
+
+
+
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.1.0</version>
@@ -154,9 +199,11 @@
                     </execution>
                 </executions>
                 <configuration>
+
                     <finalName>${project.artifactId}-with-dependencies-${project.version}</finalName>
                 </configuration>
-            </plugin>
+            </plugin-->
+
         </plugins>
     </build>
 

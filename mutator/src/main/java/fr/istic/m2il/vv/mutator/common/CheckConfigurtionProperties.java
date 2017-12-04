@@ -32,7 +32,7 @@ public class CheckConfigurtionProperties {
     }
 
     private void checkPropertie(String propertie){
-        if(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty(propertie) == null){
+        if(applicationProperties.getApplicationPropertiesFile().getProperty(propertie) == null){
             System.err.println("Veuillez indiquer la propriété " + propertie + " dans le fichier application properties");
             exit(0);
         }

@@ -28,10 +28,10 @@ public class App {
 
         ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
 
-        if(!applicationProperties.getApplicationPropertiesFile().exists()){
+        /*if(!applicationProperties.getApplicationPropertiesFile()){
             System.err.println("Impossible de trouver le fichier application.properties");
             exit(0);
-        }
+        }*/
         CheckConfigurtionProperties cheker = new CheckConfigurtionProperties(applicationProperties);
         cheker.checks();
         ClassLoaderParser classLoaderParser = new ClassLoaderParser();
@@ -39,7 +39,7 @@ public class App {
         TargetProject targetProject = new TargetProject();
         TimeWatch watcher = TimeWatch.start();
 
-        targetProject.setLocation(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
+        targetProject.setLocation(new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
 
         cheker.checkFileExist(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
         cheker.checkFileExist(targetProject.getClassesLocation());

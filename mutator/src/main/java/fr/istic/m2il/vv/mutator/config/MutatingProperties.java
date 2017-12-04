@@ -3,15 +3,16 @@ package fr.istic.m2il.vv.mutator.config;
 import fr.istic.m2il.vv.mutator.mutant.MutantType;
 import fr.istic.m2il.vv.mutator.util.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MutatingProperties {
 
 
-    public static List<MutantType> mutantsToAnalysis(){
+    public static List<MutantType> mutantsToAnalysis() throws IOException {
         List<MutantType> mutantTypes = new ArrayList<>();
-        String mutatorsPropertie = Utils.loadPropertiesFile(ApplicationProperties.getInstance().getApplicationPropertiesFile()).getProperty(ConfigurationProperties.MUTATORS.toString());
+        String mutatorsPropertie = ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty(ConfigurationProperties.MUTATORS.toString());
         mutatorsPropertie = mutatorsPropertie.trim();
         String[] mutators = mutatorsPropertie.split(",");
         if(mutators.length == 0){
