@@ -1,10 +1,6 @@
 sudo: false
 language: java
-services:
-  - docker
-cache:
-  directories:
-    - "$HOME/.cache
+install: true
 script: 
   - "cd mutator/ && mvn clean test"
   - "mvn cobertura:cobertura"
