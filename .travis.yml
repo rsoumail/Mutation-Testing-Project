@@ -1,5 +1,5 @@
 sudo: false
 language: java
-script: "mvn clean verify cobertura:cobertura"
+script: "mvn clean test"
 
 
