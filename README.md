@@ -29,7 +29,10 @@ Lancement du projet :
     > Exécution :
        Dans le dossier mutator/target: java -jar mutator-1.0-SNAPSHOT-jar-with-dependencies.jar
     
-
+## Projets cibles testés
+  > commons-cli
+  > commons-codec
+  
 ## Fonctionnalités implémentées 
 
  ### Programme :
