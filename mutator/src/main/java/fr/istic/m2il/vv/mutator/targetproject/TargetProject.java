@@ -19,10 +19,18 @@ public class TargetProject {
     private File testsLocation;
     private File classesLocation;
     private File pom;
+    private static  TargetProject instance;
 
 
-    public TargetProject(){
+    private TargetProject(){
 
+    }
+
+    public static TargetProject getInstance(){
+        if(instance == null){
+            instance = new TargetProject();
+        }
+        return instance;
     }
 
     public String getClassPackage() {
