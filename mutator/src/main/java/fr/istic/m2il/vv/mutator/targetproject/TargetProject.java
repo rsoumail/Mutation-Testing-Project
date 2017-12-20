@@ -23,7 +23,7 @@ public class TargetProject {
 
 
     private TargetProject(){
-
+        logger.info("Target project created ");
     }
 
     public static TargetProject getInstance(){
@@ -55,7 +55,9 @@ public class TargetProject {
 
     public void setClasses(List<Class<?>> classes) {
         this.classes = classes;
-        this.setClassesNames(this.ClassesNamesFromClasses(this.classes));
+        String[] classesNames = this.ClassesNamesFromClasses(this.classes);
+        if(classesNames != null)
+          this.setClassesNames(classesNames);
     }
 
     public List<Class<?>> getTests() {
@@ -119,12 +121,16 @@ public class TargetProject {
 
     private String[] ClassesNamesFromClasses(List<Class<?>> classes){
 
-        String[] classesNames = new String[classes.size()];
-        int i = 0;
-        for(Class<?> clazz: classes){
-            classesNames[i] = clazz.getName();
-            i++;
+        if(classes.size() > 0){
+            String[] classesNames = new String[classes.size()];
+            int i = 0;
+            for(Class<?> clazz: classes){
+                classesNames[i] = clazz.getName();
+                i++;
+            }
+            return classesNames;
         }
-        return classesNames;
+        else
+            return null;
     }
 }

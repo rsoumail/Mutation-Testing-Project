@@ -1,6 +1,7 @@
 package fr.istic.m2il.vv.mutator.config;
 
 
+import fr.istic.m2il.vv.mutator.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,19 +14,20 @@ public class ApplicationProperties {
     private Properties applicationPropertiesFile;
     private static ApplicationProperties instance;
 
-    private ApplicationProperties() throws IOException {
+    private ApplicationProperties(File propertieFile) throws IOException {
         logger.info("Loading application.properties");
-
-        Properties properties = new Properties();
-        properties.load(ApplicationProperties.class.getResourceAsStream("/application.properties"));
-        this.applicationPropertiesFile = properties;
+        this.applicationPropertiesFile = Utils.loadPropertiesFile(propertieFile);
         logger.info("application.properties loaded");
     }
 
-    public static ApplicationProperties getInstance() throws IOException {
+    public static ApplicationProperties getInstance(File propertieFile) throws IOException {
         if(instance == null){
-            instance = new ApplicationProperties();
+            instance = new ApplicationProperties(propertieFile);
         }
+        return instance;
+    }
+
+    public static ApplicationProperties getInstance() throws IOException {
         return instance;
     }
 

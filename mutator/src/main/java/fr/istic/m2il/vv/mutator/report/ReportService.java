@@ -3,7 +3,9 @@ package fr.istic.m2il.vv.mutator.report;
 import fr.istic.m2il.vv.mutator.mutant.MutantState;
 import fr.istic.m2il.vv.mutator.mutant.Mutator;
 
+import java.io.IOException;
 import java.util.*;
+
 
 public class ReportService implements IReportService{
 
@@ -17,6 +19,7 @@ public class ReportService implements IReportService{
 
     private ReportService(){
         reports = new HashMap<>();
+
         ranTestsNumber = new Integer(0);
     }
 
@@ -88,6 +91,7 @@ public class ReportService implements IReportService{
     }
 
     private void displayStatictics() {
+
         System.out.println("- Statistics ");
         System.out.println("================================================================================");
         System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + String.format("%.2f", this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber())) + "%)");
@@ -135,6 +139,11 @@ public class ReportService implements IReportService{
         displayTimings();
         displayStatictics();
         displayMutators();
+    }
+
+    @Override
+    public void toHtml() throws IOException {
+
     }
 
     private Long doTotalTime() {
@@ -191,5 +200,8 @@ public class ReportService implements IReportService{
     private Float getRate(Integer subset, Integer total){
         return Float.valueOf(((Float.valueOf(subset) / Float.valueOf(total))) * 100).floatValue();
     }
+
+
+
 
 }

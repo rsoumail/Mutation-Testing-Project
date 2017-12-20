@@ -2,6 +2,7 @@ package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
+import fr.istic.m2il.vv.mutator.testrunner.listener.MVNTestListener;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
@@ -15,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ArithmeticOperatorMutator implements Mutator{
 
@@ -43,6 +46,9 @@ public class ArithmeticOperatorMutator implements Mutator{
                     CodeAttribute code = methodInfo.getCodeAttribute();
                     CodeIterator iterator = code.iterator();
                     MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+                    /*ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.invokeAll(Arrays.asList(testRunner), 10, TimeUnit.SECONDS); // Timeout of 10 secondes.
+                    executor.shutdown();*/
 
                     while (iterator.hasNext()) {
                         HashMap<Integer, Integer> m = new HashMap<>();
@@ -118,6 +124,8 @@ public class ArithmeticOperatorMutator implements Mutator{
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
                             ReportService.getInstance().newRanTest();
+                            MVNTestListener listener = new MVNTestListener();
+
                             InvocationResult testResult = testRunner.run();
                             if(testResult.getExitCode() != 0){
                                 report.setMutantState(MutantState.KILLED);
@@ -147,7 +155,4 @@ public class ArithmeticOperatorMutator implements Mutator{
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
 
     }
-
-
-
 }

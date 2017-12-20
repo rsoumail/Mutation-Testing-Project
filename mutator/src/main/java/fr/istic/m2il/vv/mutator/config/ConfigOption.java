@@ -1,14 +1,14 @@
 package fr.istic.m2il.vv.mutator.config;
 
-public enum ConfigurationProperties {
+public enum ConfigOption {
     TARGET_PROJECT("target.project"),
     MAVEN_HOME("maven.home"),
     MUTATORS("mutators");
 
-    private final String propertie;
+    private final String option;
 
-    ConfigurationProperties(final String propertie) {
-        this.propertie = propertie;
+    ConfigOption(final String option) {
+        this.option = option;
     }
 
     /* (non-Javadoc)
@@ -16,6 +16,6 @@ public enum ConfigurationProperties {
      */
     @Override
     public String toString() {
-        return propertie;
+        return option;
     }
 }

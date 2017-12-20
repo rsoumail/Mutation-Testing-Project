@@ -2,6 +2,7 @@ package fr.istic.m2il.vv.mutator.report;
 
 import fr.istic.m2il.vv.mutator.mutant.Mutator;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,5 +29,8 @@ public interface IReportService {
      *  Display Report information about Mutations Analysis
      */
     void doReport();
+
+
+    void toHtml() throws IOException;
 
 }
