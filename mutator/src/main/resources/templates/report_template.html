@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--meta name="author" content="ANNE Aurélien, COISNARD-SIMON Marie, SALMON Kevin"-->
+
+    <title>Mutation Analysis Report</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Mutation Analysis Report</h1>
+        <p class="lead">ANNE Aurélien, COISNARD-SIMON Marie, SALMON Kevin</p>
+    </div>
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <#list classes as class>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading${class_index}">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse${class_index}" aria-expanded="false" aria-controls="collapse${class_index}">
+                            ${class.getClassModified().getQualifiedName()}
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse${class_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${class_index}">
+                    <div class="panel-body">
+                        <#list class.getModificationsResult() as modification>
+                            <div class="panel-group" id="accordion${class_index}${modification_index}" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading${class_index}${modification_index}">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion${class_index}" href="#collapse${class_index}${modification_index}" aria-expanded="true" aria-controls="collapse${class_index}${modification_index}">
+                                                <b>${modification.getMethod().getSimpleName()}()</b> - Operator: <i>${modification.getOperator().toString()}</i>
+                                                <small>
+                                                    <#if modification.getStatement()??>
+                                                        (statement at ${(modification.getStatement().getPosition().getLine())!""}:${(modification.getStatement().getPosition().getColumn())!""})
+                                                        <#else>
+                                                            (method modification)
+                                                    </#if>
+                                                </small>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse${class_index}${modification_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${class_index}${modification_index}">
+                                        <div class="panel-body">
+                                            <table class="table table-condensed">
+                                                <tr>
+                                                    <th>Test class</th>
+                                                    <th>Run count</th>
+                                                    <th>Failures</th>
+                                                    <th>Errors</th>
+                                                    <th>Skipped</th>
+                                                    <th>Time elapsed</th>
+                                                </tr>
+
+                                                <#list modification.getTestsResult() as testResult>
+                                                    <#if testResult.wasSuccessful()>
+                                                        <tr class="success">
+                                                            <#else>
+                                                        <tr class="danger">
+                                                    </#if>
+                                                    <td>${testResult.getTestClass()}</td>
+                                                    <td>${testResult.getRunCount()}</td>
+                                                    <td>${testResult.getFailureCount()}</td>
+                                                    <td>${testResult.getErrorsCount()}</td>
+                                                    <td>${testResult.getIgnoreCount()}</td>
+                                                    <td>${testResult.getRunTime()}</td>
+                                                    </tr>
+
+                                                    <#list testResult.getFailures() as failure>
+                                                        <tr class="danger">
+                                                            <td colspan="6">Failure: <i>${failure}</i></td>
+                                                        </tr>
+                                                    </#list>
+                                                    <#list testResult.getErrors() as failure>
+                                                        <tr class="danger">
+                                                            <td colspan="6">Error: <i>${failure}</i></td>
+                                                        </tr>
+                                                    </#list>
+                                                </#list>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                </div>
+            </div>
+        </#list>
+    </div>
+</div>
+</body>
+</html>

@@ -1,10 +1,13 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.report.Report;
+import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +34,18 @@ public class BooleanMethodMutator implements Mutator{
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
             Boolean returnValue = false;
             ctMethod.setBody("{ return " +  returnValue + ";}");
-            logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+            //logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-            testRunner.run();
+            Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+            ReportService.getInstance().newRanTest();
+            InvocationResult testResult = testRunner.run();
+            if(testResult.getExitCode() != 0){
+                report.setMutantState(MutantState.KILLED);
+            }
+            else{
+                report.setMutantState(MutantState.SURVIVED);
+            }
+            ReportService.getInstance().addReport(this, report);
             this.revert();
         }
 
@@ -41,7 +53,7 @@ public class BooleanMethodMutator implements Mutator{
 
     @Override
     public void revert() throws CannotCompileException, IOException {
-        logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " +targetProject.getLocation());
+        logger.info("Reverting  {}", getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
         modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());

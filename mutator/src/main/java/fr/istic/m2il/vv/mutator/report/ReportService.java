@@ -3,19 +3,24 @@ package fr.istic.m2il.vv.mutator.report;
 import fr.istic.m2il.vv.mutator.mutant.MutantState;
 import fr.istic.m2il.vv.mutator.mutant.Mutator;
 
+import java.io.IOException;
 import java.util.*;
+
 
 public class ReportService implements IReportService{
 
-    private Long scanClassesTime = new Long(0);;
+    private Long scanClassesTime = new Long(0);
     private Long coverageAndDependencyAnalysisTime = new Long(0);
-    private Long buildMutationTestsTime = new Long(0);;
-    private Long runMutationAnalysisTime = new Long(0);;
+    private Long buildMutationTestsTime = new Long(0);
+    private Long runMutationAnalysisTime = new Long(0);
+    private Integer ranTestsNumber;
     private HashMap<Mutator, List<Report>> reports;
     private static ReportService instance;
 
     private ReportService(){
         reports = new HashMap<>();
+
+        ranTestsNumber = new Integer(0);
     }
 
     public static ReportService getInstance(){
@@ -30,8 +35,15 @@ public class ReportService implements IReportService{
     }
 
     @Override
-    public void addReport(Mutator mutator, List<Report> reports) {
-        this.reports.put(mutator, reports);
+    public void addReport(Mutator mutator, Report report) {
+        if(reports.get(mutator) == null){
+            List<Report> mutantReportList = new ArrayList<>();
+            mutantReportList.add(report);
+            reports.put(mutator, mutantReportList);
+        }
+        else{
+            reports.get(mutator).add(report);
+        }
     }
 
     public Long getScanClassesTime() {
@@ -58,6 +70,13 @@ public class ReportService implements IReportService{
         this.buildMutationTestsTime = buildMutationTestsTime;
     }
 
+    public void newRanTest(){
+        ranTestsNumber++;
+    }
+    public Integer getRanTestsNumber() {
+        return ranTestsNumber;
+    }
+
     public Long getRunMutationAnalysisTime() {
         return runMutationAnalysisTime;
     }
@@ -72,9 +91,10 @@ public class ReportService implements IReportService{
     }
 
     private void displayStatictics() {
+
         System.out.println("- Statistics ");
         System.out.println("================================================================================");
-        System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber()) + "%)");
+        System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + String.format("%.2f", this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber())) + "%)");
         System.out.println(">> Ran " + this.getTotalMutationsNumber() + " tests (1 tests per mutation)");
         System.out.println();
     }
@@ -100,7 +120,7 @@ public class ReportService implements IReportService{
         while(iterator.hasNext()){
             Map.Entry reportMutator = (Map.Entry) iterator.next();
             System.out.println("> " + ((Mutator)reportMutator.getKey()).getClass().getName());
-            System.out.println(">> Generated " + ((List<Report>)reportMutator.getValue()).size() + " Killed " + this.getRate(getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()), ((List<Report>)reportMutator.getValue()).size()) + "%" );
+            System.out.println(">> Generated " + ((List<Report>)reportMutator.getValue()).size() + " Killed " +getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()) +" " + String.format("%.2f", this.getRate(getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()), ((List<Report>)reportMutator.getValue()).size())) + "%" );
 
             System.out.println("> KILLED " + getStateMutantsNumber(MutantState.KILLED, (List<Report>)reportMutator.getValue()) + " SURVIVED " + getStateMutantsNumber(MutantState.SURVIVED, (List<Report>)reportMutator.getValue()) +" TIMED_OUT " + getStateMutantsNumber(MutantState.TIMED_OUT, (List<Report>)reportMutator.getValue())  + " NON_VIABLE " + getStateMutantsNumber(MutantState.NON_VIABLE, (List<Report>)reportMutator.getValue()) );
             /*for(Report r:((List<Report>)reportMutator.getValue())){
@@ -119,6 +139,11 @@ public class ReportService implements IReportService{
         displayTimings();
         displayStatictics();
         displayMutators();
+    }
+
+    @Override
+    public void toHtml() throws IOException {
+
     }
 
     private Long doTotalTime() {
@@ -173,7 +198,10 @@ public class ReportService implements IReportService{
     }
 
     private Float getRate(Integer subset, Integer total){
-        return Float.valueOf(((subset / total) * 100));
+        return Float.valueOf(((Float.valueOf(subset) / Float.valueOf(total))) * 100).floatValue();
     }
+
+
+
 
 }

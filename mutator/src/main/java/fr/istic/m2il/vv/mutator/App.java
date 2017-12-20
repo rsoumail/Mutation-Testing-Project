@@ -1,22 +1,16 @@
 package fr.istic.m2il.vv.mutator;
 
+import fr.istic.m2il.vv.mutator.common.CheckConfigurtionProperties;
 import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
+import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
-import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.mutant.*;
 import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
-
-
-import fr.istic.m2il.vv.mutator.util.Utils;
-import javassist.*;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
-import static java.lang.System.exit;
 
 public class App {
 
@@ -24,24 +18,27 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
-
-        if(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project").isEmpty()){
-            System.err.println("Veuillez indiquer la propriété targetproject dans le fichier application properties");
-            exit(0);
+        if(args.length != 1){
+            System.err.println("Veuillez passez le fichier de configuration en paramètre");
         }
-        else {
+        else{
+            ApplicationProperties applicationProperties = ApplicationProperties.getInstance(new File(args[0]));
 
             ClassLoaderParser classLoaderParser = new ClassLoaderParser();
 
-            TargetProject targetProject = new TargetProject();
-            TimeWatch watcher = TimeWatch.start();
-            targetProject.setLocation(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
-            targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
-            targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getAbsolutePath()));
-            targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getAbsolutePath()));
+            TargetProject targetProject = TargetProject.getInstance();
 
-            JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
+            TimeWatch watcher = TimeWatch.start();
+
+            targetProject.setLocation(new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
+            targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
+            targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
+            targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
+
+            CheckConfigurtionProperties checker = new CheckConfigurtionProperties(applicationProperties);
+            checker.checksConfig();
+
+            JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance();
 
             ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
 
@@ -49,15 +46,15 @@ public class App {
 
             MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
             MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-            for(MutantType mutant: MutantType.values()){
+            for(MutantType mutant: MutatingProperties.mutantsToAnalysis()){
                 Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
                 mutatorExecutor.execute(mutator, targetProject);
-
             }
 
             ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
 
             //ReportService.getInstance().doReport();
+
 
         }
     }

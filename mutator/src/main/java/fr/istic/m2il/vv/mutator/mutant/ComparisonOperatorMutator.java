@@ -1,5 +1,7 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.report.Report;
+import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
@@ -13,6 +15,7 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.*;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +46,7 @@ public class ComparisonOperatorMutator implements Mutator {
 		original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
 		if (!ctMethod.getDeclaringClass().isInterface()) {
+
 			ctMethod.getDeclaringClass().defrost();
 			MethodInfo methodInfo = ctMethod.getMethodInfo();
 			CodeAttribute code = methodInfo.getCodeAttribute();
@@ -128,8 +132,7 @@ public class ComparisonOperatorMutator implements Mutator {
 	@Override
 	public void revert() throws CannotCompileException, IOException, BadBytecode {
 
-		logger.info("Reverting  {}",
-				getClass().getName() + "Revert " + modified.getName() + " on " + targetProject.getLocation());
+		logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " + targetProject.getLocation());
 		modified.getDeclaringClass().defrost();
 		modified.setBody(original, null);
 		Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());

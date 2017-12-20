@@ -1,10 +1,13 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.report.Report;
+import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +32,24 @@ public class VoidMethodMutator implements Mutator {
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.voidType)){
-            ctMethod.getDeclaringClass().defrost();
-            MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
-            ctMethod.setBody("{}");
-            logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
-            Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-            testRunner.run();
-            this.revert();
+            if(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()) != null){
+                ctMethod.getDeclaringClass().defrost();
+                MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+                ctMethod.setBody("{}");
+                //logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+                Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
+                Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+                ReportService.getInstance().newRanTest();
+                InvocationResult testResult = testRunner.run();
+                if(testResult.getExitCode() != 0){
+                    report.setMutantState(MutantState.KILLED);
+                }
+                else{
+                    report.setMutantState(MutantState.SURVIVED);
+                }
+                ReportService.getInstance().addReport(this, report);
+                this.revert();
+            }
         }
 
     }

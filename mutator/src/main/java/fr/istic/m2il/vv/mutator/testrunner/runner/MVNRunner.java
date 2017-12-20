@@ -1,9 +1,11 @@
 package fr.istic.m2il.vv.mutator.testrunner.runner;
 
-import fr.istic.m2il.vv.mutator.util.Utils;
+import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
+import fr.istic.m2il.vv.mutator.testrunner.listener.ITestListener;
 import org.apache.maven.shared.invoker.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MVNRunner {
@@ -12,6 +14,7 @@ public class MVNRunner {
     private String command;
     private InvocationRequest request;
     private String options;
+    private ITestListener listener;
 
     public MVNRunner(String pom, String command, String options) {
         this.pom = pom;
@@ -23,11 +26,9 @@ public class MVNRunner {
         request.setMavenOpts(options);
     }
 
-    public InvocationResult run() throws MavenInvocationException {
+    public InvocationResult run() throws MavenInvocationException, IOException {
         Invoker invoker = new DefaultInvoker();
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("application.properties").getFile());
-        invoker.setMavenHome(new File(Utils.loadPropertiesFile(file).getProperty("maven.home")));
+        invoker.setMavenHome(new File(ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("maven.home")));
         return invoker.execute( this.request );
     }
 

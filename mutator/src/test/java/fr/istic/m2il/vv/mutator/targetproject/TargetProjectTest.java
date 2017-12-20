@@ -1,0 +1,22 @@
+package fr.istic.m2il.vv.mutator.targetproject;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class TargetProjectTest {
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void getTestClassNameOfClass() throws Exception {
+    }
+
+}

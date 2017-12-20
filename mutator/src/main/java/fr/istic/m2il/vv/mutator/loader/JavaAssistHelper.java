@@ -23,9 +23,10 @@ public class JavaAssistHelper {
         this.initPool();
     }
 
-    public static JavaAssistHelper getInstance(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject){
+    public static JavaAssistHelper getInstance(){
         if(instance == null){
-            instance = new JavaAssistHelper(pool, loader, translator, targetProject);
+
+            instance = new JavaAssistHelper(new ClassPool(), new Loader(), new CustomTranslator(), TargetProject.getInstance());
         }
         return instance;
     }
@@ -79,8 +80,8 @@ public class JavaAssistHelper {
 
         }
         catch(Throwable exc) {
-            System.out.println("Impossible de charger les sources de l'input.");
-            System.out.println(exc.getMessage());
+            logger.error("Impossible de charger les sources de l'input.");
+            logger.error("Message {}" + exc.getMessage());
             exc.printStackTrace();
         }
     }

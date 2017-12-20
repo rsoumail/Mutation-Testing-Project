@@ -33,7 +33,7 @@ public class ArithmeticOperatorMutatorTest {
     @Before
     public void setUp() throws Exception {
     	 applicationProperties = mock(ApplicationProperties.class);
-    	 when(applicationProperties.getApplicationPropertiesFile()).thenReturn((new File("")));
+    	// when(applicationProperties.getApplicationPropertiesFile()).thenReturn((new File("")));
     	 
     	 classLoaderParser = new ClassLoaderParser();
     	 
@@ -44,9 +44,8 @@ public class ArithmeticOperatorMutatorTest {
     	 javaAssistHelperMocked.setLoader(mock(Loader.class));
     	 javaAssistHelperMocked.setTranslator(mock(CustomTranslator.class));
     	 javaAssistHelperMocked.setTargetProject(targetProjectMocked);
-    	 mutatorExecutorMocked = mock(MutatorExecutor.class);
+    	/* mutatorExecutorMocked = mock(MutatorExecutor.class);
     	 //when(mutatorExecutorMocked.getJavaAssistHelper()).thenReturn(javaAssistHelperMocked);
-
  
     	 when(targetProjectMocked.getLocation()).thenReturn(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
 		 when(targetProjectMocked.getPom()).thenReturn(new File(targetProjectMocked.getLocation().getAbsolutePath() + "/pom.xml"));
@@ -57,7 +56,7 @@ public class ArithmeticOperatorMutatorTest {
 //
 //         javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
 //         mutatorExecutorHelper = new MutatorExecutorHelper();
-//         mutatorExecutor = new MutatorExecutor(javaAssistHelper);
+//         mutatorExecutor = new MutatorExecutor(javaAssistHelper);*/
     }
 
     @After
