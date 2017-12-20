@@ -57,7 +57,7 @@ public class App {
 
             ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
 
-            ReportService.getInstance().doReport();
+            //ReportService.getInstance().doReport();
 
         }
     }
