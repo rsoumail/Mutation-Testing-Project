@@ -35,6 +35,21 @@ public class SubstractionTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Substraction substraction = new Substraction();
+		substraction.setSecondMember(20.0);
+		Assert.assertEquals(20.0, substraction.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Substraction substraction = new Substraction();
+		substraction.setSecondMember(20.0);
+		Assert.assertEquals(20.0, substraction.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Substraction substraction = new Substraction(30.0, 7.0);
 		Assert.assertTrue(substraction.firstGreatherThanSecond());

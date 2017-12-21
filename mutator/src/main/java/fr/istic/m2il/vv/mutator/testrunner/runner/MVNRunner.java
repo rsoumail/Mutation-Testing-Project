@@ -1,7 +1,6 @@
 package fr.istic.m2il.vv.mutator.testrunner.runner;
 
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
-import fr.istic.m2il.vv.mutator.testrunner.listener.ITestListener;
 import org.apache.maven.shared.invoker.*;
 
 import java.io.File;
@@ -14,7 +13,6 @@ public class MVNRunner {
     private String command;
     private InvocationRequest request;
     private String options;
-    private ITestListener listener;
 
     public MVNRunner(String pom, String command, String options) {
         this.pom = pom;

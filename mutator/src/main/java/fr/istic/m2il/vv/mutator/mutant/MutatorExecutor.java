@@ -24,6 +24,7 @@ public class MutatorExecutor {
     public void execute(Mutator mutator, TargetProject targetProject) throws CannotCompileException, BadBytecode, NotFoundException, IOException, MavenInvocationException {
         logger.info("Execute mutant  {}", mutator.getClass().getName() + " on " +targetProject.getLocation());
         for(CtClass ctClass: this.javaAssistHelper.getPool().get(targetProject.getClassesNames())){
+
             //logger.info("Try to mutate  {}", ctClass.getName()  + " on " +targetProject.getLocation());
             if(ctClass.isFrozen())
                 ctClass.defrost();

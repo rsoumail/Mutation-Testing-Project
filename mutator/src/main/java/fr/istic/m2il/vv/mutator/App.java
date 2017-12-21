@@ -7,6 +7,7 @@ import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
 import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.mutant.*;
+import fr.istic.m2il.vv.mutator.report.HtmlStrategy;
 import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import java.io.File;
@@ -32,6 +33,11 @@ public class App {
 
             targetProject.setLocation(new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
             targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
+            targetProject.setReportDir(
+                    applicationProperties.getApplicationPropertiesFile().getProperty("report.dir") != null ?
+                            new File (applicationProperties.getApplicationPropertiesFile().getProperty("report.dir")) :
+                            new File (targetProject.getLocation() + "/target")
+            );
             targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
             targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
 
@@ -40,6 +46,7 @@ public class App {
 
             JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance();
 
+            ReportService.getInstance().setReportStrategy(new HtmlStrategy());
             ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
 
             watcher.reset();
@@ -52,10 +59,15 @@ public class App {
             }
 
             ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
+<<<<<<< d1136ab84485b77f78201cf6c430197b8f6ce3fa
 
             //ReportService.getInstance().doReport();
 
 
+=======
+            ReportService.getInstance().doReport();
+            ReportService.getInstance().toGraphicReport();
+>>>>>>> Finalisation du raport html, debut de quelques tests
         }
     }
 

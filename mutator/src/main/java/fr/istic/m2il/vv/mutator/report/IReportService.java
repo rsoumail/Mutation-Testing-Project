@@ -31,6 +31,8 @@ public interface IReportService {
     void doReport();
 
 
-    void toHtml() throws IOException;
+    void toGraphicReport() throws IOException;
+
+
 
 }

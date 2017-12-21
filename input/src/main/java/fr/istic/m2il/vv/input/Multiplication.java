@@ -10,6 +10,9 @@ public class Multiplication implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Multiplication() {
+	}
+
 	@Override
 	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;

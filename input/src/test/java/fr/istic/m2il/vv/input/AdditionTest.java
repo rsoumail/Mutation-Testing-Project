@@ -37,10 +37,10 @@ public class AdditionTest {
 
 	@Test
 	public void SecondMember() throws Exception {
-		double a = 0;
-		double b = 1;
-		Addition addition = new Addition(a, b);
-		Assert.assertEquals(b, addition.getSecondMember(), 1);
+
+		Addition addition = new Addition();
+		addition.setSecondMember(20.0);
+		Assert.assertEquals(20.0, addition.getSecondMember(), 1);
 	}
 
 	@Test

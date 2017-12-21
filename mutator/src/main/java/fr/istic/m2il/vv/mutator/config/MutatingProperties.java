@@ -17,12 +17,12 @@ public class MutatingProperties {
         if(mutatorsPropertie != null){
             mutatorsPropertie = mutatorsPropertie.trim();
             mutators = mutatorsPropertie.split(",");
-            if(mutatorsPropertie != null && mutators.length == 0){
+            if(mutatorsPropertie != null && mutators[0].equals("")){
                 for(MutantType mutantType:MutantType.values()){
                     mutantTypes.add(mutantType);
                 }
             }
-            else{
+            else if (mutantTypes.size() == 0){
                 for(String mutator: mutators){
                     for(MutantType mutantType:MutantType.values()){
                         mutator = mutator.trim();

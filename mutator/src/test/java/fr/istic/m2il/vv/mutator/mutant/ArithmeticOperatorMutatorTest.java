@@ -3,6 +3,7 @@ package fr.istic.m2il.vv.mutator.mutant;
 import java.io.File;
 import java.util.List;
 
+import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,44 +20,35 @@ import javassist.Loader;
 import static org.mockito.Mockito.*;
 
 public class ArithmeticOperatorMutatorTest {
-	
-	ApplicationProperties applicationProperties;
+
+    ApplicationProperties applicationProperties;
 	ClassLoaderParser classLoaderParser;
-	TargetProject targetProjectMocked;
-	JavaAssistHelper javaAssistHelperMocked;
-	MutatorExecutor mutatorExecutorMocked;
-	MutatorExecutorHelper mutatorExecutorHelperMocjed; 
+
+
+	TargetProject targetProject;
+	MVNRunner mvnRunner;
+    File fileMocked;
+    Mutator mutator;
 	
 	/* Jeu de données */
 	List<Class<?>> classes;
 	
     @Before
     public void setUp() throws Exception {
-    	 applicationProperties = mock(ApplicationProperties.class);
-    	// when(applicationProperties.getApplicationPropertiesFile()).thenReturn((new File("")));
+ fileMocked = mock(File.class);
+
+        applicationProperties = ApplicationProperties.getInstance();
+        targetProject = TargetProject.getInstance();
+        targetProject = TargetProject.getInstance();
+        targetProject.setLocation(fileMocked);
+        targetProject.setClassesLocation(fileMocked);
+        targetProject.setPom(fileMocked);
+        targetProject.setTestsLocation(fileMocked);
     	 
-    	 classLoaderParser = new ClassLoaderParser();
-    	 
-    	 
-    	 targetProjectMocked = mock(TargetProject.class);
-    	 javaAssistHelperMocked = mock(JavaAssistHelper.class);
-    	 javaAssistHelperMocked.setPool(mock(ClassPool.class));
-    	 javaAssistHelperMocked.setLoader(mock(Loader.class));
-    	 javaAssistHelperMocked.setTranslator(mock(CustomTranslator.class));
-    	 javaAssistHelperMocked.setTargetProject(targetProjectMocked);
-    	/* mutatorExecutorMocked = mock(MutatorExecutor.class);
-    	 //when(mutatorExecutorMocked.getJavaAssistHelper()).thenReturn(javaAssistHelperMocked);
- 
-    	 when(targetProjectMocked.getLocation()).thenReturn(new File(Utils.loadPropertiesFile(applicationProperties.getApplicationPropertiesFile()).getProperty("target.project")));
-		 when(targetProjectMocked.getPom()).thenReturn(new File(targetProjectMocked.getLocation().getAbsolutePath() + "/pom.xml"));
-//		 when(targetProjectMocked.getClass()).thenReturn(classLoaderParser.getClassesFromDirectory(targetProjectMocked.getLocation().getAbsolutePath()));
-//
-//
-//         targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getAbsolutePath()));
-//
-//         javaAssistHelper = new JavaAssistHelper(new ClassPool() , new Loader(), new CustomTranslator(),targetProject);
-//         mutatorExecutorHelper = new MutatorExecutorHelper();
-//         mutatorExecutor = new MutatorExecutor(javaAssistHelper);*/
+    	 //classLoaderParser = new ClassLoaderParser();
+
+        mutator = new ArithmeticOperatorMutator(targetProject);
+
     }
 
     @After

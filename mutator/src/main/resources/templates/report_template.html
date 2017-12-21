@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--meta name="author" content="ANNE Aurélien, COISNARD-SIMON Marie, SALMON Kevin"-->
 
     <title>Mutation Analysis Report</title>
 
@@ -17,75 +16,152 @@
 <div class="container">
     <div class="page-header">
         <h1>Mutation Analysis Report</h1>
-        <p class="lead">ANNE Aurélien, COISNARD-SIMON Marie, SALMON Kevin</p>
+        <p class="lead"></p>
     </div>
 
+    <div class="panel-group" id="global_info_accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingglobal">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#global_info_accordion" href="#collapseglobal" aria-expanded="false" aria-controls="collapseglobal">
+                        <b>Global Information</b>
+                    </a>
+                </h4>
+            </div>
+            <div class="row" id="collapseglobal">
+                <div id="collapseglobaltimingst" class="panel-collapse collapse in col-md-5" role="tabpanel" aria-labelledby="headingglobal">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_timings" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobaltimings">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobaltimings" aria-expanded="true" aria-controls="collapseglobaltimings">
+                                            <b>Timings</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobaltimings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobaltimings">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Scan classpath</th>
+                                                <th>Mutation analysis </th>
+                                                <th>Total </th>
+                                            </tr>
+                                            <tr>
+                                                <td> < ${timings_scan_classpath} second(s)</td>
+                                                <td> < ${timings_mutation_analysis} second(s)</td>
+                                                <td>${timings_total} second(s)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="collapseglobalstatisticst" class="panel-collapse collapse in col-md-7" role="tabpanel" aria-labelledby="headingglobalstat">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_statistics" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobalstatistics">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobalstatistics" aria-expanded="true" aria-controls="collapseglobalstatistics">
+                                            <b>Statistics</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobalstatistics" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobalstatistics">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Generated </th>
+                                                <th>Killed </th>
+                                                <th>Rate</th>
+                                                <th>Tests Classes</th>
+                                                <th>Tests Cases Ran</th>
+                                            </tr>
+                                            <tr>
+                                                <td>${statistic_generate}</td>
+                                                <td>${statistic_killed}</td>
+                                                <td>${statistic_rate}%</td>
+                                                <td>${statistic_generate}</td>
+                                                <td>${statistic_ran_tests}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <#list classes as class>
+        <#list reports_by_mutator as mutator, reports >
             <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="heading${class_index}">
+                <div class="panel-heading" role="tab" id="heading${mutator_index}">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse${class_index}" aria-expanded="false" aria-controls="collapse${class_index}">
-                            ${class.getClassModified().getQualifiedName()}
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse${mutator_index}" aria-expanded="false" aria-controls="collapse${mutator_index}">
+                            <b>${mutator.getMutantType().name()}</b>
+                            <#assign generated = reports? size>
+                            <i>Generated: ${generated}</i>
+                            <#assign killed = 0>
+                            <#list reports as r>
+                                <#if r.getMutantState() == "KILLED">
+                                    <#assign killed++>
+                                </#if>
+                            </#list>
+                                <i>Killed: ${killed}</i>
+                            <i>Rate: ${(killed/ generated) * 100} % </i>
                         </a>
                     </h4>
                 </div>
-                <div id="collapse${class_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${class_index}">
+                <div id="collapse${mutator_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${mutator_index}">
                     <div class="panel-body">
-                        <#list class.getModificationsResult() as modification>
-                            <div class="panel-group" id="accordion${class_index}${modification_index}" role="tablist" aria-multiselectable="true">
+                        <#list reports as report>
+                            <div class="panel-group" id="accordion${mutator_index}${report_index}" role="tablist" aria-multiselectable="true">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="heading${class_index}${modification_index}">
+                                    <div class="panel-heading" role="tab" id="heading${mutator_index}${report_index}">
                                         <h4 class="panel-title">
-                                            <a role="button" data-toggle="collapse" data-parent="#accordion${class_index}" href="#collapse${class_index}${modification_index}" aria-expanded="true" aria-controls="collapse${class_index}${modification_index}">
-                                                <b>${modification.getMethod().getSimpleName()}()</b> - Operator: <i>${modification.getOperator().toString()}</i>
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion${mutator_index}" href="#collapse${mutator_index}${report_index}" aria-expanded="true" aria-controls="collapse${mutator_index}${report_index}">
+                                                <b>Method ${report.getMutatedMethodName()}</b> - in Class : <i>${report.getMutatedClassName()}</i>
                                                 <small>
-                                                    <#if modification.getStatement()??>
-                                                        (statement at ${(modification.getStatement().getPosition().getLine())!""}:${(modification.getStatement().getPosition().getColumn())!""})
-                                                        <#else>
-                                                            (method modification)
+                                                    <#if report.getMutatedLine() == -1>
+                                                                (method modification)
+                                                            <#else>
+                                                                (statement at Line ${report.getMutatedLine()})
                                                     </#if>
                                                 </small>
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="collapse${class_index}${modification_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${class_index}${modification_index}">
+                                    <div id="collapse${mutator_index}${report_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${mutator_index}${report_index}">
                                         <div class="panel-body">
+
                                             <table class="table table-condensed">
                                                 <tr>
                                                     <th>Test class</th>
                                                     <th>Run count</th>
-                                                    <th>Failures</th>
-                                                    <th>Errors</th>
-                                                    <th>Skipped</th>
-                                                    <th>Time elapsed</th>
+                                                    <th>Mutant state</th>
                                                 </tr>
 
-                                                <#list modification.getTestsResult() as testResult>
-                                                    <#if testResult.wasSuccessful()>
-                                                        <tr class="success">
-                                                            <#else>
-                                                        <tr class="danger">
-                                                    </#if>
-                                                    <td>${testResult.getTestClass()}</td>
-                                                    <td>${testResult.getRunCount()}</td>
-                                                    <td>${testResult.getFailureCount()}</td>
-                                                    <td>${testResult.getErrorsCount()}</td>
-                                                    <td>${testResult.getIgnoreCount()}</td>
-                                                    <td>${testResult.getRunTime()}</td>
+                                                <#if report.getMutantState() == "KILLED">
+                                                    <tr class="success">
+                                                        <#else>
+                                                    <tr class="danger">
+                                                </#if>
+                                                    <td>${report.getTestClassRun()}</td>
+                                                    <td>${report.getTestsRan()}</td>
+                                                    <td>${report.getMutantState()}</td>
                                                     </tr>
-
-                                                    <#list testResult.getFailures() as failure>
-                                                        <tr class="danger">
-                                                            <td colspan="6">Failure: <i>${failure}</i></td>
-                                                        </tr>
-                                                    </#list>
-                                                    <#list testResult.getErrors() as failure>
-                                                        <tr class="danger">
-                                                            <td colspan="6">Error: <i>${failure}</i></td>
-                                                        </tr>
-                                                    </#list>
-                                                </#list>
                                             </table>
                                         </div>
                                     </div>
