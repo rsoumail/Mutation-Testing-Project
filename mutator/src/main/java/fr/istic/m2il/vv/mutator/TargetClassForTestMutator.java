@@ -7,12 +7,15 @@ public class TargetClassForTestMutator {
     public int addInt(int a, int b){
         return a + b;
     }
+
     public double addDouble(double a, double b){
         return a + b;
     }
+
     public float addFloat(float a, float b){
         return a + b;
     }
+
     public long addLong(long a, long b){
         return a + b;
     }
@@ -29,7 +32,6 @@ public class TargetClassForTestMutator {
     public long subLong(long a, long b){
         return a - b;
     }
-
 
     public int divInt(int a, int b){
         return a / b;
