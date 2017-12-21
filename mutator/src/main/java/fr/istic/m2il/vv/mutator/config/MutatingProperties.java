@@ -34,7 +34,6 @@ public class MutatingProperties {
         }
         else{
             for(MutantType mutantType:MutantType.values()){
-
                     mutantTypes.add(mutantType);
             }
         }

@@ -1,10 +1,21 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import fr.istic.m2il.vv.mutator.TargetClassForTestMutator;
+import fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest;
+import fr.istic.m2il.vv.mutator.mutant.ArithmeticOperatorMutator;
+import fr.istic.m2il.vv.mutator.mutant.Mutator;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
+import javassist.*;
+import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,38 +25,41 @@ import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.util.Utils;
-import javassist.ClassPool;
-import javassist.Loader;
 
 import static org.mockito.Mockito.*;
 
 public class ArithmeticOperatorMutatorTest {
 
-    ApplicationProperties applicationProperties;
-	ClassLoaderParser classLoaderParser;
-
-
 	TargetProject targetProject;
-	MVNRunner mvnRunner;
-    File fileMocked;
+    CtClass ctClassForTest;
+	CtMethod ctMethod;
+	JavaAssistHelper javaAssistHelper;
     Mutator mutator;
-	
-	/* Jeu de données */
-	List<Class<?>> classes;
+    CtMethod modifiedCtMethod;
+    Method original;
+    Method[] methods;
 	
     @Before
     public void setUp() throws Exception {
- fileMocked = mock(File.class);
+        targetProject = TargetProject.getInstance();
+        targetProject.setLocation(new File(""));
+        targetProject.setClassesLocation(new File("target/classes"));
+        targetProject.setTestsLocation((new File("target/test-classes")));
+        targetProject.setPom(new File("pom.xml"));
+        List<Class<?>> listclass = new ArrayList<>();
+        listclass.add(TargetClassForTestMutator.class);
+        List<Class<?>> listtest = new ArrayList<>();
+        listtest.add(TargetClassForTestMutatorTest.class);
+        targetProject.setClasses(listclass);
+        targetProject.setTests(listtest);
+        javaAssistHelper = JavaAssistHelper.getInstance();
 
-        applicationProperties = ApplicationProperties.getInstance();
-        targetProject = TargetProject.getInstance();
-        targetProject = TargetProject.getInstance();
-        targetProject.setLocation(fileMocked);
-        targetProject.setClassesLocation(fileMocked);
-        targetProject.setPom(fileMocked);
-        targetProject.setTestsLocation(fileMocked);
-    	 
-    	 //classLoaderParser = new ClassLoaderParser();
+        ApplicationProperties.getInstance(new File("src/main/resources/application.properties"));
+
+
+        ctClassForTest = javaAssistHelper.getPool().get("fr.istic.m2il.vv.mutator.TargetClassForTestMutator");
+
+       methods = TargetClassForTestMutator.class.getDeclaredMethods();
 
         mutator = new ArithmeticOperatorMutator(targetProject);
 
@@ -56,14 +70,52 @@ public class ArithmeticOperatorMutatorTest {
     }
 
     @Test
-    public void mutate() throws Exception {
-    	//Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(MutantType.ArithmeticOperatorMutator, targetProject);
-      //  mutatorExecutor.execute(mutator, targetProject);
-        
+    public void mutateaddMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("add")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    @Test
+    public void mutatesubMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("sub")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    @Test
+    public void mutatemulMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("mul")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
     }
 
     @Test
-    public void revert() throws Exception {
+    public void mutatedivMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("div")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
     }
-
 }

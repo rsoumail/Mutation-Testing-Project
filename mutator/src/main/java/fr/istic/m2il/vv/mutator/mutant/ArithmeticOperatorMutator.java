@@ -28,6 +28,7 @@ public class ArithmeticOperatorMutator implements Mutator{
     private CtMethod modified;
     private TargetProject targetProject;
     private MutantType mutantType = MutantType.ARITHMETIC_MUTATOR;
+    private InvocationResult testResult;
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -131,7 +132,7 @@ public class ArithmeticOperatorMutator implements Mutator{
 
                             ReportService.getInstance().newRanTest();
 
-                            InvocationResult testResult = testRunner.run();
+                            testResult = testRunner.run();
                             if(testResult.getExitCode() != 0){
                                 report.setMutantState(MutantState.KILLED);
                             }
@@ -141,7 +142,7 @@ public class ArithmeticOperatorMutator implements Mutator{
 
                             ReportService.getInstance().addReport(this, report);
 
-                            this.revert();
+                            Utils.revert(modified, original, this, this.targetProject);
                         }
                     }
                 }
@@ -151,21 +152,19 @@ public class ArithmeticOperatorMutator implements Mutator{
 
     }
 
-    @Override
-    public void revert() throws CannotCompileException, IOException, BadBytecode {
-
-        logger.info("Reverting  {}", getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
-        modified.getDeclaringClass().defrost();
-        modified.setBody(original, null);
-        Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
-
-    }
-
     public MutantType getMutantType() {
         return mutantType;
     }
 
     public void setMutantType(MutantType mutantType) {
         this.mutantType = mutantType;
+    }
+
+    public InvocationResult getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(InvocationResult testResult) {
+        this.testResult = testResult;
     }
 }
