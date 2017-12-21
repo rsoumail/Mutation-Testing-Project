@@ -15,53 +15,54 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
+	public static void main(String[] args) throws Exception {
 
+		if (args.length != 1) {
+			System.err.println("Veuillez passez le fichier de configuration en paramètre");
+		} else {
+			ApplicationProperties applicationProperties = ApplicationProperties.getInstance(new File(args[0]));
 
-    public static void main(String[] args) throws Exception {
+			ClassLoaderParser classLoaderParser = new ClassLoaderParser();
 
-        if(args.length != 1){
-            System.err.println("Veuillez passez le fichier de configuration en paramètre");
-        }
-        else{
-            ApplicationProperties applicationProperties = ApplicationProperties.getInstance(new File(args[0]));
+			TargetProject targetProject = TargetProject.getInstance();
 
-            ClassLoaderParser classLoaderParser = new ClassLoaderParser();
+			TimeWatch watcher = TimeWatch.start();
 
-            TargetProject targetProject = TargetProject.getInstance();
+			targetProject.setLocation(
+					new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
+			targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
+			targetProject
+					.setReportDir(applicationProperties.getApplicationPropertiesFile().getProperty("report.dir") != null
+							? new File(applicationProperties.getApplicationPropertiesFile().getProperty("report.dir"))
+							: new File(targetProject.getLocation() + "/target"));
+			targetProject.setClasses(
+					classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
+			targetProject
+					.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
 
-            TimeWatch watcher = TimeWatch.start();
+			CheckConfigurtionProperties checker = new CheckConfigurtionProperties(applicationProperties);
+			checker.checksConfig();
 
-            targetProject.setLocation(new File(applicationProperties.getApplicationPropertiesFile().getProperty("target.project")));
-            targetProject.setPom(new File(targetProject.getLocation().getAbsolutePath() + "/pom.xml"));
-            targetProject.setReportDir(
-                    applicationProperties.getApplicationPropertiesFile().getProperty("report.dir") != null ?
-                            new File (applicationProperties.getApplicationPropertiesFile().getProperty("report.dir")) :
-                            new File (targetProject.getLocation() + "/target")
-            );
-            targetProject.setClasses(classLoaderParser.getClassesFromDirectory(targetProject.getClassesLocation().getPath()));
-            targetProject.setTests(classLoaderParser.getClassesFromDirectory(targetProject.getTestsLocation().getPath()));
+			JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance();
 
-            CheckConfigurtionProperties checker = new CheckConfigurtionProperties(applicationProperties);
-            checker.checksConfig();
+			ReportService.getInstance().setReportStrategy(new HtmlStrategy());
+			ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
 
-            JavaAssistHelper javaAssistHelper = JavaAssistHelper.getInstance();
+			watcher.reset();
 
-            ReportService.getInstance().setReportStrategy(new HtmlStrategy());
-            ReportService.getInstance().setScanClassesTime(watcher.time(TimeUnit.SECONDS));
+			MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
+			MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
+			for (MutantType mutant : MutatingProperties.mutantsToAnalysis()) {
+				Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
+				mutatorExecutor.execute(mutator, targetProject);
+			}
 
-            watcher.reset();
+			ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
 
-            MutatorExecutorHelper mutatorExecutorHelper = new MutatorExecutorHelper();
-            MutatorExecutor mutatorExecutor = new MutatorExecutor(javaAssistHelper);
-            for(MutantType mutant: MutatingProperties.mutantsToAnalysis()){
-                Mutator mutator = (Mutator) mutatorExecutorHelper.getInstanceOf(mutant, targetProject);
-                mutatorExecutor.execute(mutator, targetProject);
-            }
+			ReportService.getInstance().doReport();
+			ReportService.getInstance().toGraphicReport();
+		}
 
-            ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
-            ReportService.getInstance().doReport();
-            ReportService.getInstance().toGraphicReport();
-      }
-    }
+	}
 
 }
