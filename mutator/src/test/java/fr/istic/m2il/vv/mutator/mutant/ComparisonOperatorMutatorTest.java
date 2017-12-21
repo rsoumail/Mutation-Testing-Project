@@ -2,13 +2,12 @@ package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutator;
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest;
-import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
-import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
-import fr.istic.m2il.vv.mutator.util.Utils;
-import javassist.*;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,12 +18,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class BooleanMethodMutatorTest {
+public class ComparisonOperatorMutatorTest {
 
-    ApplicationProperties applicationPropertiesMocked;
+
     TargetProject targetProject;
     CtClass ctClassForTest;
     CtMethod ctMethod;
@@ -55,13 +52,13 @@ public class BooleanMethodMutatorTest {
 
         Method[] methods = TargetClassForTestMutator.class.getDeclaredMethods();
         for(Method m: methods){
-            if(m.getName().equals("boolMethod")){
+            if(m.getName().equals("firstGreatherThanSecond")){
                 original = m;
             }
         }
         ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
         modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator = new BooleanMethodMutator(targetProject);
+        mutator = new ComparisonOperatorMutator(targetProject);
 
     }
 
@@ -70,10 +67,9 @@ public class BooleanMethodMutatorTest {
     }
 
     @Test
-    public void mutateRealMethod() throws Exception {
+    public void mutateFirstGreatherThanSecond() throws Exception {
         mutator.mutate(ctMethod);
-        Assert.assertNotEquals(0, ((BooleanMethodMutator)mutator).getTestResult().getExitCode());
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
     }
-
 
 }

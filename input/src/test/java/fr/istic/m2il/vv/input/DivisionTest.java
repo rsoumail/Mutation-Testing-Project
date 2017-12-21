@@ -78,25 +78,25 @@ public class DivisionTest {
 	}
 	
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception{
+	public void firstGreatherOrEqualThanSecond() throws Exception{
 		Division division = new Division(60.0, 30.0);
 		Assert.assertTrue(division.firstGreatherOrEqualThenSecond());
 	}
 	
 	@Test 
-	public void secondGreatherOrEqualThenFirst() throws Exception{
+	public void secondGreatherOrEqualThanFirst() throws Exception{
 		Division division = new Division(30.0, 60.0);
 		Assert.assertTrue(division.secondGreatherOrEqualThenFirst());
 	}
 	
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception{
+	public void firstLessOrEqualThanSecond() throws Exception{
 		Division division = new Division(10.0, 20.0);
 		Assert.assertTrue(division.firstLessOrEqualThenSecond());
 	}
 	
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception{
+	public void secondLessOrEqualThanFirst() throws Exception{
 		Division division = new Division(20.0, 10.0);
 		Assert.assertTrue(division.secondLessOrEqualThenFirst());
 	}

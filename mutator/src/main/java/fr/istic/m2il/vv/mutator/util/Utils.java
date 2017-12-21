@@ -1,7 +1,13 @@
 package fr.istic.m2il.vv.mutator.util;
 
+import fr.istic.m2il.vv.mutator.mutant.ArithmeticOperatorMutator;
+import fr.istic.m2il.vv.mutator.mutant.Mutator;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 public class Utils {
+    private static Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public static void rebuildTarget(String command) throws Exception {
         Process pro = Runtime.getRuntime().exec(command);
@@ -80,5 +87,12 @@ public class Utils {
             //}
         }
         return testsCases;
+    }
+
+    public static void revert(CtMethod modified, CtMethod original, Mutator mutator, TargetProject targetProject) throws IOException, CannotCompileException {
+        logger.info("Reverting  {}", mutator.getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
+        modified.getDeclaringClass().defrost();
+        modified.setBody(original, null);
+        Utils.write(modified.getDeclaringClass(), targetProject.getClassesLocation());
     }
 }

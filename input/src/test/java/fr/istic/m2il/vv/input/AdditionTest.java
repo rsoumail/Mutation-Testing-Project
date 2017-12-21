@@ -76,25 +76,25 @@ public class AdditionTest {
 	}
 
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception {
+	public void firstGreatherOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(60.0, 30.0);
 		Assert.assertTrue(addition.firstGreatherOrEqualThenSecond());
 	}
 
 	@Test
-	public void secondGreatherOrEqualThenFirst() throws Exception {
+	public void secondGreatherOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(30.0, 60.0);
 		Assert.assertTrue(addition.secondGreatherOrEqualThenFirst());
 	}
 
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception {
+	public void firstLessOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(10.0, 20.0);
 		Assert.assertTrue(addition.firstLessOrEqualThenSecond());
 	}
 
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception {
+	public void secondLessOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(20.0, 10.0);
 		Assert.assertTrue(addition.secondLessOrEqualThenFirst());
 	}

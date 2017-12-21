@@ -20,11 +20,11 @@ public interface Operation {
 
 	boolean secondLessThanFirst();
 	
-	boolean firstGreatherOrEqualThenSecond();
+	boolean firstGreatherOrEqualThanSecond();
 	
-	boolean secondGreatherOrEqualThenFirst();
+	boolean secondGreatherOrEqualThanFirst();
 	
-	boolean firstLessOrEqualThenSecond();
+	boolean firstLessOrEqualThanSecond();
 	
-	boolean secondLessOrEqualThenFirst();
+	boolean secondLessOrEqualThanFirst();
 }

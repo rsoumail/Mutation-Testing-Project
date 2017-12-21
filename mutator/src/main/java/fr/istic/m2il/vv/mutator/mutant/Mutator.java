@@ -10,6 +10,4 @@ import java.io.IOException;
 
 public interface Mutator {
     void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException, MavenInvocationException;
-
-    void revert() throws CannotCompileException, IOException, BadBytecode;
 }

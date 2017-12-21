@@ -22,6 +22,7 @@ public class VoidMethodMutator implements Mutator {
     private CtMethod modified;
     private TargetProject targetProject;
     private MutantType mutantType = MutantType.VOID_MUTATOR;
+    private InvocationResult testResult;
 
     public VoidMethodMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -48,7 +49,7 @@ public class VoidMethodMutator implements Mutator {
                 report.setTestClassRun(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
                 ReportService.getInstance().newRanTest();
-                InvocationResult testResult = testRunner.run();
+                testResult = testRunner.run();
                 if(testResult.getExitCode() != 0){
                     report.setMutantState(MutantState.KILLED);
                 }
@@ -56,18 +57,10 @@ public class VoidMethodMutator implements Mutator {
                     report.setMutantState(MutantState.SURVIVED);
                 }
                 ReportService.getInstance().addReport(this, report);
-                this.revert();
+                Utils.revert(modified, original, this, this.targetProject);
             }
         }
 
-    }
-
-    @Override
-    public void revert() throws CannotCompileException, IOException {
-        logger.info("Reverting  {}", getClass().getName() + "Revert " + modified.getName() + " on " +targetProject.getLocation());
-        modified.getDeclaringClass().defrost();
-        modified.setBody(original, null);
-        Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
     }
 
     public MutantType getMutantType() {
@@ -76,5 +69,13 @@ public class VoidMethodMutator implements Mutator {
 
     public void setMutantType(MutantType mutantType) {
         this.mutantType = mutantType;
+    }
+
+    public InvocationResult getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(InvocationResult testResult) {
+        this.testResult = testResult;
     }
 }
