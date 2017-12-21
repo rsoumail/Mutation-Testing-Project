@@ -29,6 +29,7 @@ public class ComparisonOperatorMutatorTest {
     Mutator mutator;
     CtMethod modifiedCtMethod;
     Method original;
+    Method[] methods;
 
     @Before
     public void setUp() throws Exception {
@@ -44,13 +45,26 @@ public class ComparisonOperatorMutatorTest {
         targetProject.setClasses(listclass);
         targetProject.setTests(listtest);
         javaAssistHelper = JavaAssistHelper.getInstance();
+       
 
         ApplicationProperties.getInstance(new File("src/main/resources/application.properties"));
 
 
         ctClassForTest = javaAssistHelper.getPool().get("fr.istic.m2il.vv.mutator.TargetClassForTestMutator");
 
-        Method[] methods = TargetClassForTestMutator.class.getDeclaredMethods();
+        methods = TargetClassForTestMutator.class.getDeclaredMethods();
+        mutator = new ComparisonOperatorMutator(targetProject);
+    }
+    
+    
+
+    
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void mutatefirstGreatherThanSecond() throws Exception {
         for(Method m: methods){
             if(m.getName().equals("firstGreatherThanSecond")){
                 original = m;
@@ -58,18 +72,99 @@ public class ComparisonOperatorMutatorTest {
         }
         ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
         modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator = new ComparisonOperatorMutator(targetProject);
-
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
     }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
+  
+    
     @Test
-    public void mutateFirstGreatherThanSecond() throws Exception {
+    public void mutatesecondGreatherThanfirst() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("secondGreatherThanfirst")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    
+    @Test
+    public void mutatefirstLessThanSecond() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("firstLessThanSecond")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    
+    @Test
+    public void mutatesecondLessThanFirst() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("secondLessThanFirst")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    
+    @Test
+    public void mutatefirstGreatherOrEqualThanSecond() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("firstGreatherOrEqualThanSecond")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
         mutator.mutate(ctMethod);
         Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
     }
 
+    @Test
+    public void mutatesecondGreatherOrEqualThanFirst() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("secondGreatherOrEqualThanFirst")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    
+    @Test
+    public void mutatefirstLessOrEqualThanSecond() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("firstLessOrEqualThanSecond")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+    
+    @Test
+    public void mutatesecondLessOrEqualThanFirst() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("secondLessOrEqualThanFirst")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertEquals(0, ((ComparisonOperatorMutator)mutator).getTestResult().getExitCode());
+    }
 }

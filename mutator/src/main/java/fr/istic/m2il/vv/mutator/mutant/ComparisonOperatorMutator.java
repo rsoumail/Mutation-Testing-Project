@@ -71,7 +71,7 @@ public class ComparisonOperatorMutator implements Mutator {
 
                             // Replace operator > by >=
                             case Opcode.IF_ICMPLE:
-                                //m.put(pos, Opcode.IF_ICMPLT);
+                                m.put(pos, Opcode.IF_ICMPLT);
                                 break;
 
                             // Replace operator < by <= fait

@@ -96,7 +96,7 @@ public class TargetClassForTestMutator {
 	}
 
 	public boolean secondLessThanFirst(int a, int b) {
-		return a > b;
+		return b < a;
 	}
 
 	public boolean firstGreatherOrEqualThanSecond(int a, int b) {
