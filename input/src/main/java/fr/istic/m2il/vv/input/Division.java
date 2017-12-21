@@ -10,6 +10,9 @@ public class Division implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Division() {
+	}
+
 	@Override
 	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;

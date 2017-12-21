@@ -9,11 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <pit.target.classes></pit.target.classes>
-        <pit.target.tests></pit.target.tests>
-    </properties>
-
     <developers>
         <developer>
             <id>rsoumail</id>
@@ -120,8 +115,8 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
-                <!--configuration>
-                    <check>
+                <configuration>
+                    <!--check>
                         <branchRate>85</branchRate>
                         <lineRate>85</lineRate>
                         <haltOnFailure>true</haltOnFailure>
@@ -141,8 +136,21 @@
                                 <lineRate>30</lineRate>
                             </regex>
                         </regexes>
-                    </check>
-                </configuration-->
+                    </check-->
+                    <instrumentation>
+                        <ignores>
+                            <ignore>com.example.boringcode.*</ignore>
+                        </ignores>
+                        <excludes>
+                            <exclude>com/example/dullcode/**/*.class</exclude>
+                            <exclude>com/example/**/*Test.class</exclude>
+                            <exclude>fr.istic.m2il.vv.mutator.common.TimeWatch</exclude>
+                            <exclude>fr.istic.m2il.vv.mutator.common.TimeWatch</exclude>
+                            <exclude>fr.istic.m2il.vv.mutator.config.ConfigOption</exclude>
+                            <exclude>fr.istic.m2il.vv.mutator.loader.CustomTranslator</exclude>
+                        </excludes>
+                    </instrumentation>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -176,51 +184,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>2.6</version>
-            <executions>
-            <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-                <goal>copy-resources</goal>
-            </goals>
-                <configuration>
-                    <outputDirectory>${basedir}/target/classes</outputDirectory>
-                    <includeEmptyDirs>true</includeEmptyDirs>
-                    <resources>
-                        <resource>
-                            <directory>${basedir}/src/main/resources</directory>
-                            <filtering>false</filtering>
-                        </resource>
-                    </resources>
-                </configuration>
-            </execution>
-            </executions>
-            </plugin-->
-
-
-
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-
-                    <finalName>${project.artifactId}-with-dependencies-${project.version}</finalName>
-                </configuration>
-            </plugin-->
-
         </plugins>
     </build>
 

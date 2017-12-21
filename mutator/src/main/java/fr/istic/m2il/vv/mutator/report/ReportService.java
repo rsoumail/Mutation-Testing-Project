@@ -16,6 +16,7 @@ public class ReportService implements IReportService{
     private Integer ranTestsNumber;
     private HashMap<Mutator, List<Report>> reports;
     private static ReportService instance;
+    private IReportStrategy reportStrategy;
 
     private ReportService(){
         reports = new HashMap<>();
@@ -95,7 +96,8 @@ public class ReportService implements IReportService{
         System.out.println("- Statistics ");
         System.out.println("================================================================================");
         System.out.println(">> Generated " + this.getTotalMutationsNumber() + " mutations killed " + this.getTotalKilledMutantsNumber() + " (" + String.format("%.2f", this.getRate(this.getTotalKilledMutantsNumber(), this.getTotalMutationsNumber())) + "%)");
-        System.out.println(">> Ran " + this.getTotalMutationsNumber() + " tests (1 tests per mutation)");
+        System.out.println(">> Test Classe Ran " + this.getTotalMutationsNumber() + " (1 test class per mutation)");
+        System.out.println(">> Total Test Cases Ran " + this.getTotalTestsCasesRan());
         System.out.println();
     }
 
@@ -142,11 +144,12 @@ public class ReportService implements IReportService{
     }
 
     @Override
-    public void toHtml() throws IOException {
-
+    public void toGraphicReport() throws IOException {
+        this.reportStrategy.execute();
     }
 
-    private Long doTotalTime() {
+
+    public Long doTotalTime() {
         return  scanClassesTime + coverageAndDependencyAnalysisTime + buildMutationTestsTime + runMutationAnalysisTime;
     }
 
@@ -167,7 +170,7 @@ public class ReportService implements IReportService{
      * @return the Mutant killed number in the list of mutants
      */
 
-    private Integer getStateMutantsNumber(MutantState mutantState, List<Report> reports){
+    public Integer getStateMutantsNumber(MutantState mutantState, List<Report> reports){
         int stateMutantsNumber = 0;
         for(Report report: reports){
             if(report.getMutantState() == mutantState){
@@ -177,7 +180,7 @@ public class ReportService implements IReportService{
         return stateMutantsNumber;
     }
 
-    private Integer getTotalMutationsNumber(){
+    public Integer getTotalMutationsNumber(){
         Integer mutationNumber = new Integer(0);
         Iterator iterator = this.reports.entrySet().iterator();
         while(iterator.hasNext()){
@@ -186,8 +189,19 @@ public class ReportService implements IReportService{
         }
         return mutationNumber;
     }
+    public Integer getTotalTestsCasesRan(){
+        Integer testsCasesNumber = new Integer(0);
+        Iterator iterator = this.reports.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry reportMutator = (Map.Entry)iterator.next();
+            for(Report report: (List<Report>)reportMutator.getValue()){
+                testsCasesNumber+= report.getTestsRan();
+            }
+        }
+        return testsCasesNumber;
+    }
 
-    private Integer getTotalKilledMutantsNumber(){
+    public Integer getTotalKilledMutantsNumber(){
         Integer totalKilledMutantsNumber = new Integer(0);
         Iterator iterator = this.reports.entrySet().iterator();
         while(iterator.hasNext()){
@@ -197,11 +211,25 @@ public class ReportService implements IReportService{
         return totalKilledMutantsNumber;
     }
 
-    private Float getRate(Integer subset, Integer total){
+    public Float getRate(Integer subset, Integer total){
         return Float.valueOf(((Float.valueOf(subset) / Float.valueOf(total))) * 100).floatValue();
     }
 
 
+    public void setReports(HashMap<Mutator, List<Report>> reports) {
+        this.reports = reports;
+    }
 
+    public void setRanTestsNumber(Integer ranTestsNumber) {
+        this.ranTestsNumber = ranTestsNumber;
+    }
 
+    public IReportStrategy getReportStrategy() {
+        return reportStrategy;
+    }
+
+    public void setReportStrategy(IReportStrategy reportStrategy) {
+        this.reportStrategy = reportStrategy;
+        this.reportStrategy.configure(this);
+    }
 }

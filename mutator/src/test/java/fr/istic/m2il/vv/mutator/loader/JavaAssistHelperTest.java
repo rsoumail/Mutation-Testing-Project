@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+
 import fr.istic.m2il.vv.mutator.common.CheckConfigurtionProperties;
 import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ConfigOption;
@@ -13,7 +14,6 @@ import javassist.ClassPool;
 import javassist.Loader;
 
 import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -63,4 +63,9 @@ public class CheckConfigurtionPropertiesTest {
 
         Assert.assertEquals(new Integer(0), checkConfigurtionProperties.checksConfig());
     }
+
+    @Test
+    public void badConfig() throws Exception{
+        //Assert.assertEquals(new Integer(-1), checkConfigurtionProperties.checksConfig());
+    }
 }

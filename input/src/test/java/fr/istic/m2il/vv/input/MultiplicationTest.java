@@ -30,6 +30,21 @@ public class MultiplicationTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Multiplication multiplication  = new Multiplication();
+		multiplication.setSecondMember(20.0);
+		Assert.assertEquals(20.0, multiplication.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Multiplication multiplication  = new Multiplication();
+		multiplication.setSecondMember(20.0);
+		Assert.assertEquals(20.0, multiplication.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(30.0, 7.0);
 		Assert.assertTrue(multiplication.firstGreatherThanSecond());

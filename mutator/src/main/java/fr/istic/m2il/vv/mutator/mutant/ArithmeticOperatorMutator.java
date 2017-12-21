@@ -2,7 +2,6 @@ package fr.istic.m2il.vv.mutator.mutant;
 
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
-import fr.istic.m2il.vv.mutator.testrunner.listener.MVNTestListener;
 import fr.istic.m2il.vv.mutator.util.Utils;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
@@ -28,6 +27,7 @@ public class ArithmeticOperatorMutator implements Mutator{
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
+    private MutantType mutantType = MutantType.ARITHMETIC_MUTATOR;
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -123,8 +123,13 @@ public class ArithmeticOperatorMutator implements Mutator{
                             //logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+                            report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
+                            report.setMutatedMethodName(ctMethod.getName());
+                            report.setMutatedLine(methodInfo.getLineNumber(pos));
+                            report.setTestsRan(new Integer(Utils.testsCasesInTestClass(this.targetProject.getTestClassOfClass(ctMethod.getDeclaringClass().getName()))));
+                            report.setTestClassRun(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+
                             ReportService.getInstance().newRanTest();
-                            MVNTestListener listener = new MVNTestListener();
 
                             InvocationResult testResult = testRunner.run();
                             if(testResult.getExitCode() != 0){
@@ -154,5 +159,13 @@ public class ArithmeticOperatorMutator implements Mutator{
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
 
+    }
+
+    public MutantType getMutantType() {
+        return mutantType;
+    }
+
+    public void setMutantType(MutantType mutantType) {
+        this.mutantType = mutantType;
     }
 }

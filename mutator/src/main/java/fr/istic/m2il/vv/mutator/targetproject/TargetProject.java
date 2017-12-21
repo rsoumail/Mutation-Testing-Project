@@ -19,6 +19,7 @@ public class TargetProject {
     private File testsLocation;
     private File classesLocation;
     private File pom;
+    private File reportDir;
     private static  TargetProject instance;
 
 
@@ -94,6 +95,14 @@ public class TargetProject {
         this.pom = pom;
     }
 
+    public File getReportDir() {
+        return reportDir;
+    }
+
+    public void setReportDir(File reportDir) {
+        this.reportDir = reportDir;
+    }
+
     public File getTestsLocation() {
         return testsLocation;
     }
@@ -114,6 +123,15 @@ public class TargetProject {
         for(Class<?> klass: tests){
             if(klass.getName().matches(clazz+"Test")){
                 return klass.getName();
+            }
+        }
+        return null;
+    }
+
+    public Class<?> getTestClassOfClass(String clazz){
+        for(Class<?> klass: tests){
+            if(klass.getName().matches(clazz+"Test")){
+                return klass;
             }
         }
         return null;

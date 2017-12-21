@@ -38,6 +38,21 @@ public class DivisionTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Division division  = new Division();
+		division.setSecondMember(20.0);
+		Assert.assertEquals(20.0, division.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Division division  = new Division();
+		division.setSecondMember(20.0);
+		Assert.assertEquals(20.0, division.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Division division = new Division(30.0, 7.0);
 		Assert.assertTrue(division.firstGreatherThanSecond());

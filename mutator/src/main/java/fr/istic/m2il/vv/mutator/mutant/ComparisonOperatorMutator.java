@@ -33,6 +33,7 @@ public class ComparisonOperatorMutator implements Mutator {
 	private CtMethod original;
 	private CtMethod modified;
 	private TargetProject targetProject;
+	private MutantType mutantType = MutantType.COMPARISON_MUTATOR;
 
 	public ComparisonOperatorMutator(TargetProject targetProject) {
 		this.targetProject = targetProject;
@@ -44,70 +45,84 @@ public class ComparisonOperatorMutator implements Mutator {
 
 		modified = ctMethod;
 		original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-
-		if (!ctMethod.getDeclaringClass().isInterface()) {
-
+		if (this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()) != null) {
 			ctMethod.getDeclaringClass().defrost();
 			MethodInfo methodInfo = ctMethod.getMethodInfo();
-			CodeAttribute code = methodInfo.getCodeAttribute();
-			CodeIterator iterator = code.iterator();
-			MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath(), "surefire:test",
-					"-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+			if (methodInfo.getCodeAttribute() != null) {
+				CodeAttribute code = methodInfo.getCodeAttribute();
+				CodeIterator iterator = code.iterator();
+				MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath(), "surefire:test",
+						"-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
-			while (iterator.hasNext()) {
-				HashMap<Integer, Integer> m = new HashMap<>();
-				int pos = iterator.next();
-				switch (iterator.byteAt(pos)) {
-				// Replace operator < by <=
-				case Opcode.IF_ICMPLT:
-					// m.put(pos, Opcode.IF_ICMPGE);
-					m.put(pos, Opcode.IF_ICMPLE);
-					break;
+				while (iterator.hasNext()) {
+					HashMap<Integer, Integer> m = new HashMap<>();
+					int pos = iterator.next();
+					switch (iterator.byteAt(pos)) {
+					// Replace operator < by <=
+					case Opcode.IF_ICMPLT:
+						// m.put(pos, Opcode.IF_ICMPGE);
+						m.put(pos, Opcode.IF_ICMPLE);
+						break;
 
-				// Replace operator > by >=
-				case Opcode.IF_ICMPGT:
-					// m.put(pos, Opcode.IF_ICMPLE);
-					m.put(pos, Opcode.IF_ICMPGE);
-					break;
+					// Replace operator > by >=
+					case Opcode.IF_ICMPGT:
+						// m.put(pos, Opcode.IF_ICMPLE);
+						m.put(pos, Opcode.IF_ICMPGE);
+						break;
 
-				// Replace operator <= by <
-				case Opcode.IF_ICMPLE:
-					// m.put(pos, Opcode.IF_ICMPGT);
-					m.put(pos, Opcode.IF_ICMPLT);
-					break;
+					// Replace operator <= by <
+					case Opcode.IF_ICMPLE:
+						// m.put(pos, Opcode.IF_ICMPGT);
+						m.put(pos, Opcode.IF_ICMPLT);
+						break;
 
-				// Replace operator >= by >
-				case Opcode.IF_ICMPGE:
-					m.put(pos, Opcode.IF_ICMPGT);
-					break;
-				}
-				if (!m.isEmpty()) {
-					iterator.writeByte(m.get(pos), pos);
-					logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on "
-							+ ctMethod.getDeclaringClass().getName() + " of " + targetProject.getLocation());
-					Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
-					Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate "
-							+ ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
-					InvocationResult testResult = testRunner.run();
-					if (testResult.getExitCode() != 0) {
-						report.setMutantState(MutantState.KILLED);
-					} else {
-						report.setMutantState(MutantState.SURVIVED);
+					// Replace operator >= by >
+					case Opcode.IF_ICMPGE:
+						m.put(pos, Opcode.IF_ICMPGT);
+						break;
 					}
 
-					if (ReportService.getInstance().getReports().get(this) == null) {
-						List<Report> mutantReportList = new ArrayList<>();
-						mutantReportList.add(report);
-						ReportService.getInstance().getReports().put(this, mutantReportList);
-					} else {
-						ReportService.getInstance().getReports().get(this).add(report);
-					}
+					if (!m.isEmpty()) {
+						System.out.println("size " + m.get(pos));
+						iterator.writeByte(m.get(pos), pos);
+						/*
+						 * logger.info("Mutating {}", getClass().getName() + "Mutate " +
+						 * ctMethod.getName() + "" + "on " + targetProject.getLocation());
+						 */
+						Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
+						Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate "
+								+ ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+						report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
+						report.setMutatedMethodName(ctMethod.getName());
+						report.setMutatedLine(methodInfo.getLineNumber(pos));
+						report.setTestsRan(new Integer(Utils.testsCasesInTestClass(
+								this.targetProject.getTestClassOfClass(ctMethod.getDeclaringClass().getName()))));
+						report.setTestClassRun(
+								this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
-					this.revert();
+						ReportService.getInstance().newRanTest();
+						InvocationResult testResult = testRunner.run();
+						if (testResult.getExitCode() != 0) {
+							report.setMutantState(MutantState.KILLED);
+						} else {
+							report.setMutantState(MutantState.SURVIVED);
+						}
+
+						if (ReportService.getInstance().getReports().get(this) == null) {
+							List<Report> mutantReportList = new ArrayList<>();
+							mutantReportList.add(report);
+							ReportService.getInstance().getReports().put(this, mutantReportList);
+						} else {
+							ReportService.getInstance().getReports().get(this).add(report);
+						}
+
+						this.revert();
+					}
 				}
+
 			}
-
 		}
+
 	}
 
 	@Override
@@ -118,5 +133,13 @@ public class ComparisonOperatorMutator implements Mutator {
 		modified.getDeclaringClass().defrost();
 		modified.setBody(original, null);
 		Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
+	}
+
+	public MutantType getMutantType() {
+		return mutantType;
+	}
+
+	public void setMutantType(MutantType mutantType) {
+		this.mutantType = mutantType;
 	}
 }

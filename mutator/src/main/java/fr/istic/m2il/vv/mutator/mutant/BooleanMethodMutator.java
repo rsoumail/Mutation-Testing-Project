@@ -7,6 +7,7 @@ import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import fr.istic.m2il.vv.mutator.testrunner.runner.MVNRunner;
 import javassist.*;
 import javassist.bytecode.BadBytecode;
+import javassist.bytecode.MethodInfo;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class BooleanMethodMutator implements Mutator{
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
+    private MutantType mutantType = MutantType.BOOLEAN_MUTATOR;
 
     public BooleanMethodMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -31,12 +33,19 @@ public class BooleanMethodMutator implements Mutator{
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.booleanType)){
             ctMethod.getDeclaringClass().defrost();
+            MethodInfo methodInfo = ctMethod.getMethodInfo();
             MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
             Boolean returnValue = false;
             ctMethod.setBody("{ return " +  returnValue + ";}");
             //logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
+            report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
+            report.setMutatedMethodName(ctMethod.getName());
+            report.setMutatedLine(-1);
+            report.setTestsRan(new Integer(Utils.testsCasesInTestClass(this.targetProject.getTestClassOfClass(ctMethod.getDeclaringClass().getName()))));
+            report.setTestClassRun(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+
             ReportService.getInstance().newRanTest();
             InvocationResult testResult = testRunner.run();
             if(testResult.getExitCode() != 0){
@@ -57,5 +66,13 @@ public class BooleanMethodMutator implements Mutator{
         modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
+    }
+
+    public MutantType getMutantType() {
+        return mutantType;
+    }
+
+    public void setMutantType(MutantType mutantType) {
+        this.mutantType = mutantType;
     }
 }

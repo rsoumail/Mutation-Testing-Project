@@ -20,6 +20,9 @@ public class Substraction implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Substraction() {
+	}
+
 	@Override
 	public double getFirstMember() {
 		return this.firstMember;

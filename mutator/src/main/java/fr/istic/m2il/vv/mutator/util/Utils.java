@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 public class Utils {
@@ -56,5 +58,27 @@ public class Utils {
             }
         }
         return  prop;
+    }
+
+    public static int testsCasesInTestClass(Class<?> klass){
+        int testsCases = 0;
+
+
+        Method[] methods = klass.getDeclaredMethods();
+
+        for (Method method : methods) {
+            Annotation[] annotations = method.getDeclaredAnnotations();
+            /*if (annotations.length == 0 && method.getName().startsWith("test")) {
+                testsCases++;
+            } else {*/
+                for (Annotation annotation : annotations) {
+                    if (annotation.annotationType().toString()
+                            .equals("interface org.junit.Test")) {
+                        testsCases++;
+                    }
+                }
+            //}
+        }
+        return testsCases;
     }
 }

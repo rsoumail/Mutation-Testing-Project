@@ -36,8 +36,4 @@ public class ClassLoaderParserTest {
         Assert.assertEquals(0, classLoaderParser.getClassesFromDirectory(TargetProject.getInstance().getClassesLocation().getAbsolutePath()).size());
     }
 
-    @Test
-    public void getClassesNameFromDirectory() throws Exception {
-    }
-
 }
