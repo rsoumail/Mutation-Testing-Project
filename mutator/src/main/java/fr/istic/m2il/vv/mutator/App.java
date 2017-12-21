@@ -59,15 +59,9 @@ public class App {
             }
 
             ReportService.getInstance().setRunMutationAnalysisTime(watcher.time(TimeUnit.SECONDS));
-<<<<<<< d1136ab84485b77f78201cf6c430197b8f6ce3fa
-
-            //ReportService.getInstance().doReport();
-
-
-=======
+            
             ReportService.getInstance().doReport();
             ReportService.getInstance().toGraphicReport();
->>>>>>> Finalisation du raport html, debut de quelques tests
         }
     }
 
