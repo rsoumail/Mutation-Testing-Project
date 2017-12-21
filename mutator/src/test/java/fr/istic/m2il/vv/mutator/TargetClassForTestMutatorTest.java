@@ -112,5 +112,40 @@ public class TargetClassForTestMutatorTest {
     public void firstGreatherThanSecondCOmparisonMethod(){
         Assert.assertTrue(targetClassForTestMutator.firstGreatherThanSecond(2,1));
     }
+    
+    @Test
+    public void secondGreatherThanfirstComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.secondGreatherThanfirst(1, 2));
+    }
+    
+    @Test
+    public void firstLessThanSecondComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.firstLessThanSecond(1, 2));
+    }
+    
+    @Test
+    public void secondLessThanFirstComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.secondLessThanFirst(2, 1));
+    }
+    
+    @Test
+    public void firstGreatherOrEqualThanSecondComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.firstGreatherOrEqualThanSecond(2, 1));
+    }
+    
+    @Test
+    public void secondGreatherOrEqualThanFirstComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.secondGreatherOrEqualThanFirst(1, 2));
+    }
+    
+    @Test
+    public void firstLessOrEqualThanSecondComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.firstLessOrEqualThanSecond(1, 2));
+    }
+    
+    @Test
+    public void secondLessOrEqualThanFirstComparisonMethod() {
+    	Assert.assertTrue(targetClassForTestMutator.secondLessOrEqualThanFirst(2, 1));
+    }
 
 }
