@@ -78,24 +78,24 @@ public class AdditionTest {
 	@Test
 	public void firstGreatherOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(60.0, 30.0);
-		Assert.assertTrue(addition.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(addition.firstGreatherOrEqualThanSecond());
 	}
 
 	@Test
 	public void secondGreatherOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(30.0, 60.0);
-		Assert.assertTrue(addition.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(addition.secondGreatherOrEqualThanFirst());
 	}
 
 	@Test
 	public void firstLessOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(10.0, 20.0);
-		Assert.assertTrue(addition.firstLessOrEqualThenSecond());
+		Assert.assertTrue(addition.firstLessOrEqualThanSecond());
 	}
 
 	@Test
 	public void secondLessOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(20.0, 10.0);
-		Assert.assertTrue(addition.secondLessOrEqualThenFirst());
+		Assert.assertTrue(addition.secondLessOrEqualThanFirst());
 	}
 }

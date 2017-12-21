@@ -18,22 +18,22 @@ public class TargetClassForTestMutatorTest {
     @Test
     public void add() throws Exception {
 
-        Assert.assertEquals(3, targetClassForTestMutator.add(1, 2));
+        Assert.assertEquals(3, targetClassForTestMutator.addInt(1, 2));
     }
 
     @Test
     public void sub() throws Exception {
-        Assert.assertEquals(1, targetClassForTestMutator.sub(2, 1), 0);
+        Assert.assertEquals(1, targetClassForTestMutator.subInt(2, 1), 0);
     }
 
     @Test
     public void div() throws Exception {
-        Assert.assertEquals(1, targetClassForTestMutator.div(2, 2), 0);
+        Assert.assertEquals(1, targetClassForTestMutator.divInt(2, 2), 0);
     }
 
     @Test
     public void mul() throws Exception {
-        Assert.assertEquals(4, targetClassForTestMutator.mul(2, 2));
+        Assert.assertEquals(4, targetClassForTestMutator.mulInt(2, 2));
     }
 
     @Test

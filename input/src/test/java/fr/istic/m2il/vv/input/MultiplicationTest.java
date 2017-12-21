@@ -72,25 +72,25 @@ public class MultiplicationTest {
 	@Test
 	public void firstGreatherOrEqualThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(60.0, 30.0);
-		Assert.assertTrue(multiplication.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(multiplication.firstGreatherOrEqualThanSecond());
 	}
 	
 	@Test 
 	public void secondGreatherOrEqualThanFirst() throws Exception{
 		Multiplication multiplication = new Multiplication(30.0, 60.0);
-		Assert.assertTrue(multiplication.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(multiplication.secondGreatherOrEqualThanFirst());
 	}
 	
 	@Test
 	public void firstLessOrEqualThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(10.0, 20.0);
-		Assert.assertTrue(multiplication.firstLessOrEqualThenSecond());
+		Assert.assertTrue(multiplication.firstLessOrEqualThanSecond());
 	}
 	
 	@Test
 	public void secondLessOrEqualThanFirst() throws Exception{
 		Multiplication multiplication = new Multiplication(20.0, 10.0);
-		Assert.assertTrue(multiplication.secondLessOrEqualThenFirst());
+		Assert.assertTrue(multiplication.secondLessOrEqualThanFirst());
 	}
 
 }
