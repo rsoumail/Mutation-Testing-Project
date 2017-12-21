@@ -15,7 +15,7 @@ public class JavaAssistHelper {
     private TargetProject targetProject;
     private static JavaAssistHelper instance;
 
-    private JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
+    JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
         this.pool = pool;
         this.loader = loader;
         this.translator = translator;

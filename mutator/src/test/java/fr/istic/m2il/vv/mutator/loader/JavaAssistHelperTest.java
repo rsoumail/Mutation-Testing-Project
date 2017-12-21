@@ -10,6 +10,7 @@ import fr.istic.m2il.vv.mutator.common.CheckConfigurtionProperties;
 import fr.istic.m2il.vv.mutator.common.TimeWatch;
 import fr.istic.m2il.vv.mutator.config.ConfigOption;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProjectTest;
 import javassist.ClassPool;
 import javassist.Loader;
 
@@ -34,22 +35,22 @@ public class JavaAssistHelperTest {
 
 	@Before
 	public void setUp() throws Exception {
-		pool = new ClassPool();
-		loader = new Loader();
-		//Class<Loader> cl = mock(Class.class);
-		translator = new CustomTranslator();
-		javaHelp = JavaAssistHelper.getInstance();
-		targetProject = TargetProject.getInstance();
-		classes = new ArrayList<>();
-		tests = new ArrayList<>();
-        classes.add(ConfigOption.class);
-        tests.add(TimeWatch.class);
-        targetProject.setClasses(classes);
-        targetProject.setTests(tests);
-        //fileMocked = mock(File.class);
-        targetProject.setLocation(new File("../input"));
-        targetProject.setClassesLocation(new File("../input/target/classes"));
-        targetProject.setTestsLocation(new File("../input/target/test-classes"));
+//		pool = new ClassPool();
+//		loader = new Loader();
+//		//Class<Loader> cl = mock(Class.class);
+//		translator = new CustomTranslator();
+//		javaHelp = JavaAssistHelper.getInstance();
+//		targetProject = TargetProject.getInstance();
+//		classes = new ArrayList<>();
+//		tests = new ArrayList<>();
+//        classes.add(ConfigOption.class);
+//        tests.add(TimeWatch.class);
+//        targetProject.setClasses(classes);
+//        targetProject.setTests(tests);
+////        //fileMocked = mock(File.class);
+////        targetProject.setLocation(new File("../input"));
+////        targetProject.setClassesLocation(new File("../input/target/classes"));
+////        targetProject.setTestsLocation(new File("../input/target/test-classes"));
     }
 
 	@After
@@ -62,12 +63,10 @@ public class JavaAssistHelperTest {
 
 	@Test
 	public void getPool() throws Exception {
+		javaHelp = new JavaAssistHelper(new ClassPool(), new Loader(), new CustomTranslator(), TargetProject.getInstance());
+		Assert.assertNotNull(javaHelp.getPool().getClassLoader());
 	}
 
-	@Test
-	public void initPool() throws Exception {
 
-		Assert.assertNotNull(javaHelp.getPool().get("fr.istic.m2il.vv.input.Addition"));
-	}
 
 }
