@@ -76,7 +76,13 @@ public class HtmlStrategy implements IReportStrategy{
 
                     reportFile = new File(TargetProject.getInstance().getReportDir() , "report-" + timePart1[0] + "-" + timePart1[1] + "-" + timePart1[2] + "-" + timeParts[1]+ ".html");
 
-            }else{
+            }else if(ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("report.timestamped") == null
+                    || (ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("report.timestamped") != null &&
+                    ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("report.timestamped").trim().equals("false")
+            )){
+                reportFile = new File(TargetProject.getInstance().getReportDir() , "report.html");
+            }
+            else{
                 reportFile = new File(TargetProject.getInstance().getReportDir() , "report.html");
             }
 

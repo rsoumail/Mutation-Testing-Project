@@ -2,7 +2,9 @@ package fr.istic.m2il.vv.mutator;
 
 public class TargetClassForTestMutator {
 
-	private int valueOfVoidMethod;
+
+    private int valueOfVoidMethod;
+
 
 	public int addInt(int a, int b) {
 		return a + b;

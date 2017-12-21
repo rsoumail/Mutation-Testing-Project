@@ -70,33 +70,9 @@ public class ArithmeticOperatorMutatorTest {
     }
 
     @Test
-    public void mutateaddMethod() throws Exception {
+    public void mutateaddIntMethod() throws Exception {
         for(Method m: methods){
-            if(m.getName().equals("add")){
-                original = m;
-            }
-        }
-        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
-        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator.mutate(ctMethod);
-        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
-    }
-    @Test
-    public void mutatesubMethod() throws Exception {
-        for(Method m: methods){
-            if(m.getName().equals("sub")){
-                original = m;
-            }
-        }
-        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
-        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator.mutate(ctMethod);
-        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
-    }
-    @Test
-    public void mutatemulMethod() throws Exception {
-        for(Method m: methods){
-            if(m.getName().equals("mul")){
+            if(m.getName().equals("addInt")){
                 original = m;
             }
         }
@@ -107,9 +83,191 @@ public class ArithmeticOperatorMutatorTest {
     }
 
     @Test
-    public void mutatedivMethod() throws Exception {
+    public void mutateaddFloatMethod() throws Exception {
         for(Method m: methods){
-            if(m.getName().equals("div")){
+            if(m.getName().equals("addFloat")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutateaddLongMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("addLong")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutateaddDoubleMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("addDouble")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatesubIntMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("subInt")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatesubFloatMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("subFloat")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatesubLongMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("subLong")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatesubDoubleMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("subDouble")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatemulIntMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("mulInt")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatemulFloatMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("mulFloat")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatemulLongMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("mulLong")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatemulDoubleMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("mulDouble")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatedivIntMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().startsWith("divInt")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatedivFloatMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().startsWith("divFloat")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatedivLongMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().startsWith("divLong")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        mutator.mutate(ctMethod);
+        Assert.assertNotEquals(0, ((ArithmeticOperatorMutator)mutator).getTestResult().getExitCode());
+    }
+
+    @Test
+    public void mutatedivDoubleMethod() throws Exception {
+        for(Method m: methods){
+            if(m.getName().startsWith("divDouble")){
                 original = m;
             }
         }
