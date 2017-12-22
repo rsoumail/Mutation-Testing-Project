@@ -80,13 +80,15 @@
                                             <tr>
                                                 <th>Generated </th>
                                                 <th>Killed </th>
+                                                <th>Timed Out</th>
                                                 <th>Rate</th>
-                                                <th>Tests Classes</th>
-                                                <th>Tests Cases Ran</th>
+                                                <th>Tests</th>
+                                                <th>Tests Cases</th>
                                             </tr>
                                             <tr>
                                                 <td>${statistic_generate}</td>
                                                 <td>${statistic_killed}</td>
+                                                <td>${statistic_timedout}</td>
                                                 <td>${statistic_rate}%</td>
                                                 <td>${statistic_generate}</td>
                                                 <td>${statistic_ran_tests}</td>
@@ -119,7 +121,15 @@
                                     <#assign killed++>
                                 </#if>
                             </#list>
-                                <i>Killed: ${killed}</i>
+                            <i>Killed : ${killed}</i>
+
+                            <#assign timedout = 0>
+                            <#list reports as r>
+                                <#if r.getMutantState() == "TIMED_OUT">
+                                    <#assign timedout++>
+                                </#if>
+                            </#list>
+                            <i>Timed out: ${timedout}</i>
                             <i>Rate: ${(killed/ generated) * 100} % </i>
                         </a>
                     </h4>

@@ -1,5 +1,6 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
@@ -28,13 +29,14 @@ public class ArithmeticOperatorMutator implements Mutator{
     private TargetProject targetProject;
     private MutantType mutantType = MutantType.ARITHMETIC_MUTATOR;
     private InvocationResult testResult;
+    List<Future<InvocationResult>> results = null;
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
     }
 
     @Override
-    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException, InterruptedException, ExecutionException {
+    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException, InterruptedException {
         modified = ctMethod;
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
@@ -45,12 +47,13 @@ public class ArithmeticOperatorMutator implements Mutator{
                 if(methodInfo.getCodeAttribute() != null){
                     CodeAttribute code = methodInfo.getCodeAttribute();
                     CodeIterator iterator = code.iterator();
-                    MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    List<Future<InvocationResult>> results = executor.invokeAll(Arrays.asList(testRunner), 10, TimeUnit.SECONDS); // Timeout of 10 secondes.
-                    executor.shutdown();
+                    MVNRunner testRunner = new MVNRunner(
+                            this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" +
+                            this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName())
+                    );
 
                     while (iterator.hasNext()) {
+                        boolean timeout = false;
                         HashMap<Integer, Integer> m = new HashMap<>();
                         int pos = iterator.next();
                         switch (iterator.byteAt(pos)) {
@@ -120,7 +123,7 @@ public class ArithmeticOperatorMutator implements Mutator{
                         }
                         if(!m.isEmpty()){
                             iterator.writeByte(m.get(pos), pos);
-                            //logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
+                            logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
                             report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
@@ -131,14 +134,36 @@ public class ArithmeticOperatorMutator implements Mutator{
 
                             ReportService.getInstance().newRanTest();
 
-                            testResult = results.get(0).get();
-                            if(testResult.getExitCode() != 0){
-                                report.setMutantState(MutantState.KILLED);
-                            }
-                            else{
-                                report.setMutantState(MutantState.SURVIVED);
-                            }
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
 
+                            try {
+                                results = executor.invokeAll(Arrays.asList(testRunner), MutatingProperties.getMutationTimeOut(), TimeUnit.SECONDS);
+
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                timeout = true;
+                                report.setMutantState(MutantState.TIMED_OUT);
+                            }
+                            finally {
+                                if(timeout == false){
+                                    testResult = testRunner.getInvocationResult();
+                                    if( testResult != null){
+                                        if(testRunner.getInvocationResult().getExitCode() != 0)
+                                            report.setMutantState(MutantState.KILLED);
+                                        else
+                                            report.setMutantState(MutantState.SURVIVED);
+                                    }
+                                    else
+                                        report.setMutantState(MutantState.TIMED_OUT);
+                                }
+                                executor.shutdown();
+                                try {
+                                    executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
                             ReportService.getInstance().addReport(this, report);
 
                             Utils.revert(modified, original, this, this.targetProject);

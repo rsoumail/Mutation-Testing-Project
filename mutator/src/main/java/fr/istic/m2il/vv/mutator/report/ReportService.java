@@ -177,13 +177,22 @@ public class ReportService implements IReportService{
     }
 
     public Integer getTotalKilledMutantsNumber(){
-        Integer totalKilledMutantsNumber = new Integer(0);
+
+        return getTotalMutantsNumbersByMutantState(MutantState.KILLED);
+    }
+
+    public Integer getTimedOutMutantsNumber(){
+        return getTotalMutantsNumbersByMutantState(MutantState.TIMED_OUT);
+    }
+
+    private Integer getTotalMutantsNumbersByMutantState(MutantState mutantState){
+        Integer total = new Integer(0);
         Iterator iterator = this.reports.entrySet().iterator();
         while(iterator.hasNext()){
             Map.Entry reportMutator = (Map.Entry)iterator.next();
-            totalKilledMutantsNumber += getStateMutantsNumber(MutantState.KILLED,((List<Report>)reportMutator.getValue()));
+            total += getStateMutantsNumber(mutantState,((List<Report>)reportMutator.getValue()));
         }
-        return totalKilledMutantsNumber;
+        return total;
     }
 
     public Float getRate(Integer subset, Integer total){

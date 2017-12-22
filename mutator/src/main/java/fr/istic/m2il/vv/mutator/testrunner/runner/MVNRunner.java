@@ -29,7 +29,8 @@ public class MVNRunner implements Callable<InvocationResult>{
     public InvocationResult run() throws MavenInvocationException, IOException {
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File(ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("maven.home")));
-        return invoker.execute( this.request );
+        this.invocationResult = invoker.execute( this.request );
+        return this.invocationResult;
     }
 
     public String getPom() {

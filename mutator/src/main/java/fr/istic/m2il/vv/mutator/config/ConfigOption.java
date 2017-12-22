@@ -5,6 +5,7 @@ public enum ConfigOption {
     MAVEN_HOME("maven.home"),
     REPORT_DIR("report.dir"),
     TIME_STAMPED_REPORTS("report.timestamped"),
+    TIMEOUT("test.timeout"),
     MUTATORS("mutators");
 
     private final String option;

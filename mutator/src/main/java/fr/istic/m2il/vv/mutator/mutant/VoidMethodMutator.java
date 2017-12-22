@@ -1,5 +1,6 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
@@ -14,6 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class VoidMethodMutator implements Mutator {
 
@@ -23,6 +30,7 @@ public class VoidMethodMutator implements Mutator {
     private TargetProject targetProject;
     private MutantType mutantType = MutantType.VOID_MUTATOR;
     private InvocationResult testResult;
+    List<Future<InvocationResult>> results = null;
 
     public VoidMethodMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
@@ -37,9 +45,10 @@ public class VoidMethodMutator implements Mutator {
         if(!ctMethod.getDeclaringClass().isInterface() && ctMethod.getReturnType().equals(CtClass.voidType)){
             if(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()) != null){
                 ctMethod.getDeclaringClass().defrost();
+                boolean timeout = false;
                 MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
                 ctMethod.setBody("{}");
-                //logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
+                logger.info("Mutating  {}", getClass().getName() + "Mutate " + ctMethod.getName() + " on " +targetProject.getLocation());
                 Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                 Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
                 report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
@@ -49,14 +58,40 @@ public class VoidMethodMutator implements Mutator {
                 report.setTestClassRun(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
                 ReportService.getInstance().newRanTest();
-                testResult = testRunner.run();
-                if(testResult.getExitCode() != 0){
-                    report.setMutantState(MutantState.KILLED);
+
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+
+                try {
+                    results = executor.invokeAll(Arrays.asList(testRunner), MutatingProperties.getMutationTimeOut(), TimeUnit.SECONDS);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    timeout = true;
+                    report.setMutantState(MutantState.TIMED_OUT);
+                    executor.shutdown();
                 }
-                else{
-                    report.setMutantState(MutantState.SURVIVED);
+                finally {
+                    if(timeout == false){
+                        testResult = testRunner.getInvocationResult();
+                        if( testResult != null){
+                            if(testRunner.getInvocationResult().getExitCode() != 0)
+                                report.setMutantState(MutantState.KILLED);
+                            else
+                                report.setMutantState(MutantState.SURVIVED);
+                        }
+                        else
+                            report.setMutantState(MutantState.TIMED_OUT);
+                    }
+                    executor.shutdown();
+                    try {
+                        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 ReportService.getInstance().addReport(this, report);
+
                 Utils.revert(modified, original, this, this.targetProject);
             }
         }

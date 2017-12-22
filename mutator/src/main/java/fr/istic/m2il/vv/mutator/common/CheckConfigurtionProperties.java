@@ -31,7 +31,8 @@ public class CheckConfigurtionProperties {
     public void checksProperties(){
         existStatus = new Integer(-1);
         for(ConfigOption propertie: ConfigOption.values()){
-            if(!propertie.equals(ConfigOption.MUTATORS) && !propertie.equals(ConfigOption.REPORT_DIR ) && !propertie.equals(ConfigOption.TIME_STAMPED_REPORTS))
+            if(!propertie.equals(ConfigOption.MUTATORS) && !propertie.equals(ConfigOption.REPORT_DIR )
+                    && !propertie.equals(ConfigOption.TIME_STAMPED_REPORTS) && !propertie.equals(ConfigOption.TIMEOUT))
                 checkPropertie(propertie.toString());
         }
         existStatus = new Integer(0);

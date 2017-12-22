@@ -41,4 +41,15 @@ public class MutatingProperties {
 
         return mutantTypes;
     }
+
+    public static int getMutationTimeOut() throws IOException {
+        int timeOut = 30;
+        String timeoutPropertie =
+                ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty(ConfigOption.TIMEOUT.toString());
+        if(timeoutPropertie != null && timeoutPropertie.length() != 0){
+            timeoutPropertie = timeoutPropertie.trim();
+            timeOut = Integer.valueOf(timeoutPropertie);
+        }
+        return  timeOut;
+    }
 }

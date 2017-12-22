@@ -44,6 +44,7 @@ public class HtmlStrategy implements IReportStrategy{
         input.put("timings_total", ((ReportService)this.reportService).doTotalTime());
         input.put("statistic_generate", ((ReportService)this.reportService).getTotalMutationsNumber());
         input.put("statistic_killed", ((ReportService)this.reportService).getTotalKilledMutantsNumber());
+        input.put("statistic_timedout", ((ReportService)this.reportService).getTimedOutMutantsNumber());
         input.put("statistic_rate", String.format("%.2f", ((ReportService)this.reportService).getRate(((ReportService)this.reportService).getTotalKilledMutantsNumber(), ((ReportService)this.reportService).getTotalMutationsNumber())));
         input.put("statistic_ran_tests", ((ReportService)this.reportService).getTotalTestsCasesRan());
 
