@@ -10,6 +10,9 @@ public class Division implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Division() {
+	}
+
 	@Override
 	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;
@@ -56,22 +59,22 @@ public class Division implements Operation {
 	}
 	
 	@Override
-	public boolean firstGreatherOrEqualThenSecond() {
+	public boolean firstGreatherOrEqualThanSecond() {
 		return (this.firstMember >= this.secondMember);
 	}
 
 	@Override
-	public boolean secondGreatherOrEqualThenFirst() {
+	public boolean secondGreatherOrEqualThanFirst() {
 		return (this.secondMember >= this.firstMember);
 	}
 
 	@Override
-	public boolean firstLessOrEqualThenSecond() {
+	public boolean firstLessOrEqualThanSecond() {
 		return (this.firstMember <= this.secondMember);
 	}
 
 	@Override
-	public boolean secondLessOrEqualThenFirst() {
+	public boolean secondLessOrEqualThanFirst() {
 		return (this.secondMember <= this.firstMember);
 	}
 }

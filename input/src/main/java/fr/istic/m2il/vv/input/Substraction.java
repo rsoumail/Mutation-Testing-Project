@@ -20,6 +20,9 @@ public class Substraction implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Substraction() {
+	}
+
 	@Override
 	public double getFirstMember() {
 		return this.firstMember;
@@ -55,22 +58,22 @@ public class Substraction implements Operation {
 	}
 	
 	@Override
-	public boolean firstGreatherOrEqualThenSecond() {
+	public boolean firstGreatherOrEqualThanSecond() {
 		return (this.firstMember >= this.secondMember);
 	}
 
 	@Override
-	public boolean secondGreatherOrEqualThenFirst() {
+	public boolean secondGreatherOrEqualThanFirst() {
 		return (this.secondMember >= this.firstMember);
 	}
 
 	@Override
-	public boolean firstLessOrEqualThenSecond() {
+	public boolean firstLessOrEqualThanSecond() {
 		return (this.firstMember <= this.secondMember);
 	}
 
 	@Override
-	public boolean secondLessOrEqualThenFirst() {
+	public boolean secondLessOrEqualThanFirst() {
 		return (this.secondMember <= this.firstMember);
 	}
 }

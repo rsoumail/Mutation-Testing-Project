@@ -35,6 +35,21 @@ public class SubstractionTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Substraction substraction = new Substraction();
+		substraction.setSecondMember(20.0);
+		Assert.assertEquals(20.0, substraction.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Substraction substraction = new Substraction();
+		substraction.setSecondMember(20.0);
+		Assert.assertEquals(20.0, substraction.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Substraction substraction = new Substraction(30.0, 7.0);
 		Assert.assertTrue(substraction.firstGreatherThanSecond());
@@ -60,27 +75,27 @@ public class SubstractionTest {
 	}
 	
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception{
+	public void firstGreatherOrEqualThanSecond() throws Exception{
 		Substraction substraction = new Substraction(60.0, 30.0);
-		Assert.assertTrue(substraction.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(substraction.firstGreatherOrEqualThanSecond());
 	}
 	
 	@Test 
-	public void secondGreatherOrEqualThenFirst() throws Exception{
+	public void secondGreatherOrEqualThanFirst() throws Exception{
 		Substraction substraction = new Substraction(30.0, 60.0);
-		Assert.assertTrue(substraction.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(substraction.secondGreatherOrEqualThanFirst());
 	}
 	
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception{
+	public void firstLessOrEqualThanSecond() throws Exception{
 		Substraction substraction = new Substraction(10.0, 20.0);
-		Assert.assertTrue(substraction.firstLessOrEqualThenSecond());
+		Assert.assertTrue(substraction.firstLessOrEqualThanSecond());
 	}
 	
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception{
+	public void secondLessOrEqualThanFirst() throws Exception{
 		Substraction substraction = new Substraction(20.0, 10.0);
-		Assert.assertTrue(substraction.secondLessOrEqualThenFirst());
+		Assert.assertTrue(substraction.secondLessOrEqualThanFirst());
 	}
 
 }

@@ -1,5 +1,6 @@
 package fr.istic.m2il.vv.mutator.mutant;
 
+import fr.istic.m2il.vv.mutator.config.MutatingProperties;
 import fr.istic.m2il.vv.mutator.report.Report;
 import fr.istic.m2il.vv.mutator.report.ReportService;
 import fr.istic.m2il.vv.mutator.util.Utils;
@@ -15,9 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class ArithmeticOperatorMutator implements Mutator{
 
@@ -25,13 +27,16 @@ public class ArithmeticOperatorMutator implements Mutator{
     private CtMethod original;
     private CtMethod modified;
     private TargetProject targetProject;
+    private MutantType mutantType = MutantType.ARITHMETIC_MUTATOR;
+    private InvocationResult testResult;
+    List<Future<InvocationResult>> results = null;
 
     public ArithmeticOperatorMutator(TargetProject targetProject) {
         this.targetProject = targetProject;
     }
 
     @Override
-    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException {
+    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException, InterruptedException {
         modified = ctMethod;
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
@@ -42,9 +47,13 @@ public class ArithmeticOperatorMutator implements Mutator{
                 if(methodInfo.getCodeAttribute() != null){
                     CodeAttribute code = methodInfo.getCodeAttribute();
                     CodeIterator iterator = code.iterator();
-                    MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
+                    MVNRunner testRunner = new MVNRunner(
+                            this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" +
+                            this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName())
+                    );
 
                     while (iterator.hasNext()) {
+                        boolean timeout = false;
                         HashMap<Integer, Integer> m = new HashMap<>();
                         int pos = iterator.next();
                         switch (iterator.byteAt(pos)) {
@@ -114,21 +123,50 @@ public class ArithmeticOperatorMutator implements Mutator{
                         }
                         if(!m.isEmpty()){
                             iterator.writeByte(m.get(pos), pos);
-                            //logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
+                            logger.info("Mutating  {}", getClass().getName() + " Mutate " + ctMethod.getName() + " on " +ctMethod.getDeclaringClass().getName() + " of " +targetProject.getLocation());
                             Utils.write(ctMethod.getDeclaringClass(), this.targetProject.getClassesLocation());
                             Report report = new Report(MutantState.STARTED, getClass().getName() + " Mutate " + ctMethod.getName() + " on class " + ctMethod.getDeclaringClass().getName());
-                            ReportService.getInstance().newRanTest();
-                            InvocationResult testResult = testRunner.run();
-                            if(testResult.getExitCode() != 0){
-                                report.setMutantState(MutantState.KILLED);
-                            }
-                            else{
-                                report.setMutantState(MutantState.SURVIVED);
-                            }
+                            report.setMutatedClassName(ctMethod.getDeclaringClass().getName());
+                            report.setMutatedMethodName(ctMethod.getName());
+                            report.setMutatedLine(methodInfo.getLineNumber(pos));
+                            report.setTestsRan(new Integer(Utils.testsCasesInTestClass(this.targetProject.getTestClassOfClass(ctMethod.getDeclaringClass().getName()))));
+                            report.setTestClassRun(this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
 
+                            ReportService.getInstance().newRanTest();
+
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+
+                            try {
+                                results = executor.invokeAll(Arrays.asList(testRunner), MutatingProperties.getMutationTimeOut(), TimeUnit.SECONDS);
+
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                timeout = true;
+                                report.setMutantState(MutantState.TIMED_OUT);
+                            }
+                            finally {
+                                if(timeout == false){
+                                    testResult = testRunner.getInvocationResult();
+                                    if( testResult != null){
+                                        if(testRunner.getInvocationResult().getExitCode() != 0)
+                                            report.setMutantState(MutantState.KILLED);
+                                        else
+                                            report.setMutantState(MutantState.SURVIVED);
+                                    }
+                                    else
+                                        report.setMutantState(MutantState.TIMED_OUT);
+                                }
+                                executor.shutdown();
+                                try {
+                                    executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
                             ReportService.getInstance().addReport(this, report);
 
-                            this.revert();
+                            Utils.revert(modified, original, this, this.targetProject);
                         }
                     }
                 }
@@ -138,16 +176,12 @@ public class ArithmeticOperatorMutator implements Mutator{
 
     }
 
-    @Override
-    public void revert() throws CannotCompileException, IOException, BadBytecode {
-
-        logger.info("Reverting  {}", getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
-        modified.getDeclaringClass().defrost();
-        modified.setBody(original, null);
-        Utils.write(modified.getDeclaringClass(), this.targetProject.getClassesLocation());
-
+    public MutantType getMutantType() {
+        return mutantType;
     }
 
-
+    public InvocationResult getTestResult() {
+        return testResult;
+    }
 
 }

@@ -38,6 +38,21 @@ public class DivisionTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Division division  = new Division();
+		division.setSecondMember(20.0);
+		Assert.assertEquals(20.0, division.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Division division  = new Division();
+		division.setSecondMember(20.0);
+		Assert.assertEquals(20.0, division.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Division division = new Division(30.0, 7.0);
 		Assert.assertTrue(division.firstGreatherThanSecond());
@@ -63,26 +78,26 @@ public class DivisionTest {
 	}
 	
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception{
+	public void firstGreatherOrEqualThanSecond() throws Exception{
 		Division division = new Division(60.0, 30.0);
-		Assert.assertTrue(division.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(division.firstGreatherOrEqualThanSecond());
 	}
 	
 	@Test 
-	public void secondGreatherOrEqualThenFirst() throws Exception{
+	public void secondGreatherOrEqualThanFirst() throws Exception{
 		Division division = new Division(30.0, 60.0);
-		Assert.assertTrue(division.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(division.secondGreatherOrEqualThanFirst());
 	}
 	
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception{
+	public void firstLessOrEqualThanSecond() throws Exception{
 		Division division = new Division(10.0, 20.0);
-		Assert.assertTrue(division.firstLessOrEqualThenSecond());
+		Assert.assertTrue(division.firstLessOrEqualThanSecond());
 	}
 	
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception{
+	public void secondLessOrEqualThanFirst() throws Exception{
 		Division division = new Division(20.0, 10.0);
-		Assert.assertTrue(division.secondLessOrEqualThenFirst());
+		Assert.assertTrue(division.secondLessOrEqualThanFirst());
 	}
 }

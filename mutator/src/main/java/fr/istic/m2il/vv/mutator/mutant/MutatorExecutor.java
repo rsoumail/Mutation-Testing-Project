@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class MutatorExecutor {
 	
@@ -21,9 +22,10 @@ public class MutatorExecutor {
 
 
 
-    public void execute(Mutator mutator, TargetProject targetProject) throws CannotCompileException, BadBytecode, NotFoundException, IOException, MavenInvocationException {
+    public void execute(Mutator mutator, TargetProject targetProject) throws CannotCompileException, BadBytecode, NotFoundException, IOException, MavenInvocationException, ExecutionException, InterruptedException {
         logger.info("Execute mutant  {}", mutator.getClass().getName() + " on " +targetProject.getLocation());
         for(CtClass ctClass: this.javaAssistHelper.getPool().get(targetProject.getClassesNames())){
+
             //logger.info("Try to mutate  {}", ctClass.getName()  + " on " +targetProject.getLocation());
             if(ctClass.isFrozen())
                 ctClass.defrost();

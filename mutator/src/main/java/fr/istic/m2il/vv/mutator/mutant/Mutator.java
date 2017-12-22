@@ -7,9 +7,8 @@ import javassist.bytecode.BadBytecode;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public interface Mutator {
-    void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException, MavenInvocationException;
-
-    void revert() throws CannotCompileException, IOException, BadBytecode;
+    void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, NotFoundException, MavenInvocationException, InterruptedException, ExecutionException;
 }
