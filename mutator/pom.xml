@@ -88,13 +88,29 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.stefanbirkner/system-rules -->
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+
 
     </dependencies>
     <build>
 
-
-
         <plugins>
+
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
+                <configuration>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -121,8 +137,8 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
-                    <!--check>
-                        <branchRate>85</branchRate>
+                    <check>
+                        <!--branchRate>85</branchRate>
                         <lineRate>85</lineRate>
                         <haltOnFailure>true</haltOnFailure>
                         <totalBranchRate>85</totalBranchRate>
@@ -140,8 +156,8 @@
                                 <branchRate>40</branchRate>
                                 <lineRate>30</lineRate>
                             </regex>
-                        </regexes>
-                    </check-->
+                        </regexes-->
+                    </check>
                     <instrumentation>
                         <ignores>
                             <ignore>com.example.boringcode.*</ignore>
@@ -150,10 +166,12 @@
                             <exclude>com/example/dullcode/**/*.class</exclude>
                             <exclude>com/example/**/*Test.class</exclude>
                             <exclude>fr.istic.m2il.vv.mutator.common.TimeWatch</exclude>
-                            <exclude>fr.istic.m2il.vv.mutator.common.TimeWatch</exclude>
                             <exclude>fr.istic.m2il.vv.mutator.config.ConfigOption</exclude>
                             <exclude>fr.istic.m2il.vv.mutator.loader.CustomTranslator</exclude>
                         </excludes>
+                        <ignoreMethodAnnotations>
+                            <ignoreMethodAnnotation>fr.istic.m2il.vv.mutator.common.CoverageIgnore</ignoreMethodAnnotation>
+                        </ignoreMethodAnnotations>
                     </instrumentation>
                 </configuration>
                 <executions>

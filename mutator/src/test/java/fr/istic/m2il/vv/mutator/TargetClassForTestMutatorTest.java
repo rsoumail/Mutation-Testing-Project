@@ -1,10 +1,9 @@
 package fr.istic.m2il.vv.mutator;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class TargetClassForTestMutatorTest {
 
@@ -13,6 +12,11 @@ public class TargetClassForTestMutatorTest {
     @Before
     public void setUp() throws Exception {
         targetClassForTestMutator = new TargetClassForTestMutator();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        targetClassForTestMutator = null;
     }
 
     @Test

@@ -1,14 +1,16 @@
-package fr.istic.m2il.vv.mutator.mutant;
+package fr.istic.m2il.vv.mutator.util;
 
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutator;
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest;
-import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
-import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.mutant.ArithmeticOperatorMutator;
+import fr.istic.m2il.vv.mutator.mutant.BooleanMethodMutator;
+import fr.istic.m2il.vv.mutator.mutant.Mutator;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
-import fr.istic.m2il.vv.mutator.util.Utils;
-import javassist.*;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,18 +21,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class BooleanMethodMutatorTest {
+public class UtilsTest {
 
     TargetProject targetProject;
     CtClass ctClassForTest;
     CtMethod ctMethod;
     JavaAssistHelper javaAssistHelper;
-    Mutator mutator;
     CtMethod modifiedCtMethod;
     Method original;
+    Method[] methods;
 
     @Before
     public void setUp() throws Exception {
@@ -45,42 +45,57 @@ public class BooleanMethodMutatorTest {
         listtest.add(TargetClassForTestMutatorTest.class);
         targetProject.setClasses(listclass);
         targetProject.setTests(listtest);
-        javaAssistHelper = JavaAssistHelper.getInstance();
 
         ApplicationProperties.getInstance(new File("src/main/resources/application.properties"));
+        javaAssistHelper = JavaAssistHelper.getInstance();
+
+
 
 
         ctClassForTest = javaAssistHelper.getPool().get("fr.istic.m2il.vv.mutator.TargetClassForTestMutator");
 
-        Method[] methods = TargetClassForTestMutator.class.getDeclaredMethods();
-        for(Method m: methods){
-            if(m.getName().equals("boolMethod")){
-                original = m;
-            }
-        }
-        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
-        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator = new BooleanMethodMutator(targetProject);
+        methods = TargetClassForTestMutator.class.getDeclaredMethods();
+
 
     }
 
     @After
     public void tearDown() throws Exception {
-
+        targetProject = null;
         ctClassForTest = null;
         ctMethod = null;
-        javaAssistHelper = null;
-        mutator = null;
         modifiedCtMethod = null;
         original = null;
-        targetProject = null;
+        methods = null;
+        javaAssistHelper = null;
     }
 
     @Test
-    public void mutateRealMethod() throws Exception {
-        mutator.mutate(ctMethod);
-        Assert.assertNotEquals(0, ((BooleanMethodMutator)mutator).getTestResult().getExitCode());
+    public void write() throws Exception {
     }
 
+    @Test
+    public void loadPropertiesFile() throws Exception {
+        Assert.assertNotNull(Utils.loadPropertiesFile(new File("src/main/resources/application.properties")));
+    }
+
+    @Test
+    public void testsCasesInTestClass() throws Exception {
+        Assert.assertEquals(19, Utils.testsCasesInTestClass(TargetClassForTestMutatorTest.class));
+    }
+
+    @Test
+    public void revert() throws Exception {
+        for(Method m: methods){
+            if(m.getName().equals("voidMethod")){
+                original = m;
+            }
+        }
+        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
+        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
+        ctMethod.setBody("{}");
+        Utils.revert(modifiedCtMethod, ctMethod, new BooleanMethodMutator(targetProject), targetProject);
+        Assert.assertEquals(ctMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
+    }
 
 }

@@ -6,13 +6,15 @@ import org.apache.maven.shared.invoker.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 
-public class MVNRunner {
+public class MVNRunner implements Callable<InvocationResult>{
 
     private String pom;
     private String command;
     private InvocationRequest request;
     private String options;
+    private InvocationResult invocationResult;
 
     public MVNRunner(String pom, String command, String options) {
         this.pom = pom;
@@ -34,16 +36,23 @@ public class MVNRunner {
         return pom;
     }
 
-    public void setPom(String pom) {
-        this.pom = pom;
-    }
-
     public String getCommand() {
         return command;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+
+    public String getOptions() {
+        return options;
     }
 
+
+
+    public InvocationResult getInvocationResult() {
+        return invocationResult;
+    }
+
+    @Override
+    public InvocationResult call() throws Exception {
+        return this.run();
+    }
 }

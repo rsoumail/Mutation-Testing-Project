@@ -65,15 +65,7 @@ public class BooleanMethodMutator implements Mutator{
         return mutantType;
     }
 
-    public void setMutantType(MutantType mutantType) {
-        this.mutantType = mutantType;
-    }
-
     public InvocationResult getTestResult() {
         return testResult;
-    }
-
-    public void setTestResult(InvocationResult testResult) {
-        this.testResult = testResult;
     }
 }

@@ -12,16 +12,6 @@ import static org.junit.Assert.*;
 
 public class ClassLoaderParserTest {
 
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void classesFromDirectoryExist() throws Exception {
         ClassLoaderParser classLoaderParser = new ClassLoaderParser();

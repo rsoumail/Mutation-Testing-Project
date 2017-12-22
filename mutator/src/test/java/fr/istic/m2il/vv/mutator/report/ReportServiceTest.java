@@ -1,14 +1,17 @@
-package fr.istic.m2il.vv.mutator.mutant;
+package fr.istic.m2il.vv.mutator.report;
 
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutator;
 import fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest;
-import fr.istic.m2il.vv.mutator.common.ClassLoaderParser;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
-import fr.istic.m2il.vv.mutator.loader.CustomTranslator;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.mutant.BooleanMethodMutator;
+import fr.istic.m2il.vv.mutator.mutant.Mutator;
+import fr.istic.m2il.vv.mutator.mutant.VoidMethodMutator;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
-import fr.istic.m2il.vv.mutator.util.Utils;
-import javassist.*;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,19 +22,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
 
-public class BooleanMethodMutatorTest {
+public class ReportServiceTest {
 
     TargetProject targetProject;
-    CtClass ctClassForTest;
     CtMethod ctMethod;
     JavaAssistHelper javaAssistHelper;
     Mutator mutator;
-    CtMethod modifiedCtMethod;
     Method original;
-
+    Method[] methods;
     @Before
     public void setUp() throws Exception {
         targetProject = TargetProject.getInstance();
@@ -49,38 +49,47 @@ public class BooleanMethodMutatorTest {
 
         ApplicationProperties.getInstance(new File("src/main/resources/application.properties"));
 
-
-        ctClassForTest = javaAssistHelper.getPool().get("fr.istic.m2il.vv.mutator.TargetClassForTestMutator");
-
-        Method[] methods = TargetClassForTestMutator.class.getDeclaredMethods();
+        methods = TargetClassForTestMutator.class.getDeclaredMethods();
         for(Method m: methods){
-            if(m.getName().equals("boolMethod")){
+            if(m.getName().equals("voidMethod")){
                 original = m;
             }
         }
-        ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
-        modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        mutator = new BooleanMethodMutator(targetProject);
 
+        ctMethod = javaAssistHelper.getPool().get("fr.istic.m2il.vv.mutator.TargetClassForTestMutator").getDeclaredMethod(original.getName());
+        mutator = new VoidMethodMutator(targetProject);
+        mutator.mutate(ctMethod);
+        ReportService.getInstance().doReport();
     }
 
     @After
     public void tearDown() throws Exception {
-
-        ctClassForTest = null;
+        targetProject = null;
+        mutator = null;
         ctMethod = null;
         javaAssistHelper = null;
-        mutator = null;
-        modifiedCtMethod = null;
         original = null;
-        targetProject = null;
+        methods = null;
     }
 
     @Test
-    public void mutateRealMethod() throws Exception {
-        mutator.mutate(ctMethod);
-        Assert.assertNotEquals(0, ((BooleanMethodMutator)mutator).getTestResult().getExitCode());
+    public void validMutantNumber() throws Exception{
+        Assert.assertEquals(new Integer(1), ReportService.getInstance().getTotalMutationsNumber());
     }
 
+    @Test
+    public void validTotalTestsCasesRan() throws Exception{
+        Assert.assertEquals(new Integer(57), ReportService.getInstance().getTotalTestsCasesRan());
+    }
+
+    @Test
+    public void validTotalKilledMutantsNumber(){
+        Assert.assertEquals(new Integer(2), ReportService.getInstance().getTotalKilledMutantsNumber());
+    }
+
+    @Test
+    public void validRate(){
+        Assert.assertEquals(new Float(50),ReportService.getInstance().getRate(new Integer(2), new Integer(4)));
+    }
 
 }

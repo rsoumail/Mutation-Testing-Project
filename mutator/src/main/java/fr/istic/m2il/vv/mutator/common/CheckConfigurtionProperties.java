@@ -60,7 +60,7 @@ public class CheckConfigurtionProperties {
         if(targetProject.getClasses().size() == 0){
             System.out.println();
             System.err.println(" Le projet cible ne contient aucun fichier .class");
-            exit(0);
+            exit(1);
         }
         if(targetProject.getTests().size() == 0){
             System.out.println();
@@ -68,5 +68,9 @@ public class CheckConfigurtionProperties {
             exit(0);
         }
         existStatus = new Integer(0);
+    }
+
+    public Integer getExistStatus() {
+        return existStatus;
     }
 }

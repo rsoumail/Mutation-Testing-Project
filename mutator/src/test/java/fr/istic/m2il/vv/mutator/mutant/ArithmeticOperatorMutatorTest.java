@@ -67,6 +67,14 @@ public class ArithmeticOperatorMutatorTest {
 
     @After
     public void tearDown() throws Exception {
+        targetProject = null;
+        ctClassForTest = null;
+        ctMethod = null;
+        javaAssistHelper = null;
+        mutator = null;
+        modifiedCtMethod = null;
+        original = null;
+        methods = null;
     }
 
     @Test

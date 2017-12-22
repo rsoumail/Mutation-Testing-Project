@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mutation Analysis Report</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Mutation Analysis Report</h1>
+        <p class="lead"></p>
+    </div>
+
+    <div class="panel-group" id="global_info_accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingglobal">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#global_info_accordion" href="#collapseglobal" aria-expanded="false" aria-controls="collapseglobal">
+                        <b>Global Information</b>
+                    </a>
+                </h4>
+            </div>
+            <div class="row" id="collapseglobal">
+                <div id="collapseglobaltimingst" class="panel-collapse collapse in col-md-5" role="tabpanel" aria-labelledby="headingglobal">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_timings" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobaltimings">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobaltimings" aria-expanded="true" aria-controls="collapseglobaltimings">
+                                            <b>Timings</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobaltimings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobaltimings">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Scan classpath</th>
+                                                <th>Mutation analysis </th>
+                                                <th>Total </th>
+                                            </tr>
+                                            <tr>
+                                                <td> < 1 second(s)</td>
+                                                <td> < 1 second(s)</td>
+                                                <td>0 second(s)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="collapseglobalstatisticst" class="panel-collapse collapse in col-md-7" role="tabpanel" aria-labelledby="headingglobalstat">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_statistics" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobalstatistics">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobalstatistics" aria-expanded="true" aria-controls="collapseglobalstatistics">
+                                            <b>Statistics</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobalstatistics" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobalstatistics">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Generated </th>
+                                                <th>Killed </th>
+                                                <th>Rate</th>
+                                                <th>Tests Classes</th>
+                                                <th>Tests Cases Ran</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>100,00%</td>
+                                                <td>1</td>
+                                                <td>19</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading0">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="false" aria-controls="collapse0">
+                            <b>VOID_MUTATOR</b>
+                            <i>Generated: 1</i>
+                                <i>Killed: 1</i>
+                            <i>Rate: 100 % </i>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse0" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading0">
+                    <div class="panel-body">
+                            <div class="panel-group" id="accordion00" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading00">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion0" href="#collapse00" aria-expanded="true" aria-controls="collapse00">
+                                                <b>Method voidMethod</b> - in Class : <i>fr.istic.m2il.vv.mutator.TargetClassForTestMutator</i>
+                                                <small>
+                                                                (method modification)
+                                                </small>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse00" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading00">
+                                        <div class="panel-body">
+
+                                            <table class="table table-condensed">
+                                                <tr>
+                                                    <th>Test class</th>
+                                                    <th>Run count</th>
+                                                    <th>Mutant state</th>
+                                                </tr>
+
+                                                    <tr class="success">
+                                                    <td>fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest</td>
+                                                    <td>19</td>
+                                                    <td>KILLED</td>
+                                                    </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+</html>

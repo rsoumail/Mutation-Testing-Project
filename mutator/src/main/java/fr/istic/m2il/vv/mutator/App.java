@@ -19,6 +19,7 @@ public class App {
 
 		if (args.length != 1) {
 			System.err.println("Veuillez passez le fichier de configuration en paramètre");
+			System.exit(0);
 		} else {
 			ApplicationProperties applicationProperties = ApplicationProperties.getInstance(new File(args[0]));
 

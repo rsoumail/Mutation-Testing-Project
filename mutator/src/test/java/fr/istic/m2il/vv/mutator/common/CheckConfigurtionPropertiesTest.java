@@ -4,10 +4,8 @@ import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
 
 import fr.istic.m2il.vv.mutator.config.ConfigOption;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
 
 import java.io.File;
@@ -26,6 +24,7 @@ public class CheckConfigurtionPropertiesTest {
     Properties propertiesMocked;
     List<Class<?>> classes;
 
+
     @Before
     public void setUp() throws Exception {
         fileMocked = mock(File.class);
@@ -40,13 +39,6 @@ public class CheckConfigurtionPropertiesTest {
         targetProject.setClassesLocation(fileMocked);
         targetProject.setPom(fileMocked);
         targetProject.setTestsLocation(fileMocked);
-       /* when(targetProject.getLocation()).thenReturn(fileMocked);
-        when(targetProject.getPom()).thenReturn(fileMocked);
-        when(targetProject.getClassesLocation()).thenReturn(fileMocked);
-        when(targetProject.getTestsLocation()).thenReturn(fileMocked);*/
-        //classes = mock(ArrayList.class);
-        //classes.add(klazz);
-        //classes.add(klazz);
         classes = new ArrayList<>();
         classes.add(CheckConfigurtionProperties.class);
         classes.add(ConfigOption.class);
@@ -57,6 +49,12 @@ public class CheckConfigurtionPropertiesTest {
 
     @After
     public void tearDown() throws Exception {
+        checkConfigurtionProperties = null;
+        applicationPropertiesMocked = null;
+        fileMocked = null;
+        targetProject = null;
+        propertiesMocked = null;
+        classes = null;
     }
     @Test
     public void checksConfig() throws Exception {
@@ -64,8 +62,14 @@ public class CheckConfigurtionPropertiesTest {
         Assert.assertEquals(new Integer(0), checkConfigurtionProperties.checksConfig());
     }
 
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
     @Test
-    public void badConfig() throws Exception{
-        //Assert.assertEquals(new Integer(-1), checkConfigurtionProperties.checksConfig());
+    public void fileNotExist(){
+        when(fileMocked.exists()).thenReturn(false);
+        exit.expectSystemExitWithStatus(0);
+        checkConfigurtionProperties.checkFileExist(fileMocked);
+        when(fileMocked.exists()).thenReturn(true);
     }
 }

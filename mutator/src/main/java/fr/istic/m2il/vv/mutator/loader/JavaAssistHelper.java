@@ -19,7 +19,7 @@ public class JavaAssistHelper {
         this.pool = pool;
         this.loader = loader;
         this.translator = translator;
-        this.targetProject = targetProject;
+        this.setTargetProject(targetProject);
         this.initPool();
     }
 
@@ -36,9 +36,6 @@ public class JavaAssistHelper {
         return pool;
     }
 
-    public void setPool(ClassPool pool) {
-        this.pool = pool;
-    }
 
     public Loader getLoader() {
         return loader;
@@ -48,13 +45,6 @@ public class JavaAssistHelper {
         this.loader = loader;
     }
 
-    public CustomTranslator getTranslator() {
-        return translator;
-    }
-
-    public void setTranslator(CustomTranslator translator) {
-        this.translator = translator;
-    }
 
     public TargetProject getTargetProject() {
 		return targetProject;
@@ -74,9 +64,6 @@ public class JavaAssistHelper {
             loader.addTranslator(pool, translator);
             pool.appendClassPath(targetProject.getClassesLocation().getAbsolutePath());
             pool.appendClassPath(targetProject.getTestsLocation().getAbsolutePath());
-
-            /*Ajouter un jar dans le pool*/
-           /* pool.insertClassPath( "/Path/from/root/myjarfile.jar" );*/
 
         }
         catch(Throwable exc) {

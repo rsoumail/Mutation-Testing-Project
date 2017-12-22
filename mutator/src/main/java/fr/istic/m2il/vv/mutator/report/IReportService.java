@@ -19,20 +19,14 @@ public interface IReportService {
     void addReport(Mutator mutator, Report report);
 
     /**
-     * Returns all report informations in a markdown format
-     *
-     * @return
-     */
-    public String toMarkdown();
-
-    /**
      *  Display Report information about Mutations Analysis
      */
     void doReport();
 
-
+    /**
+     * Generates a Gui Report according to the strategy choose (Html, XML ....)
+     * @throws IOException input/output Exception
+     */
     void toGraphicReport() throws IOException;
-
-
 
 }

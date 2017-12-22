@@ -17,9 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class ArithmeticOperatorMutator implements Mutator{
 
@@ -35,7 +34,7 @@ public class ArithmeticOperatorMutator implements Mutator{
     }
 
     @Override
-    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException {
+    public void mutate(CtMethod ctMethod) throws CannotCompileException, BadBytecode, IOException, MavenInvocationException, InterruptedException, ExecutionException {
         modified = ctMethod;
         original = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
 
@@ -47,9 +46,9 @@ public class ArithmeticOperatorMutator implements Mutator{
                     CodeAttribute code = methodInfo.getCodeAttribute();
                     CodeIterator iterator = code.iterator();
                     MVNRunner testRunner = new MVNRunner(this.targetProject.getPom().getAbsolutePath() , "surefire:test", "-Dtest=" + this.targetProject.getTestClassNameOfClass(ctMethod.getDeclaringClass().getName()));
-                    /*ExecutorService executor = Executors.newSingleThreadExecutor();
-                    executor.invokeAll(Arrays.asList(testRunner), 10, TimeUnit.SECONDS); // Timeout of 10 secondes.
-                    executor.shutdown();*/
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    List<Future<InvocationResult>> results = executor.invokeAll(Arrays.asList(testRunner), 10, TimeUnit.SECONDS); // Timeout of 10 secondes.
+                    executor.shutdown();
 
                     while (iterator.hasNext()) {
                         HashMap<Integer, Integer> m = new HashMap<>();
@@ -132,7 +131,7 @@ public class ArithmeticOperatorMutator implements Mutator{
 
                             ReportService.getInstance().newRanTest();
 
-                            testResult = testRunner.run();
+                            testResult = results.get(0).get();
                             if(testResult.getExitCode() != 0){
                                 report.setMutantState(MutantState.KILLED);
                             }
@@ -156,15 +155,8 @@ public class ArithmeticOperatorMutator implements Mutator{
         return mutantType;
     }
 
-    public void setMutantType(MutantType mutantType) {
-        this.mutantType = mutantType;
-    }
-
     public InvocationResult getTestResult() {
         return testResult;
     }
 
-    public void setTestResult(InvocationResult testResult) {
-        this.testResult = testResult;
-    }
 }

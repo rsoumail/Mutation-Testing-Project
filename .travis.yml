@@ -2,8 +2,11 @@ sudo: false
 language: java
 install: true
 script: 
-  - "cd mutator/ && mvn clean test"
-  - "mvn cobertura:cobertura"
+  - cd mutator/
+  - mvn clean test
+
+after_success:
+  - mvn clean test cobertura:cobertura coveralls:report
 
 
 

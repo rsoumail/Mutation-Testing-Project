@@ -10,8 +10,6 @@ public class TargetProject {
 
     private static Logger logger = LoggerFactory.getLogger(TargetProject.class);
 
-    private String classPackage;
-    private String testClassPackage;
     private List<Class<?>> classes;
     private String[] classesNames;
     private List<Class<?>> tests;
@@ -32,22 +30,6 @@ public class TargetProject {
             instance = new TargetProject();
         }
         return instance;
-    }
-
-    public String getClassPackage() {
-        return classPackage;
-    }
-
-    public void setClassPackage(String classPackage) {
-        this.classPackage = classPackage;
-    }
-
-    public String getTestClassPackage() {
-        return testClassPackage;
-    }
-
-    public void setTestClassPackage(String testClassPackage) {
-        this.testClassPackage = testClassPackage;
     }
 
     public List<Class<?>> getClasses() {

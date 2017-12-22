@@ -1,32 +1,31 @@
 package fr.istic.m2il.vv.mutator;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
+import org.junit.*;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class AppTest {
 
-    @Before
-    public void setUp() throws Exception{
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
 
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
+    @Test
+    public void testMainWithoutArgument() throws Exception {
+        exit.expectSystemExitWithStatus(0);
+        String[] args = new String[0];
+        App.main(args);
     }
 
     @Test
-    public void testTargetProjectExist(){
-
+    public void testMainWithArgument() throws Exception{
+        exit.expectSystemExitWithStatus(0);
+        App.main(new String[]{"src/main/resources/test.properties"});
     }
-
-    @Test
-    public void test(){
-
-    }
-
-
 }
