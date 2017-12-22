@@ -8,5 +8,11 @@ script:
 
 after_success:
   - mvn clean test cobertura:cobertura coveralls:report
+  deploy:
+  provider: develop
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: master
   
 
