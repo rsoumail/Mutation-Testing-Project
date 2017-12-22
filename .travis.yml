@@ -23,6 +23,6 @@ deploy:
     branch: master
 
 after_success:
-  - mvn clean test cobertura:cobertura coveralls:report
+  - mvn clean cobertura:cobertura coveralls:report
   - git remote add deploy https://github.com/ismaelrami/VV_MutationTesting
   - git push deploy

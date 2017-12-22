@@ -108,6 +108,10 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
                 <configuration>
+                    <repoToken>##############################</repoToken>
+                    <coberturaReports>
+                        <param>${project.build.directory}/site/cobertura/coverage.xml</param>
+                    </coberturaReports>
                 </configuration>
             </plugin>
 
@@ -173,6 +177,10 @@
                             <ignoreMethodAnnotation>fr.istic.m2il.vv.mutator.common.CoverageIgnore</ignoreMethodAnnotation>
                         </ignoreMethodAnnotations>
                     </instrumentation>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
                 </configuration>
                 <executions>
                     <execution>
