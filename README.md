@@ -1,6 +1,6 @@
 # VV_MutationTesting
 
-[![Coverage Status](https://coveralls.io/repos/github/ismaelrami/VV_MutationTesting/badge.svg?branch=master)](https://coveralls.io/github/ismaelrami/VV_MutationTesting?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ismaelrami/VV_MutationTesting/badge.svg)](https://coveralls.io/github/ismaelrami/VV_MutationTesting)
 
 ## Usage
 
