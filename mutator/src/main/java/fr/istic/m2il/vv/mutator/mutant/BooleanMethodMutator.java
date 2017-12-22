@@ -93,6 +93,7 @@ public class BooleanMethodMutator implements Mutator{
 
     }
 
+
     public MutantType getMutantType() {
         return mutantType;
     }
