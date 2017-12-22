@@ -35,10 +35,10 @@ Lancement du projet :
       
     > Compilation des programmes 
   
-    Dans le dossier mutator : mvn package 
+      Dans le dossier mutator : mvn package 
     
     > Exécution :
-   Dans le dossier mutator/target: java -jar mutator-1.0-SNAPSHOT-jar-with-dependencies.jar file.properties
+      Dans le dossier mutator/target: java -jar mutator-1.0-SNAPSHOT-jar-with-dependencies.jar file.properties
     
 ## Projets cibles testés
   > commons-cli
