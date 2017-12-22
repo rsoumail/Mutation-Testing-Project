@@ -23,6 +23,8 @@ local.properties
 .loadpath
 .recommenders
 input/report.html
+report.html
+report-*.html
 
 
 # External tool builders
