@@ -1,14 +1,9 @@
 
 # Created by https://www.gitignore.io/api/eclipse,intellij
 
-input/report.html
-<<<<<<< HEAD
 
 target/
 
-=======
-target/
->>>>>>> 4e13cda07ac188c9cd476fc17467ac05c702558f
 ### Eclipse ###
 
 .metadata
@@ -25,7 +20,6 @@ local.properties
 input/report.html
 report.html
 report-*.html
-
 
 # External tool builders
 .externalToolBuilders/
