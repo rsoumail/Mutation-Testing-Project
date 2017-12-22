@@ -1,5 +1,7 @@
 # VV_MutationTesting
 
+[![Coverage Status](https://coveralls.io/repos/github/ismaelrami/VV_MutationTesting/badge.svg?branch=master)](https://coveralls.io/github/ismaelrami/VV_MutationTesting?branch=master)
+
 ## Usage
 
 Lancement du projet :
