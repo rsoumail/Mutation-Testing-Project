@@ -12,7 +12,7 @@ Lancement du projet :
   
   > Utilisation de notre outil mutateur 
   
-   > Configuration : dans le fichier application.propreties se trouvant dans mutator/src/main/resources/
+   > Configuration : dans un fichier.properties en prenant comme exemple application.propreties se trouvant dans mutator/src/main/resources/
   
     Fournir les propriétés suivants: 
            -  Les mutateurs souhaitée (séparé par une virgule)
@@ -23,17 +23,26 @@ Lancement du projet :
     
            -  Le maven home 
            Exemple: maven.home = /usr/share/maven 
+           
+           - Le report dir (dossier pour le rapport en format html)
+           Exemple: report.dir = "/dossier"
+           
+           - Le report timestamped (à spécifier si on veut garder une trace des raports)
+           Exemple : report.timestamped = true (par defaut est à false)
       
     > Compilation des programmes 
   
     Dans le dossier mutator : mvn package 
     
     > Exécution :
-       Dans le dossier mutator/target: java -jar mutator-1.0-SNAPSHOT-jar-with-dependencies.jar
+       Dans le dossier mutator/target: java -jar mutator-1.0-SNAPSHOT-jar-with-dependencies.jar fichier.properties
     
 ## Projets cibles testés
   > commons-cli
   > commons-codec
+  > commons-collections
+  > commons-lang-LANG_3_3_2
+  > commons-math
   
 ## Fonctionnalités implémentées 
 
@@ -61,16 +70,14 @@ Lancement du projet :
   
      Opérateur de comparaison
       
-    * Opération < est remplacé par >=
-    * Opération > est remplacé par <=
-    * Opération <= est remplacé par >
-    * Opération >= est remplacé par <
-   
-     
+    * Opération < est remplacé par <=
+    * Opération > est remplacé par >=
+    * Opération <= est remplacé par <
+    * Opération >= est remplacé par >
      
 ## Couverture d'analyse de mutation
 
- Notre outil génère des informations concernant les opérations de mutations sur le projet spécifié, un rapport est affiché à la fin de l'exuction des mutations.
+ Notre outil génère des informations concernant les opérations de mutations sur le projet spécifié, un rapport est affiché à la fin de l'exuction des mutations. Un rapport au format html est aussi généré, ce dernier ce trouve dans le dossier target si la propriété "report.dir" n'est pas spécifier.
   
 
   
