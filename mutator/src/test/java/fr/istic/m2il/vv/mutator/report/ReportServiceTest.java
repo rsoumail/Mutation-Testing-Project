@@ -5,6 +5,7 @@ import fr.istic.m2il.vv.mutator.TargetClassForTestMutatorTest;
 import fr.istic.m2il.vv.mutator.config.ApplicationProperties;
 import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.mutant.BooleanMethodMutator;
+import fr.istic.m2il.vv.mutator.mutant.MutantState;
 import fr.istic.m2il.vv.mutator.mutant.Mutator;
 import fr.istic.m2il.vv.mutator.mutant.VoidMethodMutator;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
@@ -20,7 +21,9 @@ import org.junit.Test;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.*;
 
@@ -74,17 +77,41 @@ public class ReportServiceTest {
 
     @Test
     public void validMutantNumber() throws Exception{
-        Assert.assertEquals(new Integer(1), ReportService.getInstance().getTotalMutationsNumber());
+        HashMap<Mutator, List<Report>> reports = ReportService.getInstance().getReports();
+        AtomicInteger counter = new AtomicInteger(0);
+        reports.entrySet().stream().forEach(e -> {
+            e.getValue().stream().forEach(r -> {
+                counter.getAndIncrement();
+            });
+        });
+        Assert.assertEquals(new Integer(counter.get()), ReportService.getInstance().getTotalMutationsNumber());
     }
 
     @Test
     public void validTotalTestsCasesRan() throws Exception{
-        Assert.assertEquals(new Integer(57), ReportService.getInstance().getTotalTestsCasesRan());
+        HashMap<Mutator, List<Report>> reports = ReportService.getInstance().getReports();
+        AtomicInteger counter = new AtomicInteger(0);
+        reports.entrySet().stream().forEach(e -> {
+            e.getValue().stream().forEach(r -> {
+               for(int i=1; i<= r.getTestsRan();i++){
+                   counter.getAndIncrement();
+               }
+            });
+        });
+        Assert.assertEquals(new Integer(counter.get()), ReportService.getInstance().getTotalTestsCasesRan());
     }
 
     @Test
     public void validTotalKilledMutantsNumber(){
-        Assert.assertEquals(new Integer(2), ReportService.getInstance().getTotalKilledMutantsNumber());
+        HashMap<Mutator, List<Report>> reports = ReportService.getInstance().getReports();
+        AtomicInteger counter = new AtomicInteger(0);
+        reports.entrySet().stream().forEach(e -> {
+            e.getValue().stream().forEach(r -> {
+                if(r.getMutantState().equals(MutantState.KILLED))
+                    counter.getAndIncrement();
+            });
+        });
+        Assert.assertEquals(new Integer(counter.get()), ReportService.getInstance().getTotalKilledMutantsNumber());
     }
 
     @Test

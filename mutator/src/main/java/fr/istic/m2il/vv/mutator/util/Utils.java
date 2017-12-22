@@ -69,8 +69,9 @@ public class Utils {
     }
 
     public static void revert(CtMethod modified, CtMethod original, Mutator mutator, TargetProject targetProject) throws IOException, CannotCompileException {
+        if(modified.getDeclaringClass().isFrozen())
+            modified.getDeclaringClass().defrost();
         logger.info("Reverting  {}", mutator.getClass().getName() + " Revert " + modified.getName() + " on " +targetProject.getLocation());
-        modified.getDeclaringClass().defrost();
         modified.setBody(original, null);
         Utils.write(modified.getDeclaringClass(), targetProject.getClassesLocation());
     }

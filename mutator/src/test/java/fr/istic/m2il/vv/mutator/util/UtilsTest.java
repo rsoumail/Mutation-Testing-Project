@@ -17,9 +17,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class UtilsTest {
@@ -81,7 +84,18 @@ public class UtilsTest {
 
     @Test
     public void testsCasesInTestClass() throws Exception {
-        Assert.assertEquals(19, Utils.testsCasesInTestClass(TargetClassForTestMutatorTest.class));
+        AtomicInteger counter = new AtomicInteger(0);
+        Arrays.stream(TargetClassForTestMutatorTest.class.getMethods()).forEach(m -> {
+            Annotation[] annotations = m.getDeclaredAnnotations();
+            Arrays.stream(annotations).forEach(a -> {
+                if (a.annotationType().toString().equals("interface org.junit.Test")) {
+                    counter.getAndIncrement();
+                }
+            });
+
+        });
+
+        Assert.assertEquals(counter.get(), Utils.testsCasesInTestClass(TargetClassForTestMutatorTest.class));
     }
 
     @Test

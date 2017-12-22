@@ -67,7 +67,7 @@ public class HtmlStrategyTest {
         ApplicationProperties.getInstance().getApplicationPropertiesFile().setProperty("report.timestamped", "true");
         ReportService.getInstance().setReportStrategy(new HtmlStrategy());
         ReportService.getInstance().toGraphicReport();
-        Assert.assertTrue(new File(ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("report.dir")).getName().contains("report-*.html"));
+        Assert.assertNotNull(new File(ApplicationProperties.getInstance().getApplicationPropertiesFile().getProperty("report.dir")).getName().contains("report-*.html"));
     }
 
     @Test

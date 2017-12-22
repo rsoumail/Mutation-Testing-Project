@@ -47,12 +47,12 @@ public class TargetProjectTest {
 
     @Test
     public void getTestClassNameOfClassBad() throws Exception {
-        Assert.assertEquals(TargetClassForTestMutatorTest.class.getName(), targetProject.getTestClassNameOfClass(""));
+        Assert.assertNotEquals(TargetClassForTestMutatorTest.class.getName(), targetProject.getTestClassNameOfClass(""));
     }
 
     @Test
     public void testClassNotNullBad(){
-        Assert.assertEquals(TargetClassForTestMutatorTest.class, targetProject.getTestClassOfClass(""));
+        Assert.assertNotEquals(TargetClassForTestMutatorTest.class, targetProject.getTestClassOfClass(""));
     }
 
 }
