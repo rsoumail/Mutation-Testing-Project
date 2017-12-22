@@ -37,10 +37,10 @@ public class AdditionTest {
 
 	@Test
 	public void SecondMember() throws Exception {
-		double a = 0;
-		double b = 1;
-		Addition addition = new Addition(a, b);
-		Assert.assertEquals(b, addition.getSecondMember(), 1);
+
+		Addition addition = new Addition();
+		addition.setSecondMember(20.0);
+		Assert.assertEquals(20.0, addition.getSecondMember(), 1);
 	}
 
 	@Test
@@ -49,8 +49,6 @@ public class AdditionTest {
 		addition.setFirstMember(20.0);
 		Assert.assertEquals(20.0, addition.getFirstMember(), 1);
 	}
-
-
 
 	@Test
 	public void firstGreatherThanSecond() throws Exception {
@@ -76,28 +74,28 @@ public class AdditionTest {
 		Addition addition = new Addition(30.0, 5.0);
 		Assert.assertTrue(addition.secondLessThanFirst());
 	}
-	
+
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception{
+	public void firstGreatherOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(60.0, 30.0);
-		Assert.assertTrue(addition.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(addition.firstGreatherOrEqualThanSecond());
 	}
-	
-	@Test 
-	public void secondGreatherOrEqualThenFirst() throws Exception{
+
+	@Test
+	public void secondGreatherOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(30.0, 60.0);
-		Assert.assertTrue(addition.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(addition.secondGreatherOrEqualThanFirst());
 	}
-	
+
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception{
+	public void firstLessOrEqualThanSecond() throws Exception {
 		Addition addition = new Addition(10.0, 20.0);
-		Assert.assertTrue(addition.firstLessOrEqualThenSecond());
+		Assert.assertTrue(addition.firstLessOrEqualThanSecond());
 	}
-	
+
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception{
+	public void secondLessOrEqualThanFirst() throws Exception {
 		Addition addition = new Addition(20.0, 10.0);
-		Assert.assertTrue(addition.secondLessOrEqualThenFirst());
+		Assert.assertTrue(addition.secondLessOrEqualThanFirst());
 	}
 }

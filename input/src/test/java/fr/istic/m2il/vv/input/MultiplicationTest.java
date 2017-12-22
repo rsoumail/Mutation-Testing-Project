@@ -30,6 +30,21 @@ public class MultiplicationTest {
 	}
 
 	@Test
+	public void SecondMember() throws Exception {
+
+		Multiplication multiplication  = new Multiplication();
+		multiplication.setSecondMember(20.0);
+		Assert.assertEquals(20.0, multiplication.getSecondMember(), 1);
+	}
+
+	@Test
+	public void SetFirstMember() throws Exception {
+		Multiplication multiplication  = new Multiplication();
+		multiplication.setSecondMember(20.0);
+		Assert.assertEquals(20.0, multiplication.getFirstMember(), 1);
+	}
+
+	@Test
 	public void firstGreatherThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(30.0, 7.0);
 		Assert.assertTrue(multiplication.firstGreatherThanSecond());
@@ -55,27 +70,27 @@ public class MultiplicationTest {
 	}
 	
 	@Test
-	public void firstGreatherOrEqualThenSecond() throws Exception{
+	public void firstGreatherOrEqualThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(60.0, 30.0);
-		Assert.assertTrue(multiplication.firstGreatherOrEqualThenSecond());
+		Assert.assertTrue(multiplication.firstGreatherOrEqualThanSecond());
 	}
 	
 	@Test 
-	public void secondGreatherOrEqualThenFirst() throws Exception{
+	public void secondGreatherOrEqualThanFirst() throws Exception{
 		Multiplication multiplication = new Multiplication(30.0, 60.0);
-		Assert.assertTrue(multiplication.secondGreatherOrEqualThenFirst());
+		Assert.assertTrue(multiplication.secondGreatherOrEqualThanFirst());
 	}
 	
 	@Test
-	public void firstLessOrEqualThenSecond() throws Exception{
+	public void firstLessOrEqualThanSecond() throws Exception{
 		Multiplication multiplication = new Multiplication(10.0, 20.0);
-		Assert.assertTrue(multiplication.firstLessOrEqualThenSecond());
+		Assert.assertTrue(multiplication.firstLessOrEqualThanSecond());
 	}
 	
 	@Test
-	public void secondLessOrEqualThenFirst() throws Exception{
+	public void secondLessOrEqualThanFirst() throws Exception{
 		Multiplication multiplication = new Multiplication(20.0, 10.0);
-		Assert.assertTrue(multiplication.secondLessOrEqualThenFirst());
+		Assert.assertTrue(multiplication.secondLessOrEqualThanFirst());
 	}
 
 }

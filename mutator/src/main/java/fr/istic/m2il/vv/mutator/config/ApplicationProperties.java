@@ -1,28 +1,41 @@
 package fr.istic.m2il.vv.mutator.config;
 
+
+import fr.istic.m2il.vv.mutator.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
+import java.util.Properties;
 
 public class ApplicationProperties {
 
     private static Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
-    private File applicationPropertiesFile;
+    private Properties applicationPropertiesFile;
+    private static ApplicationProperties instance;
 
-    public ApplicationProperties(){
-
+    private ApplicationProperties(File propertieFile) throws IOException {
         logger.info("Loading application.properties");
-        ClassLoader classLoader = getClass().getClassLoader();
-        this.applicationPropertiesFile = new File(classLoader.getResource("application.properties").getFile());
+        this.applicationPropertiesFile = Utils.loadPropertiesFile(propertieFile);
         logger.info("application.properties loaded");
     }
 
-    public File getApplicationPropertiesFile() {
+    public static ApplicationProperties getInstance(File propertieFile) throws IOException {
+        if(instance == null){
+            instance = new ApplicationProperties(propertieFile);
+        }
+        return instance;
+    }
+
+    public static ApplicationProperties getInstance() throws IOException {
+        return instance;
+    }
+
+    public Properties getApplicationPropertiesFile() {
         return applicationPropertiesFile;
     }
 
-    public void setApplicationPropertiesFile(File applicationPropertiesFile) {
+    public void setApplicationPropertiesFile(Properties applicationPropertiesFile) {
         this.applicationPropertiesFile = applicationPropertiesFile;
     }
 }

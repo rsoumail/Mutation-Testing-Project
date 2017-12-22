@@ -13,13 +13,22 @@ public class JavaAssistHelper {
     private Loader loader;
     private CustomTranslator translator;
     private TargetProject targetProject;
+    private static JavaAssistHelper instance;
 
-    public JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
+    JavaAssistHelper(ClassPool pool, Loader loader, CustomTranslator translator, TargetProject targetProject) {
         this.pool = pool;
         this.loader = loader;
         this.translator = translator;
-        this.targetProject = targetProject;
+        this.setTargetProject(targetProject);
         this.initPool();
+    }
+
+    public static JavaAssistHelper getInstance(){
+        if(instance == null){
+
+            instance = new JavaAssistHelper(new ClassPool(), new Loader(), new CustomTranslator(), TargetProject.getInstance());
+        }
+        return instance;
     }
 
     public ClassPool getPool() {
@@ -27,9 +36,6 @@ public class JavaAssistHelper {
         return pool;
     }
 
-    public void setPool(ClassPool pool) {
-        this.pool = pool;
-    }
 
     public Loader getLoader() {
         return loader;
@@ -39,15 +45,16 @@ public class JavaAssistHelper {
         this.loader = loader;
     }
 
-    public CustomTranslator getTranslator() {
-        return translator;
-    }
 
-    public void setTranslator(CustomTranslator translator) {
-        this.translator = translator;
-    }
+    public TargetProject getTargetProject() {
+		return targetProject;
+	}
 
-    private void initPool(){
+	public void setTargetProject(TargetProject targetProject) {
+		this.targetProject = targetProject;
+	}
+
+	private void initPool(){
         try{
             logger.info("Init pool on  {}",this.targetProject.getLocation());
             this.pool = ClassPool.getDefault();
@@ -58,13 +65,10 @@ public class JavaAssistHelper {
             pool.appendClassPath(targetProject.getClassesLocation().getAbsolutePath());
             pool.appendClassPath(targetProject.getTestsLocation().getAbsolutePath());
 
-            /*Ajouter un jar dans le pool*/
-           /* pool.insertClassPath( "/Path/from/root/myjarfile.jar" );*/
-
         }
         catch(Throwable exc) {
-            System.out.println("Impossible de charger les sources de l'input.");
-            System.out.println(exc.getMessage());
+            logger.error("Impossible de charger les sources de l'input.");
+            logger.error("Message {}" + exc.getMessage());
             exc.printStackTrace();
         }
     }

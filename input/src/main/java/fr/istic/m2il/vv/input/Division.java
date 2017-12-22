@@ -10,6 +10,9 @@ public class Division implements Operation {
 		this.secondMember = secondMember;
 	}
 
+	public Division() {
+	}
+
 	@Override
 	public void setFirstMember(double firstMember) {
 		this.firstMember = firstMember;
@@ -37,41 +40,41 @@ public class Division implements Operation {
 
 	@Override
 	public boolean firstGreatherThanSecond() {
-		return this.firstMember > this.secondMember;
+		return (this.firstMember > this.secondMember);
 	}
 
 	@Override
 	public boolean secondGreatherThanFirst() {
-		return this.secondMember > this.firstMember;
+		return (this.secondMember > this.firstMember);
 	}
 
 	@Override
 	public boolean firstLessThanSecond() {
-		return this.firstMember < this.secondMember;
+		return (this.firstMember < this.secondMember);
 	}
 
 	@Override
 	public boolean secondLessThanFirst() {
-		return this.secondMember < this.firstMember;
+		return (this.secondMember < this.firstMember);
 	}
 	
 	@Override
-	public boolean firstGreatherOrEqualThenSecond() {
-		return this.firstMember >= this.secondMember;
+	public boolean firstGreatherOrEqualThanSecond() {
+		return (this.firstMember >= this.secondMember);
 	}
 
 	@Override
-	public boolean secondGreatherOrEqualThenFirst() {
-		return this.secondMember >= this.firstMember;
+	public boolean secondGreatherOrEqualThanFirst() {
+		return (this.secondMember >= this.firstMember);
 	}
 
 	@Override
-	public boolean firstLessOrEqualThenSecond() {
-		return this.firstMember <= this.secondMember;
+	public boolean firstLessOrEqualThanSecond() {
+		return (this.firstMember <= this.secondMember);
 	}
 
 	@Override
-	public boolean secondLessOrEqualThenFirst() {
-		return this.secondMember <= this.firstMember;
+	public boolean secondLessOrEqualThanFirst() {
+		return (this.secondMember <= this.firstMember);
 	}
 }

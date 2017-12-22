@@ -3,7 +3,7 @@ package fr.istic.m2il.vv.input;
 public class Addition implements Operation {
 	private double firstMember;
 	private double secondMember;
-
+	
 	public Addition(double firstMember, double secondMember) {
 		this.firstMember = firstMember;
 		this.secondMember = secondMember;
@@ -40,41 +40,41 @@ public class Addition implements Operation {
 
 	@Override
 	public boolean firstGreatherThanSecond() {
-		return this.firstMember > this.secondMember;
+		return (this.firstMember > this.secondMember);
 	}
 
 	@Override
 	public boolean secondGreatherThanFirst() {
-		return this.secondMember > this.firstMember;
+		return (this.secondMember > this.firstMember);
 	}
 
 	@Override
 	public boolean firstLessThanSecond() {
-		return  this.firstMember < this.secondMember;
+		return  (this.firstMember < this.secondMember);
 	}
 
 	@Override
 	public boolean secondLessThanFirst() {
-		return this.secondMember < this.firstMember;
+		return (this.secondMember < this.firstMember);
 	}
 
 	@Override
-	public boolean firstGreatherOrEqualThenSecond() {
-		return this.firstMember >= this.secondMember;
+	public boolean firstGreatherOrEqualThanSecond() {
+		return (this.firstMember >= this.secondMember);
 	}
 
 	@Override
-	public boolean secondGreatherOrEqualThenFirst() {
-		return this.secondMember >= this.firstMember;
+	public boolean secondGreatherOrEqualThanFirst() {
+		return (this.secondMember >= this.firstMember);
 	}
 
 	@Override
-	public boolean firstLessOrEqualThenSecond() {
-		return this.firstMember <= this.secondMember;
+	public boolean firstLessOrEqualThanSecond() {
+		return (this.firstMember <= this.secondMember);
 	}
 
 	@Override
-	public boolean secondLessOrEqualThenFirst() {
-		return this.secondMember <= this.firstMember;
+	public boolean secondLessOrEqualThanFirst() {
+		return (this.secondMember <= this.firstMember);
 	}
 }

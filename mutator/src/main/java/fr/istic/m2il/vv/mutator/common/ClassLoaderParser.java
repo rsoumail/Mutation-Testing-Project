@@ -1,5 +1,8 @@
 package fr.istic.m2il.vv.mutator.common;
 
+import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
+import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +28,12 @@ public class ClassLoaderParser {
      */
     public List<Class<?>> getClassesFromDirectory(String directoryPath){
         List<Class<?>> classList = new ArrayList<>();
+        List<String> classesName = new ArrayList<>();
 
         logger.info("Class parsing into {}",directoryPath);
         File classDirectory = new File(directoryPath);
 
-        List<String> classesName = getClassesNameFromDirectory(classDirectory);
+        classesName = getClassesNameFromDirectory(classDirectory);
 
         classList = loadClassFromDirectory(classDirectory,classesName);
 
@@ -61,15 +65,17 @@ public class ClassLoaderParser {
 
     private void loadingDirectoryClasses(File directoryClass, List<String> classesName, List<Class<?>> loadedClasses, URL[] urls) throws ClassNotFoundException {
         logger.trace("Loading folders into classLoader");
+
         try(URLClassLoader classLoader = new URLClassLoader(urls)) {
             logger.trace("Loading classes located in {}", directoryClass.getAbsolutePath());
             for (String className : classesName) {
                 logger.info("Loading class : {}", className);
-                loadedClasses.add(classLoader.loadClass(className));
+                        loadedClasses.add(classLoader.loadClass(className));
             }
         }
         catch (IOException e) {
             logger.warn("Errors occured during classLoader closing");
+            e.printStackTrace();
         }
     }
 
@@ -99,7 +105,9 @@ public class ClassLoaderParser {
                     classesName.addAll(getClassesNameFromDirectory(classFile,packageArchitecture));
                 }
                 else if(classFile.isFile()){
+                    if(getClassName(classFile) != null){
                     classesName.add(parentPackage+PACKAGE_SEPARATOR+getClassName(classFile));
+                    }
                 }
                 else{
                     logger.trace("File {} is not directory and not a file",classFile.getName());
@@ -116,7 +124,11 @@ public class ClassLoaderParser {
      * @return
      */
     private String getClassName(File classFile){
-        return classFile.getName().substring(0, classFile.getName().lastIndexOf('.'));
+
+
+        if(classFile.getName().split("\\.").length >= 2  && classFile.getName().matches(classFile.getName().substring(0, classFile.getName().lastIndexOf('.')) +".class"))
+            return classFile.getName().substring(0, classFile.getName().lastIndexOf('.'));
+        return null;
     }
 
 }

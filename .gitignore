@@ -1,12 +1,9 @@
 
 # Created by https://www.gitignore.io/api/eclipse,intellij
-<<<<<<< HEAD
+
 
 target/
 
-=======
-target/
->>>>>>> 4e13cda07ac188c9cd476fc17467ac05c702558f
 ### Eclipse ###
 
 .metadata

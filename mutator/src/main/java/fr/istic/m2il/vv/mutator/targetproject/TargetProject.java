@@ -10,8 +10,6 @@ public class TargetProject {
 
     private static Logger logger = LoggerFactory.getLogger(TargetProject.class);
 
-    private String classPackage;
-    private String testClassPackage;
     private List<Class<?>> classes;
     private String[] classesNames;
     private List<Class<?>> tests;
@@ -20,25 +18,20 @@ public class TargetProject {
     private File classesLocation;
     private File pom;
 
+    private File reportDir;
+    private static  TargetProject instance;
 
-    public TargetProject(){
 
+    private TargetProject(){
+
+        logger.info("Target project created ");
     }
 
-    public String getClassPackage() {
-        return classPackage;
-    }
-
-    public void setClassPackage(String classPackage) {
-        this.classPackage = classPackage;
-    }
-
-    public String getTestClassPackage() {
-        return testClassPackage;
-    }
-
-    public void setTestClassPackage(String testClassPackage) {
-        this.testClassPackage = testClassPackage;
+    public static TargetProject getInstance(){
+        if(instance == null){
+            instance = new TargetProject();
+        }
+        return instance;
     }
 
     public List<Class<?>> getClasses() {
@@ -47,7 +40,9 @@ public class TargetProject {
 
     public void setClasses(List<Class<?>> classes) {
         this.classes = classes;
-        this.setClassesNames(this.ClassesNamesFromClasses(this.classes));
+        String[] classesNames = this.ClassesNamesFromClasses(this.classes);
+        if(classesNames != null)
+          this.setClassesNames(classesNames);
     }
 
     public List<Class<?>> getTests() {
@@ -84,6 +79,14 @@ public class TargetProject {
         this.pom = pom;
     }
 
+    public File getReportDir() {
+        return reportDir;
+    }
+
+    public void setReportDir(File reportDir) {
+        this.reportDir = reportDir;
+    }
+
     public File getTestsLocation() {
         return testsLocation;
     }
@@ -100,14 +103,36 @@ public class TargetProject {
         this.classesLocation = classesLocation;
     }
 
+    public String getTestClassNameOfClass(String clazz){
+        for(Class<?> klass: tests){
+            if(klass.getName().matches(clazz+"Test")){
+                return klass.getName();
+            }
+        }
+        return null;
+    }
+
+    public Class<?> getTestClassOfClass(String clazz){
+        for(Class<?> klass: tests){
+            if(klass.getName().matches(clazz+"Test")){
+                return klass;
+            }
+        }
+        return null;
+    }
+
     private String[] ClassesNamesFromClasses(List<Class<?>> classes){
 
-        String[] classesNames = new String[classes.size()];
-        int i = 0;
-        for(Class<?> clazz: classes){
-            classesNames[i] = clazz.getName();
-            i++;
+        if(classes.size() > 0){
+            String[] classesNames = new String[classes.size()];
+            int i = 0;
+            for(Class<?> clazz: classes){
+                classesNames[i] = clazz.getName();
+                i++;
+            }
+            return classesNames;
         }
-        return classesNames;
+        else
+            return null;
     }
 }

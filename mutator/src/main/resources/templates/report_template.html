@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mutation Analysis Report</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Mutation Analysis Report</h1>
+        <p class="lead"></p>
+    </div>
+
+    <div class="panel-group" id="global_info_accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingglobal">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#global_info_accordion" href="#collapseglobal" aria-expanded="false" aria-controls="collapseglobal">
+                        <b>Global Information</b>
+                    </a>
+                </h4>
+            </div>
+            <div class="row" id="collapseglobal">
+                <div id="collapseglobaltimingst" class="panel-collapse collapse in col-md-5" role="tabpanel" aria-labelledby="headingglobal">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_timings" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobaltimings">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobaltimings" aria-expanded="true" aria-controls="collapseglobaltimings">
+                                            <b>Timings</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobaltimings" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobaltimings">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Scan classpath</th>
+                                                <th>Mutation analysis </th>
+                                                <th>Total </th>
+                                            </tr>
+                                            <tr>
+                                                <td> < ${timings_scan_classpath} second(s)</td>
+                                                <td> < ${timings_mutation_analysis} second(s)</td>
+                                                <td>${timings_total} second(s)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="collapseglobalstatisticst" class="panel-collapse collapse in col-md-7" role="tabpanel" aria-labelledby="headingglobalstat">
+                    <div class="panel-body">
+                        <div class="panel-group" id="global_info_accordion_statistics" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingglobalstatistics">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#global_info_accordion_timings" href="#collapseglobalstatistics" aria-expanded="true" aria-controls="collapseglobalstatistics">
+                                            <b>Statistics</b>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseglobalstatistics" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingglobalstatistics">
+                                    <div class="panel-body">
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Generated </th>
+                                                <th>Killed </th>
+                                                <th>Timed Out</th>
+                                                <th>Rate</th>
+                                                <th>Tests</th>
+                                                <th>Tests Cases</th>
+                                            </tr>
+                                            <tr>
+                                                <td>${statistic_generate}</td>
+                                                <td>${statistic_killed}</td>
+                                                <td>${statistic_timedout}</td>
+                                                <td>${statistic_rate}%</td>
+                                                <td>${statistic_generate}</td>
+                                                <td>${statistic_ran_tests}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <#list reports_by_mutator as mutator, reports >
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading${mutator_index}">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse${mutator_index}" aria-expanded="false" aria-controls="collapse${mutator_index}">
+                            <b>${mutator.getMutantType().name()}</b>
+                            <#assign generated = reports? size>
+                            <i>Generated: ${generated}</i>
+                            <#assign killed = 0>
+                            <#list reports as r>
+                                <#if r.getMutantState() == "KILLED">
+                                    <#assign killed++>
+                                </#if>
+                            </#list>
+                            <i>Killed : ${killed}</i>
+
+                            <#assign timedout = 0>
+                            <#list reports as r>
+                                <#if r.getMutantState() == "TIMED_OUT">
+                                    <#assign timedout++>
+                                </#if>
+                            </#list>
+                            <i>Timed out: ${timedout}</i>
+                            <i>Rate: ${(killed/ generated) * 100} % </i>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse${mutator_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${mutator_index}">
+                    <div class="panel-body">
+                        <#list reports as report>
+                            <div class="panel-group" id="accordion${mutator_index}${report_index}" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading${mutator_index}${report_index}">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion${mutator_index}" href="#collapse${mutator_index}${report_index}" aria-expanded="true" aria-controls="collapse${mutator_index}${report_index}">
+                                                <b>Method ${report.getMutatedMethodName()}</b> - in Class : <i>${report.getMutatedClassName()}</i>
+                                                <small>
+                                                    <#if report.getMutatedLine() == -1>
+                                                                (method modification)
+                                                            <#else>
+                                                                (statement at Line ${report.getMutatedLine()})
+                                                    </#if>
+                                                </small>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse${mutator_index}${report_index}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${mutator_index}${report_index}">
+                                        <div class="panel-body">
+
+                                            <table class="table table-condensed">
+                                                <tr>
+                                                    <th>Test class</th>
+                                                    <th>Run count</th>
+                                                    <th>Mutant state</th>
+                                                </tr>
+
+                                                <#if report.getMutantState() == "KILLED">
+                                                    <tr class="success">
+                                                        <#else>
+                                                    <tr class="danger">
+                                                </#if>
+                                                    <td>${report.getTestClassRun()}</td>
+                                                    <td>${report.getTestsRan()}</td>
+                                                    <td>${report.getMutantState()}</td>
+                                                    </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                </div>
+            </div>
+        </#list>
+    </div>
+</div>
+</body>
+</html>
