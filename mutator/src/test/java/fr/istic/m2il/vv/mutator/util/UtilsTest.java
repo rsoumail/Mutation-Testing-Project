@@ -109,10 +109,7 @@ public class UtilsTest {
         modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
         modifiedCtMethod.setBody("{}");
         Utils.revert(modifiedCtMethod, ctMethod, new BooleanMethodMutator(targetProject), targetProject);
-        if(ctMethod.getDeclaringClass().isFrozen())
-            ctMethod.getDeclaringClass().defrost();
-        if(modifiedCtMethod.getDeclaringClass().isFrozen())
-            modifiedCtMethod.getDeclaringClass().defrost();
+        modifiedCtMethod.getDeclaringClass().defrost();
         Assert.assertEquals(modifiedCtMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
     }
 

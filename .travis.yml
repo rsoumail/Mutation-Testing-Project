@@ -4,7 +4,7 @@ install: true
 script: 
   - mvn -version
   - cd mutator/
-  - mvn clean test
+  - mvn clean test -Dtest=UtilsTest
 
 deploy:
   provider: develop
