@@ -5,13 +5,6 @@ script:
   - mvn -version
   - cd mutator/
   - mvn clean test -Dtest=UtilsTest
-
-deploy:
-  provider: develop
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  on:
-    branch: master
   
 deploy:
   provider: releases
@@ -22,6 +15,12 @@ deploy:
   on:
     tags: true
 
+deploy:
+  provider: develop
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: master
 
 after_success:
   - mvn clean test cobertura:cobertura coveralls:report
