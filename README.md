@@ -29,6 +29,9 @@ Lancement du projet :
            
            - Le report timestamped (à spécifier si on veut garder une trace des raports)
            Exemple : report.timestamped = true (par defaut est à false)
+           
+           - Le timeout (pour spécifier le temps maximum en seconde que peut durer l'écution d'un test)
+           Exemple : test.timeout = 30 ( par défaut il est à 20 sécondes)
       
     > Compilation des programmes 
   
