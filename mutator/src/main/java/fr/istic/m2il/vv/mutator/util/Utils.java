@@ -1,10 +1,12 @@
 package fr.istic.m2il.vv.mutator.util;
 
+import fr.istic.m2il.vv.mutator.loader.JavaAssistHelper;
 import fr.istic.m2il.vv.mutator.mutant.Mutator;
 import fr.istic.m2il.vv.mutator.targetproject.TargetProject;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,22 +51,27 @@ public class Utils {
         return  prop;
     }
 
-    public static int testsCasesInTestClass(Class<?> klass){
+    public static int testsCasesInTestClass(Class<?> klass) {
         int testsCases = 0;
 
-
-        Method[] methods = klass.getDeclaredMethods();
-
-        for (Method method : methods) {
-            Annotation[] annotations = method.getDeclaredAnnotations();
-
-                for (Annotation annotation : annotations) {
-                    if (annotation.annotationType().toString()
-                            .equals("interface org.junit.Test")) {
-                        testsCases++;
+        try {
+            CtClass ctClass = JavaAssistHelper.getInstance().getPool().get(klass.getName());
+            for(CtMethod m: ctClass.getDeclaredMethods()){
+                try {
+                    for(Object o:  m.getAnnotations()){
+                        if (((Annotation)o).annotationType().toString()
+                                .equals("interface org.junit.Test")) {
+                            testsCases++;
+                        }
                     }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
+            }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
         }
+
         return testsCases;
     }
 

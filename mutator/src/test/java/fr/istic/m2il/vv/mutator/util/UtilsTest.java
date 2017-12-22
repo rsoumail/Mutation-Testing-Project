@@ -100,16 +100,21 @@ public class UtilsTest {
 
     @Test
     public void revert() throws Exception {
+
         for(Method m: methods){
             if(m.getName().equals("voidMethod")){
                 original = m;
             }
         }
+        ctClassForTest.defrost();
         ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
         modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
         modifiedCtMethod.setBody("{}");
+        modifiedCtMethod.getDeclaringClass().defrost();
         Utils.revert(modifiedCtMethod, ctMethod, new BooleanMethodMutator(targetProject), targetProject);
         modifiedCtMethod.getDeclaringClass().defrost();
+        ctMethod.getDeclaringClass().defrost();
+
         Assert.assertEquals(modifiedCtMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
     }
 
