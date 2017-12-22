@@ -107,9 +107,13 @@ public class UtilsTest {
         }
         ctMethod = ctClassForTest.getDeclaredMethod(original.getName());
         modifiedCtMethod = CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null);
-        ctMethod.setBody("{}");
+        modifiedCtMethod.setBody("{}");
         Utils.revert(modifiedCtMethod, ctMethod, new BooleanMethodMutator(targetProject), targetProject);
-        Assert.assertEquals(ctMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
+        if(ctMethod.getDeclaringClass().isFrozen())
+            ctMethod.getDeclaringClass().defrost();
+        if(modifiedCtMethod.getDeclaringClass().isFrozen())
+            modifiedCtMethod.getDeclaringClass().defrost();
+        Assert.assertEquals(modifiedCtMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
     }
 
 }
