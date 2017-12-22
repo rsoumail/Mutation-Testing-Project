@@ -6,13 +6,24 @@ script:
   - cd mutator/
   - mvn clean test
 
-after_success:
-  - mvn clean test cobertura:cobertura coveralls:report
-  deploy:
+deploy:
   provider: develop
   skip_cleanup: true
   github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   on:
     branch: master
   
+deploy:
+  provider: releases
+  #api_key: "GITHUB OAUTH TOKEN"
+  github_token: $GITHUB_TOKEN
+  file: "FILE TO UPLOAD"
+  skip_cleanup: true
+  on:
+    tags: true
 
+
+after_success:
+  - mvn clean test cobertura:cobertura coveralls:report
+  - git remote add deploy https://github.com/ismaelrami/VV_MutationTesting
+  - git push deploy
