@@ -1,10 +1,9 @@
 sudo: false
 language: java
 install: true
-script: 
-  - mvn -version
+script:
   - cd mutator/
-  - mvn clean test -Dtest=UtilsTest
+  - mvn clean test
   
 deploy:
   provider: releases
