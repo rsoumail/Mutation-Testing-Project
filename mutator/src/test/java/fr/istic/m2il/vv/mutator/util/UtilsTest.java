@@ -114,6 +114,7 @@ public class UtilsTest {
         Utils.revert(modifiedCtMethod, ctMethod, new BooleanMethodMutator(targetProject), targetProject);
         modifiedCtMethod.getDeclaringClass().defrost();
         ctMethod.getDeclaringClass().defrost();
+
         Assert.assertEquals(modifiedCtMethod, CtNewMethod.copy(ctMethod, ctMethod.getDeclaringClass(), null));
     }
 
