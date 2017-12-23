@@ -45,7 +45,7 @@ public class SubstractionTest {
 	@Test
 	public void SetFirstMember() throws Exception {
 		Substraction substraction = new Substraction();
-		substraction.setSecondMember(20.0);
+		substraction.setFirstMember(20.0);
 		Assert.assertEquals(20.0, substraction.getFirstMember(), 1);
 	}
 

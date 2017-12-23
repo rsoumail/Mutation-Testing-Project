@@ -48,7 +48,7 @@ public class DivisionTest {
 	@Test
 	public void SetFirstMember() throws Exception {
 		Division division  = new Division();
-		division.setSecondMember(20.0);
+		division.setFirstMember(20.0);
 		Assert.assertEquals(20.0, division.getFirstMember(), 1);
 	}
 

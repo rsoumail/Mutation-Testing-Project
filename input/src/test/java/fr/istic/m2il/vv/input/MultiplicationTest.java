@@ -40,7 +40,7 @@ public class MultiplicationTest {
 	@Test
 	public void SetFirstMember() throws Exception {
 		Multiplication multiplication  = new Multiplication();
-		multiplication.setSecondMember(20.0);
+		multiplication.setFirstMember(20.0);
 		Assert.assertEquals(20.0, multiplication.getFirstMember(), 1);
 	}
 
