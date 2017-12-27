@@ -11,7 +11,7 @@ Lancement du projet :
     Dans le dossier input : mvn package    
   
   > Utilisation de notre outil mutateur 
-  
+   > Spécifier votre maven.home dans le fichier application.propreties se trouvant dans mutator/src/main/resources/
    > Configuration : dans un fichier.properties en prenant comme exemple application.propreties se trouvant dans mutator/src/main/resources/
   
     Fournir les propriétés suivants: 
