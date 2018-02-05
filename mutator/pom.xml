@@ -20,7 +20,7 @@
             <id>rsoumail</id>
             <name>Ramadan Soumaila</name>
             <email>ramadan.soumaila@gmail.com</email>
-            <organization>ISTIC - Université Rennes 1</organization>
+            <organization>ISTIC - Université Rennes1</organization>
             <organizationUrl>http://www.istic.univ-rennes1.fr</organizationUrl>
         </developer>
 
@@ -28,7 +28,7 @@
             <id>waberto</id>
             <name>Waberi Houssein</name>
             <email>waberi.houssein@gmail.com</email>
-            <organization>ISTIC - Université Rennes 1</organization>
+            <organization>ISTIC - Université Rennes1</organization>
             <organizationUrl>http://www.istic.univ-rennes1.fr</organizationUrl>
         </developer>
     </developers>
